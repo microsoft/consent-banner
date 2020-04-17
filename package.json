@@ -1,0 +1,47 @@
+{
+  "name": "consent-banner",
+  "version": "2.0.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "Microsoft",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack -d --mode development",
+    "build-prod": "webpack -p --mode production",
+    "start": "webpack-dev-server --open",
+    "test": "jest --watchAll",
+    "test-coverage": "jest --coverage",
+    "test-ci": "jest",
+    "lint": "tslint -p tsconfig.json -t stylish"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "@types/node-sass": "^4.11.0",
+    "awesome-typescript-loader": "^5.2.1",
+    "css-loader": "^3.5.2",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^25.3.0",
+    "jest-junit-reporter": "^1.1.0",
+    "jest-pnp-resolver": "^1.2.1",
+    "node-sass": "^4.13.1",
+    "postcss-loader": "^3.0.0",
+    "postcss-preset-env": "^6.7.0",
+    "sass-loader": "^8.0.2",
+    "style-loader": "^1.1.4",
+    "ts-jest": "^25.3.1",
+    "tslint": "^6.1.1",
+    "tslint-microsoft-contrib": "^6.2.0",
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not ie <= 9",
+    "not dead",
+    "not op_mini all"
+  ]
+}
