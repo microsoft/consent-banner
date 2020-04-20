@@ -23,12 +23,12 @@ npm run build
 ## Running
 
 ```sh
-node run start
+npm run start
 ```
 
 
 ## Testing
 
 ```sh
-node run test
+npm run test
 ```
