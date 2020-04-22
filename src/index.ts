@@ -2,6 +2,15 @@ import styles from "./styles.scss";
 
 console.log("aabcd");
 
+// Add <meta name="viewport" content="width=device-width, initial-scale=1.0">
+// for responsive web design
+if (!document.querySelector('meta[name="viewport"]')) {
+    let meta = document.createElement('meta');
+    meta.name = "viewport";
+    meta.content = "width=device-width, initial-scale=1.0";
+    document.getElementsByTagName('head')[0].appendChild(meta);
+}
+
 // Insert point for banner
 let insert = document.querySelector('#app');
 
@@ -19,7 +28,7 @@ const banner =
         <div class="${styles.buttonGroup}">
             <button type="button" class="${styles.bannerButton}">Accept all</button>
             <button type="button" class="${styles.bannerButton}">Reject all</button>
-            <button type="button" class="${styles.bannerButton}" id="cookieInfo">More info</button>
+            <button type="button" class="${styles.bannerButton}">More info</button>
         </div>
     </div>
 `;

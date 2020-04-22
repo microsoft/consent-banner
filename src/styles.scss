@@ -1,5 +1,4 @@
-$primary-color: white;
-$bg: black;
+$banner-alpha: 0.85;
 
 .bannerBody {
   position: fixed;
@@ -7,16 +6,17 @@ $bg: black;
   left: 0;
   width: 100%;
   min-height: 64px;
-  background-color: rgba(242, 242, 242, 0.85);
-  z-index: 1024;
+  background-color: rgba(242, 242, 242, $banner-alpha);
   overflow: auto;
 }
 
 .bannerInform {
   float: left;
-  height: 20px;
-  margin-left: 5%;
-  margin-top: 4px;
+  margin : {
+    left: 5%;
+    top: 4px;
+  }
+  
   width: 50%;
   height: 52px;
   overflow: auto;
@@ -24,14 +24,17 @@ $bg: black;
 
 .infoIcon {
   float: left;
+  padding: 12px;
   height: 24px;
   width: 24px;
-  padding: 12px;
 
-  font-family: Segoe MDL2 Assets;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 24px;
+  font : {
+    family: Segoe UI, SegoeUI, Arial, sans-serif;
+    style: normal;
+    weight: normal;
+    size: 24px;
+  }
+  
   line-height: 24px;
   /* identical to box height */
   display: flex;
@@ -44,15 +47,18 @@ $bg: black;
   padding-top: 6px;
   height: 20px;
 
-  font-family: Segoe UI;
-  font-size: 13px;
+  font : {
+    family: Segoe UI, SegoeUI, Arial, sans-serif;
+    size: 13px;
+  }
+
   line-height: 16px;
 }
 
 .buttonGroup {
   float: right;
-  min-width: 470px;
   margin-top: 8px;
+  min-width: 470px;
   overflow: auto;
 }
 
@@ -63,30 +69,33 @@ $bg: black;
   background-color: #EBEBEB;
   
   cursor: pointer;
-  font-family: Segoe UI;
-  font-size: 15px;
+  font : {
+    family: Segoe UI, SegoeUI, Arial, sans-serif;
+    size: 15px;
+  }
+
   line-height: 20px;
   text-align: center;
-}
 
-.bannerButton:hover {
-  background-color: #DBDBDB;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
-}
+  &:hover {
+    background-color: #DBDBDB;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+  }
 
-.bannerButton:focus {
-  visibility: hidden;
-  background: #DBDBDB;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+  &:focus {
+    visibility: hidden;
+    background: #DBDBDB;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    
+    border: 2px solid #000000;
+    box-sizing: border-box;
+  }
 
-  border: 2px solid #000000;
-  box-sizing: border-box;
-}
-
-.bannerButton:disabled {
-  visibility: hidden;
-  color: rgba(0, 0, 0, 0.2);
-  background-color: rgba(0, 0, 0, 0.2);
+  &:disabled {
+    visibility: hidden;
+    color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.2);
+  }
 }
 
 @media only screen and (max-width: 768px) {
@@ -94,19 +103,16 @@ $bg: black;
   
   .buttonGroup, .bannerInform {
     float: none;
-    width: 92.5%;
     margin: 3.75%;
-    min-width: 300px;
-    min-height: 36px;
+    width: 92.5%;
+
+    min : {
+      width: 300px;
+      height: 36px;
+    }
   }
 
   .bannerButton {
     width: 100%;
   }
-}
-
-h1 {
-  color: $primary-color;
-  background-color: $bg;
-  color: rebeccapurple;
 }
