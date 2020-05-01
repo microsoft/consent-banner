@@ -1,29 +1,23 @@
-$banner-alpha: 0.85;
-
 .bannerBody {
-  position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
   min-height: 64px;
-  background-color: rgba(242, 242, 242, $banner-alpha);
-  overflow: auto;
+  background-color: #F2F2F2;
 }
 
 .bannerInform {
+  display: table;
   float: left;
   margin : {
     left: 5%;
-    top: 4px;
+    top: 8px;
+    bottom: 8px;
   }
   
   width: 50%;
-  height: 52px;
-  overflow: auto;
 }
 
 .infoIcon {
-  float: left;
+  display: table-cell;
   padding: 12px;
   width: 24px;
   height: 24px;
@@ -37,22 +31,12 @@ $banner-alpha: 0.85;
   
   /* identical to box height */
   line-height: 24px;
-
-  /* support older browsers */
-  display: -webkit-box;
-  display: -moz-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-
-  align-items: center;
-  text-align: center;
 }
 
 .bannerInformBody {
-  /* align text with icon */
-  padding-top: 6px;
-
+  display: table-cell;
+  vertical-align: middle;
+  
   font : {
     family: Segoe UI, SegoeUI, Arial, sans-serif;
     size: 13px;
@@ -63,13 +47,17 @@ $banner-alpha: 0.85;
 
 .buttonGroup {
   float: right;
-  margin-top: 8px;
-  min-width: 470px;
-  overflow: auto;
+  margin : {
+    top: 8px;
+    bottom: 8px;
+    right: 5%;
+  }
 }
 
 .bannerButton {
   margin: 4px;
+  border: none;
+
   width: 120px;
   height: 36px;
   background-color: #EBEBEB;
@@ -126,7 +114,6 @@ $banner-alpha: 0.85;
 
   border: 1px solid #0067B8;
   width: 640px;
-  height: 640px;
 }
 
 .closeModalIcon {
@@ -144,13 +131,7 @@ $banner-alpha: 0.85;
 
   line-height: 13px;
 
-  /* support older browsers */
-  display: -webkit-box;
-  display: -moz-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-
   align-items: center;
   text-align: center;
   color: #666666;
@@ -159,7 +140,6 @@ $banner-alpha: 0.85;
 .modalBody {
   margin : {
     top: 36px;
-    bottom: 48px;
     left: 36px;
     right: 36px;
   }
@@ -174,6 +154,8 @@ $banner-alpha: 0.85;
 
   font : {
     family: Segoe UI, SegoeUI, Arial, sans-serif;
+    style: normal;
+    weight: 600;
     size: 20px;
   }
   line-height: 24px;
@@ -188,6 +170,14 @@ $banner-alpha: 0.85;
   margin : {
     top: 0;
   }
+
+  font : {
+    family: Segoe UI, SegoeUI, Arial, sans-serif;
+    style: normal;
+    weight: normal;
+    size: 15px;
+  }
+  line-height: 20px;
 }
 
 .cookieOrderedList {
@@ -208,6 +198,8 @@ $banner-alpha: 0.85;
 
   font : {
     family: Segoe UI, SegoeUI, Arial, sans-serif;
+    style: normal;
+    weight: 600;
     size: 18px;
   }
 
@@ -268,10 +260,13 @@ $banner-alpha: 0.85;
 .modalButtonGroup {
   margin : {
     top: 36px;
+    bottom: 48px;
   }
 }
 
 .modalButtonReset {
+  border: none;
+
   width: 278px;
   height: 36px;
   
@@ -311,6 +306,7 @@ $banner-alpha: 0.85;
   margin : {
     left: 10px;
   }
+  border: none;
 
   width: 278px;
   height: 36px;
@@ -347,28 +343,34 @@ $banner-alpha: 0.85;
   }
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 995px) {
   /* For mobile phones: */
   
   .buttonGroup, .bannerInform {
     float: none;
-    margin: 3.75%;
-    width: 92.5%;
-
-    min : {
-      width: 300px;
-      height: 36px;
+    margin : {
+      top: 8px;
+      bottom: 8px;
+      left: 3.75%;
     }
+
+    width: 92.5%;
   }
 
   .bannerButton {
+    margin : {
+      bottom: 8px;
+      left: 0;
+      right: 0;
+    }
+
     width: 100%;
   }
 
   .modalContainer {
     margin : {
-      top: 3.6%;
-      bottom: 3.6%;
+      top: 3.3%;
+      bottom: 3.3%;
       left: auto;
     }
     
@@ -386,9 +388,7 @@ $banner-alpha: 0.85;
 
   .modalContent {
     height: 61.25%;   /* If "calc()" is not supported */
-
-    height: -webkit-calc(100% - 248px);
-    height: -moz-calc(100% - 248px);    
+   
     height: calc(100% - 248px);
   }
 

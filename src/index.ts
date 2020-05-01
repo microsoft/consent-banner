@@ -14,11 +14,19 @@ if (!document.querySelector('meta[name="viewport"]')) {
 // Insert point for banner
 let insert = document.querySelector('#app');
 
+let infoIcon = `
+<svg xmlns="http://www.w3.org/2000/svg" x='0px' y='0px' viewBox='0 0 44 44' height='24px' fill='none' stroke='currentColor'>
+  <circle cx='22' cy='22' r='20' stroke-width='2'></circle>
+  <line x1='22' x2='22' y1='18' y2='33' stroke-width='3'></line>
+  <line x1='22' x2='22' y1='12' y2='15' stroke-width='3'></line>
+</svg>
+`;
+
 const banner = 
 `
     <div class="${styles.bannerBody}" role="alert">
         <div class="${styles.bannerInform}">
-            <span class="${styles.infoIcon}" aria-label="Information message">&#9432;</span> <!--  used for icon  -->
+            <span class="${styles.infoIcon}" aria-label="Information message">${infoIcon}</span> <!--  used for icon  -->
             <p class="${styles.bannerInformBody}">
                 We use optional cookies to provide a better experience, read more about them 
                 <a href="https://privacy.microsoft.com/en-us/privacystatement" target="_blank">here</a>.
@@ -35,11 +43,11 @@ const banner =
     <!-- The Modal -->
     <div class="${styles.cookieModal}">
         <div role="dialog" aria-modal="true" aria-label="Flow scroll" class="${styles.modalContainer}">
-            <span role="button" aria-label="Close dialog" class="${styles.closeModalIcon}">&times;</span>
+            <span role="button" aria-label="Close dialog" class="${styles.closeModalIcon}">&#x2715;</span>
             <div role="setting" class="${styles.modalBody}">
                 <div class="${styles.modalTitle}">Manage cookie preferences</div>
                 
-                <div class="${styles.modalContent}">
+                <form class="${styles.modalContent}">
                     <p class="${styles.cookieStatement}">
                         Most Microsoft sites use cookies, small text files placed on your device which web servers in 
                         the domain that placed the cookie can retrieve later. We use cookies to store your preferences 
@@ -120,11 +128,11 @@ const banner =
                             </label>
                         </div>
                     </ol>
-                </div>
+                </form>
                 
                 <div class="${styles.modalButtonGroup}">
-                    <button type="button" class="${styles.modalButtonSave}">Save changes</button>
-                    <button type="button" class="${styles.modalButtonReset}">Reset all</button>
+                    <button type="button" class="${styles.modalButtonSave}" disabled>Save changes</button>
+                    <button type="button" class="${styles.modalButtonReset}" disabled>Reset all</button>
                 </div>
             </div>
         </div>
@@ -139,6 +147,10 @@ let cookieInfo = document.getElementsByClassName(`${styles.bannerButton}`)[2];
 let modal: HTMLElement = <HTMLElement> document.getElementsByClassName(`${styles.cookieModal}`)[0];
 let closeModalIcon = document.getElementsByClassName(`${styles.closeModalIcon}`)[0];
 
+let cookieItemRadioBtn: Element[] = Array.from(document.getElementsByClassName(`${ styles.cookieItemRadioBtn }`));
+let modalButtonSave: HTMLInputElement = <HTMLInputElement> document.getElementsByClassName(`${ styles.modalButtonSave }`)[0];
+let modalButtonReset: HTMLInputElement = <HTMLInputElement> document.getElementsByClassName(`${ styles.modalButtonReset }`)[0];
+
 function popup() {
     if (modal) {
         modal.style.display = 'block';
@@ -151,6 +163,16 @@ function close() {
     }
 }
 
+function enableModalButtons() {
+    if (modalButtonSave) {
+        modalButtonSave.disabled = false;
+    }
+
+    if (modalButtonReset) {
+        modalButtonReset.disabled = false;
+    }
+}
+
 if (cookieInfo) {
     cookieInfo.addEventListener('click', popup);
 
@@ -160,4 +182,10 @@ if (cookieInfo) {
 
 if (closeModalIcon) {
     closeModalIcon.addEventListener('click', close);
+}
+
+if (cookieItemRadioBtn && cookieItemRadioBtn.length) {
+    for (let radio of cookieItemRadioBtn) {
+        radio.addEventListener('click', enableModalButtons);
+    }
 }
