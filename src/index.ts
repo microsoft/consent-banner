@@ -1,7 +1,5 @@
 import styles from "./styles.scss";
 
-console.log("aabcd");
-
 // Add <meta name="viewport" content="width=device-width, initial-scale=1.0">
 // for responsive web design
 if (!document.querySelector('meta[name="viewport"]')) {

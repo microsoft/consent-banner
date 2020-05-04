@@ -103,15 +103,16 @@
 }
 
 .modalContainer {
-  background-color: #ffffff;
-  box-sizing: border-box;
+  position: relative;
+  top: 8%;
   margin : {
-    top: 56px;
-    bottom: 56px;
+    bottom: 40px;
     left: auto;
     right: auto;
   }
-
+  
+  background-color: #ffffff;
+  box-sizing: border-box;
   border: 1px solid #0067B8;
   width: 640px;
 }
@@ -367,12 +368,12 @@
     width: 100%;
   }
 
+  .cookieModal {
+    overflow: visible;
+  }
+
   .modalContainer {
-    margin : {
-      top: 3.3%;
-      bottom: 3.3%;
-      left: auto;
-    }
+    top: 1.8%;
     
     width: 93.33%;
     height: 96.4%;
