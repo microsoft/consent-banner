@@ -40,10 +40,13 @@ const banner =
 
     <!-- The Modal -->
     <div class="${styles.cookieModal}">
-        <div role="dialog" aria-modal="true" aria-label="Flow scroll" class="${styles.modalContainer}">
-            <span role="button" aria-label="Close dialog" class="${styles.closeModalIcon}">&#x2715;</span>
-            <div role="setting" class="${styles.modalBody}">
-                <div class="${styles.modalTitle}">Manage cookie preferences</div>
+        <div role="presentation" tabindex="-1"></div>
+        <div role="dialog" aria-modal="true" aria-label="Flow scroll" class="${styles.modalContainer}" tabindex="-1">
+            <button aria-label="Close dialog" class="${styles.closeModalIcon}" tabindex="0">&#x2715;</button>
+            <div role="document" class="${styles.modalBody}">
+                <div>
+                    <h2 class="${styles.modalTitle}">Manage cookie preferences</h2>
+                </div>
                 
                 <form class="${styles.modalContent}">
                     <p class="${styles.cookieStatement}">
@@ -57,80 +60,98 @@ const banner =
                     </p>
 
                     <ol class="${styles.cookieOrderedList}">
-                        <li class="${styles.cookieListItem}">Essential cookies</li>
-                        <span class="${styles.cookieListItemDescription}">
-                            We use essential cookies to do things.
-                        </span>
+                        <li class="${styles.cookieListItem}">
+                            Essential cookies
+                            <p class="${styles.cookieListItemDescription}">
+                                We use essential cookies to do things.
+                            </p>
+                        </li>
                 
-                        <li class="${styles.cookieListItem}">Performance & analytics</li>
-                        <span class="${styles.cookieListItemDescription}">
-                            We use performance & analytics cookies to track how things are working. Message text. This 
-                            is where the message dialog text goes. The text can wrap and wrap and wrap and wrap.
-                        </span>
-                        <div class="${styles.cookieItemRadioBtnGroup}">
-                            <label class="${styles.cookieItemRadioBtnCtrl}">
-                                <input type="radio" name="performanceCookies" class="${styles.cookieItemRadioBtn}" value="accept">
-                                <span class="${styles.cookieItemRadioBtnLabel}">Accept</span>
-                            </label>
-                            <label class="${styles.cookieItemRadioBtnCtrl}">
-                                <input type="radio" name="performanceCookies" class="${styles.cookieItemRadioBtn}" value="reject">
-                                <span class="${styles.cookieItemRadioBtnLabel}">Reject</span>
-                            </label>
-                        </div>
+                        <li class="${styles.cookieListItem}">
+                            <fieldset class="${styles.cookieListItemGroup}" role="radiogroup" aria-label="Performance and analytics cookies setting">
+                                <legend class="${styles.cookieListItemTitle}">Performance & analytics</legend>
+                                <p class="${styles.cookieListItemDescription}">
+                                    We use performance & analytics cookies to track how things are working. Message text. This 
+                                    is where the message dialog text goes. The text can wrap and wrap and wrap and wrap.
+                                </p>
+                                <div class="${styles.cookieItemRadioBtnGroup}">
+                                    <label class="${styles.cookieItemRadioBtnCtrl}" role="radio">
+                                        <input type="radio" aria-label="Accept" class="${styles.cookieItemRadioBtn}" name="performanceCookies" value="accept">
+                                        <span class="${styles.cookieItemRadioBtnLabel}">Accept</span>
+                                    </label>
+                                    <label class="${styles.cookieItemRadioBtnCtrl}" role="radio">
+                                        <input type="radio" aria-label="Reject" class="${styles.cookieItemRadioBtn}" name="performanceCookies" value="reject">
+                                        <span class="${styles.cookieItemRadioBtnLabel}">Reject</span>
+                                    </label>
+                                </div>
+                            </fieldset>
+                        </li>
 
-                        <li class="${styles.cookieListItem}">Advertising/Marketing</li>
-                        <span class="${styles.cookieListItemDescription}">
-                            We use advertising/marketing cookies to provide our partners with data. Message text. This 
-                            is where the message dialog text goes. The text can wrap and wrap and wrap and wrap.
-                        </span>
-                        <div class="${styles.cookieItemRadioBtnGroup}">
-                            <label class="${styles.cookieItemRadioBtnCtrl}">
-                                <input type="radio" name="advertisingCookies" class="${styles.cookieItemRadioBtn}" value="accept">
-                                <span class="${styles.cookieItemRadioBtnLabel}">Accept</span>
-                            </label>
-                            <label class="${styles.cookieItemRadioBtnCtrl}">
-                                <input type="radio" name="advertisingCookies" class="${styles.cookieItemRadioBtn}" value="reject">
-                                <span class="${styles.cookieItemRadioBtnLabel}">Reject</span>
-                            </label>
-                        </div>
+                        <li class="${styles.cookieListItem}">
+                            <fieldset class="${styles.cookieListItemGroup}" role="radiogroup" aria-label="Advertising/Marketing cookies setting">
+                                <legend class="${styles.cookieListItemTitle}">Advertising/Marketing</legend>
+                                <p class="${styles.cookieListItemDescription}">
+                                    We use advertising/marketing cookies to provide our partners with data. Message text. This 
+                                    is where the message dialog text goes. The text can wrap and wrap and wrap and wrap.
+                                </p>
+                                <div class="${styles.cookieItemRadioBtnGroup}">
+                                    <label class="${styles.cookieItemRadioBtnCtrl}" role="radio">
+                                        <input type="radio" aria-label="Accept" class="${styles.cookieItemRadioBtn}" name="advertisingCookies" value="accept">
+                                        <span class="${styles.cookieItemRadioBtnLabel}">Accept</span>
+                                    </label>
+                                    <label class="${styles.cookieItemRadioBtnCtrl}" role="radio">
+                                        <input type="radio" aria-label="Reject" class="${styles.cookieItemRadioBtn}" name="advertisingCookies" value="reject">
+                                        <span class="${styles.cookieItemRadioBtnLabel}">Reject</span>
+                                    </label>
+                                </div>
+                            </fieldset>
+                        </li>
 
-                        <li class="${styles.cookieListItem}">Targeting/personalization</li>
-                        <span class="${styles.cookieListItemDescription}">
-                            We use targeting/personalization cookies to enhance the quality of ads you see. Message text. 
-                            This is where the message dialog text goes. The text can wrap and wrap and wrap and wrap.
-                        </span>
-                        <div class="${styles.cookieItemRadioBtnGroup}">
-                            <label class="${styles.cookieItemRadioBtnCtrl}">
-                                <input type="radio" name="targetingCookies" class="${styles.cookieItemRadioBtn}" value="accept">
-                                <span class="${styles.cookieItemRadioBtnLabel}">Accept</span>
-                            </label>
-                            <label class="${styles.cookieItemRadioBtnCtrl}">
-                                <input type="radio" name="targetingCookies" class="${styles.cookieItemRadioBtn}" value="reject">
-                                <span class="${styles.cookieItemRadioBtnLabel}">Reject</span>
-                            </label>
-                        </div>
+                        <li class="${styles.cookieListItem}">
+                            <fieldset class="${styles.cookieListItemGroup}" role="radiogroup" aria-label="Targeting/personalization cookies setting">
+                                <legend class="${styles.cookieListItemTitle}">Targeting/personalization</legend>
+                                <p class="${styles.cookieListItemDescription}">
+                                    We use targeting/personalization cookies to enhance the quality of ads you see. Message text. 
+                                    This is where the message dialog text goes. The text can wrap and wrap and wrap and wrap.
+                                </p>
+                                <div class="${styles.cookieItemRadioBtnGroup}">
+                                    <label class="${styles.cookieItemRadioBtnCtrl}" role="radio">
+                                        <input type="radio" aria-label="Accept" class="${styles.cookieItemRadioBtn}" name="targetingCookies" value="accept">
+                                        <span class="${styles.cookieItemRadioBtnLabel}">Accept</span>
+                                    </label>
+                                    <label class="${styles.cookieItemRadioBtnCtrl}" role="radio">
+                                        <input type="radio" aria-label="Reject" class="${styles.cookieItemRadioBtn}" name="targetingCookies" value="reject">
+                                        <span class="${styles.cookieItemRadioBtnLabel}">Reject</span>
+                                    </label>
+                                </div>
+                            </fieldset>
+                        </li>
 
-                        <li class="${styles.cookieListItem}">Social media</li>
-                        <span class="${styles.cookieListItemDescription}">
-                            We use social media cookies to improve the experience you see. Message text. This is where 
-                            the message dialog text goes. The text can wrap and wrap and wrap and wrap.
-                        </span>
-                        <div class="${styles.cookieItemRadioBtnGroup}">
-                            <label class="${styles.cookieItemRadioBtnCtrl}">
-                                <input type="radio" name="socialMediaCookies" class="${styles.cookieItemRadioBtn}" value="accept">
-                                <span class="${styles.cookieItemRadioBtnLabel}">Accept</span>
-                            </label>
-                            <label class="${styles.cookieItemRadioBtnCtrl}">
-                                <input type="radio" name="socialMediaCookies" class="${styles.cookieItemRadioBtn}" value="reject">
-                                <span class="${styles.cookieItemRadioBtnLabel}">Reject</span>
-                            </label>
-                        </div>
+                        <li class="${styles.cookieListItem}">
+                            <fieldset class="${styles.cookieListItemGroup}" role="radiogroup" aria-label="Social media cookies setting">
+                                <legend class="${styles.cookieListItemTitle}">Social media</legend>
+                                <p class="${styles.cookieListItemDescription}">
+                                    We use social media cookies to improve the experience you see. Message text. This is where 
+                                    the message dialog text goes. The text can wrap and wrap and wrap and wrap.
+                                </p>
+                                <div class="${styles.cookieItemRadioBtnGroup}">
+                                    <label class="${styles.cookieItemRadioBtnCtrl}" role="radio">
+                                        <input type="radio" aria-label="Accept" class="${styles.cookieItemRadioBtn}" name="socialMediaCookies" value="accept">
+                                        <span class="${styles.cookieItemRadioBtnLabel}">Accept</span>
+                                    </label>
+                                    <label class="${styles.cookieItemRadioBtnCtrl}" role="radio">
+                                        <input type="radio" aria-label="Reject" class="${styles.cookieItemRadioBtn}" name="socialMediaCookies" value="reject">
+                                        <span class="${styles.cookieItemRadioBtnLabel}">Reject</span>
+                                    </label>
+                                </div>
+                            </fieldset>
+                        </li>
                     </ol>
                 </form>
                 
                 <div class="${styles.modalButtonGroup}">
-                    <button type="button" class="${styles.modalButtonSave}" disabled>Save changes</button>
-                    <button type="button" class="${styles.modalButtonReset}" disabled>Reset all</button>
+                    <button type="button" aria-label="Save changes" class="${styles.modalButtonSave}" disabled>Save changes</button>
+                    <button type="button" aria-label="Reset all" class="${styles.modalButtonReset}" disabled>Reset all</button>
                 </div>
             </div>
         </div>

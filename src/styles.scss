@@ -120,7 +120,7 @@
 .closeModalIcon {
   float: right;
   padding: 12px;
-  width: 12px;
+  border: none;
 
   cursor: pointer;
   font : {
@@ -136,6 +136,7 @@
   align-items: center;
   text-align: center;
   color: #666666;
+  background-color: #ffffff;
 }
 
 .modalBody {
@@ -208,9 +209,23 @@
   /* identical to box height, or 133% */
 }
 
+.cookieListItemGroup {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.cookieListItemTitle {
+  padding: 0;
+}
+
 .cookieListItemDescription {
+  margin: 0;
+
   font : {
     family: Segoe UI, SegoeUI, Arial, sans-serif;
+    style: normal;
+    weight: normal;
     size: 15px;
   }
 
@@ -232,6 +247,8 @@
 
   font : {
     family: Segoe UI, SegoeUI, Arial, sans-serif;
+    style: normal;
+    weight: normal;
     size: 15px;
   }
   line-height: 20px;
