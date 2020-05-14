@@ -1,4 +1,16 @@
+@mixin bannerFont($weight, $size, $style: normal) {
+  font : {
+    family: Segoe UI, SegoeUI, Arial, sans-serif;
+    style: $style;
+    weight: $weight;
+    size: $size;
+  }
+}
+
 .bannerBody {
+  position: relative;
+  z-index: 9999;          /* on top of the page */
+  margin-bottom: 3px;     /* Prevent breaking the layout of the page */
   width: 100%;
   min-height: 64px;
   background-color: #F2F2F2;
@@ -22,27 +34,30 @@
   width: 24px;
   height: 24px;
 
-  font : {
-    family: Segoe UI, SegoeUI, Arial, sans-serif;
-    style: normal;
-    weight: normal;
-    size: 24px;
-  }
+  @include bannerFont(normal, 24px);
   
   /* identical to box height */
   line-height: 24px;
+
+  color: #000000;
 }
 
 .bannerInformBody {
   display: table-cell;
   vertical-align: middle;
   
-  font : {
-    family: Segoe UI, SegoeUI, Arial, sans-serif;
-    size: 13px;
-  }
-
+  @include bannerFont(normal, 13px);
   line-height: 16px;
+  color: #000000;
+
+  /* Edit this line in case the text-align in insertion point is different */
+  /* text-align: left; */
+
+  /* Add styles to hyperlinks in case websites close the default styles for hyperlinks */
+  & a {
+    color: #0067B8;
+    text-decoration: underline;
+  }
 }
 
 .buttonGroup {
@@ -63,15 +78,14 @@
   background-color: #EBEBEB;
   
   cursor: pointer;
-  font : {
-    family: Segoe UI, SegoeUI, Arial, sans-serif;
-    size: 15px;
-  }
-
+  @include bannerFont(normal, 15px);
   line-height: 20px;
   text-align: center;
 
+  color: #000000;
+  
   &:hover {
+    color: #000000;
     background-color: #DBDBDB;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
   }
@@ -93,7 +107,7 @@
 .cookieModal {
   display: none;
   position: fixed;
-  z-index: 2;
+  z-index: 9999;   /* on top of the page */
   top: 0;
   left: 0;
   width: 100%;
@@ -123,13 +137,7 @@
   border: none;
 
   cursor: pointer;
-  font : {
-    family: Segoe UI, SegoeUI, Arial, sans-serif;
-    style: normal;
-    weight: normal;
-    size: 13px;
-  }
-
+  @include bannerFont(normal, 13px);
   line-height: 13px;
 
   display: flex;
@@ -146,7 +154,8 @@
     right: 36px;
   }
 
-  height: 100%;
+  /* Edit this line in case the text-align in insertion point is different */
+  /* text-align: left; */
 }
 
 .modalTitle {
@@ -154,13 +163,10 @@
     bottom: 12px;
   }
 
-  font : {
-    family: Segoe UI, SegoeUI, Arial, sans-serif;
-    style: normal;
-    weight: 600;
-    size: 20px;
-  }
+  @include bannerFont(600, 20px);
   line-height: 24px;
+  text-transform: none;
+  color: #000000;
 }
 
 .modalContent {
@@ -173,40 +179,41 @@
     top: 0;
   }
 
-  font : {
-    family: Segoe UI, SegoeUI, Arial, sans-serif;
-    style: normal;
-    weight: normal;
-    size: 15px;
-  }
+  @include bannerFont(normal, 15px);
   line-height: 20px;
+  color: #000000;
+
+  /* Add styles to hyperlinks in case websites close the default styles for hyperlinks */
+  & a {
+    color: #0067B8;
+    text-decoration: underline;
+  }
 }
 
-.cookieOrderedList {
+ol.cookieOrderedList {
   margin : {
-    top: 20px;
+    top: 36px;
     bottom: 0;
   }
-
   padding : {
     left: 20px;
   }
+
+  /* Add decimal numbers in front of list items in case websites close the default styles */
+  list-style-type: decimal;
 }
 
-.cookieListItem {
+li.cookieListItem {
   margin : {
-    top: 36px;
+    top: 20px;
   }
 
-  font : {
-    family: Segoe UI, SegoeUI, Arial, sans-serif;
-    style: normal;
-    weight: 600;
-    size: 18px;
-  }
-
+  @include bannerFont(600, 18px);
   line-height: 24px;
-  /* identical to box height, or 133% */
+  color: #000000;
+
+  /* Add decimal numbers in front of list items in case websites close the default styles */
+  list-style-type: decimal;
 }
 
 .cookieListItemGroup {
@@ -216,50 +223,112 @@
 }
 
 .cookieListItemTitle {
+  margin: 0;
   padding: 0;
+  border-bottom: none;
+
+  @include bannerFont(600, 18px);
+  line-height: 24px;
+  text-transform: none;
+  color: #000000;
 }
 
 .cookieListItemDescription {
-  margin: 0;
-
-  font : {
-    family: Segoe UI, SegoeUI, Arial, sans-serif;
-    style: normal;
-    weight: normal;
-    size: 15px;
+  display: inline-block;
+  margin : {
+    top: 0;
+    bottom: 16px;
   }
 
+  @include bannerFont(normal, 15px);
   line-height: 20px;
-  /* identical to box height, or 133% */
+  color: #000000;
 }
 
 .cookieItemRadioBtnGroup {
-  margin : {
-    top: 16px;
-  }
+  display: block;
 }
 
 .cookieItemRadioBtnCtrl {
-  display: inline-table;
+  display: inline-block;
   margin : {
+    bottom: 16px;
     right: 34px;
   }
-
-  font : {
-    family: Segoe UI, SegoeUI, Arial, sans-serif;
-    style: normal;
-    weight: normal;
-    size: 15px;
-  }
-  line-height: 20px;
-  /* identical to box height, or 133% */
 }
 
-.cookieItemRadioBtn {
-  display: table-cell;
+@mixin defineRaioInput {
+  border-radius: 50%;
+  outline: none;
+
+  &:checked::after {
+    display: block;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    border-radius: 50%;
+    height: 10px;
+    width: 10px;
+    content: "";
+    background-color: #000000;
+  }
+
+  &:hover {
+    border: 1px solid #0067B8;
+    
+    &:after {
+      display: block;
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      border-radius: 50%;
+      height: 10px;
+      width: 10px;
+      content: "";
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+  }
+
+  &:focus {
+    border: 1px solid #0067B8;
+    
+    &:after {
+      display: block;
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      border-radius: 50%;
+      height: 10px;
+      width: 10px;
+      content: "";
+      background-color: #000000;
+    }
+  }
+
+  &:disabled {
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+
+    &:after {
+      display: block;
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      border-radius: 50%;
+      height: 10px;
+      width: 10px;
+      content: "";
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+input[type="radio"].cookieItemRadioBtn {
+  display: block;
+  float: left;
   position: relative;   /* Adjust the position */
-  top: 4px;
   margin : {
+    top: 0;
     right: 8px;
   }
 
@@ -269,15 +338,33 @@
   cursor: pointer;
   border: 1px solid #000000;
   box-sizing: border-box;
+
+  /* Add this line if you don't like default styles for radio input button */
+  /* appearance: none; */
+
+  /* Define our own radio input in case websites close the default styles for input type radio */
+  @include defineRaioInput;
 }
 
 .cookieItemRadioBtnLabel {
-  display: table-cell;
+  display: inline-block;
+  position: relative;   /* Adjust the position */
+  bottom: 3px;
+  width: 80%;   /* If "calc()" is not supported */
+
+  width: calc(100% - 33px);
+
+  @include bannerFont(normal, 15px);
+  line-height: 20px;
+  /* identical to box height, or 133% */
+
+  text-transform: none;
+  color: #000000;
 }
 
 .modalButtonGroup {
   margin : {
-    top: 36px;
+    top: 20px;
     bottom: 48px;
   }
 }
@@ -289,18 +376,17 @@
   height: 36px;
   
   cursor: pointer;
-  font : {
-    family: Segoe UI, SegoeUI, Arial, sans-serif;
-    size: 15px;
-  }
+  @include bannerFont(normal, 15px);
 
   line-height: 20px;
   /* identical to box height, or 133% */
   text-align: center;
 
+  color: #000000;
   background-color: #EBEBEB;
 
   &:hover {
+    color: #000000;
     background-color: #DBDBDB;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
   }
@@ -330,10 +416,7 @@
   height: 36px;
 
   cursor: pointer;
-  font : {
-    family: Segoe UI, SegoeUI, Arial, sans-serif;
-    size: 15px;
-  }
+  @include bannerFont(normal, 15px);
 
   line-height: 20px;
   /* identical to box height, or 133% */
@@ -343,6 +426,7 @@
   background-color: #0067B8;
 
   &:hover {
+    color: #FFFFFF;
     background-color: #0067B8;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
   }
@@ -386,7 +470,7 @@
   }
 
   .cookieModal {
-    overflow: visible;
+    overflow: hidden;
   }
 
   .modalContainer {
@@ -402,12 +486,14 @@
       left: 24px;
       right: 24px;
     }
+
+    height: 100%;
   }
 
   .modalContent {
-    height: 61.25%;   /* If "calc()" is not supported */
+    height: 62%;   /* If "calc()" is not supported */
    
-    height: calc(100% - 248px);
+    height: calc(100% - 225px);
   }
 
   .modalButtonReset {

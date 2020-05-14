@@ -61,7 +61,7 @@ const banner =
 
                     <ol class="${styles.cookieOrderedList}">
                         <li class="${styles.cookieListItem}">
-                            Essential cookies
+                            <h3 class="${styles.cookieListItemTitle}">Essential cookies</h3>
                             <p class="${styles.cookieListItemDescription}">
                                 We use essential cookies to do things.
                             </p>
