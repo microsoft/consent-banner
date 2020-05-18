@@ -10,7 +10,6 @@
 .bannerBody {
   position: relative;
   z-index: 9999;          /* on top of the page */
-  margin-bottom: 3px;     /* Prevent breaking the layout of the page */
   width: 100%;
   min-height: 64px;
   background-color: #F2F2F2;
@@ -196,7 +195,7 @@ ol.cookieOrderedList {
     bottom: 0;
   }
   padding : {
-    left: 20px;
+    left: 24px;
   }
 
   /* Add decimal numbers in front of list items in case websites close the default styles */
