@@ -13,7 +13,7 @@ if (!document.querySelector('meta[name="viewport"]')) {
 let insert = document.querySelector('#app');
 
 let infoIcon = `
-<svg xmlns="http://www.w3.org/2000/svg" x='0px' y='0px' viewBox='0 0 44 44' height='24px' fill='none' stroke='currentColor'>
+<svg xmlns="http://www.w3.org/2000/svg" x='0px' y='0px' viewBox='0 0 44 44' width='24px' height='24px' fill='none' stroke='currentColor'>
   <circle cx='22' cy='22' r='20' stroke-width='2'></circle>
   <line x1='22' x2='22' y1='18' y2='33' stroke-width='3'></line>
   <line x1='22' x2='22' y1='12' y2='15' stroke-width='3'></line>
@@ -61,15 +61,15 @@ const banner =
 
                     <ol class="${styles.cookieOrderedList}">
                         <li class="${styles.cookieListItem}">
-                            Essential cookies
+                            <h3 class="${styles.cookieListItemTitle}">Essential cookies</h3>
                             <p class="${styles.cookieListItemDescription}">
                                 We use essential cookies to do things.
                             </p>
                         </li>
                 
                         <li class="${styles.cookieListItem}">
-                            <fieldset class="${styles.cookieListItemGroup}" role="radiogroup" aria-label="Performance and analytics cookies setting">
-                                <legend class="${styles.cookieListItemTitle}">Performance & analytics</legend>
+                            <div class="${styles.cookieListItemGroup}" role="radiogroup" aria-label="Performance and analytics cookies setting">
+                                <h3 class="${styles.cookieListItemTitle}">Performance & analytics</h3>
                                 <p class="${styles.cookieListItemDescription}">
                                     We use performance & analytics cookies to track how things are working. Message text. This 
                                     is where the message dialog text goes. The text can wrap and wrap and wrap and wrap.
@@ -84,12 +84,12 @@ const banner =
                                         <span class="${styles.cookieItemRadioBtnLabel}">Reject</span>
                                     </label>
                                 </div>
-                            </fieldset>
+                            </div>
                         </li>
 
                         <li class="${styles.cookieListItem}">
-                            <fieldset class="${styles.cookieListItemGroup}" role="radiogroup" aria-label="Advertising/Marketing cookies setting">
-                                <legend class="${styles.cookieListItemTitle}">Advertising/Marketing</legend>
+                            <div class="${styles.cookieListItemGroup}" role="radiogroup" aria-label="Advertising/Marketing cookies setting">
+                                <h3 class="${styles.cookieListItemTitle}">Advertising/Marketing</h3>
                                 <p class="${styles.cookieListItemDescription}">
                                     We use advertising/marketing cookies to provide our partners with data. Message text. This 
                                     is where the message dialog text goes. The text can wrap and wrap and wrap and wrap.
@@ -104,12 +104,12 @@ const banner =
                                         <span class="${styles.cookieItemRadioBtnLabel}">Reject</span>
                                     </label>
                                 </div>
-                            </fieldset>
+                            </div>
                         </li>
 
                         <li class="${styles.cookieListItem}">
-                            <fieldset class="${styles.cookieListItemGroup}" role="radiogroup" aria-label="Targeting/personalization cookies setting">
-                                <legend class="${styles.cookieListItemTitle}">Targeting/personalization</legend>
+                            <div class="${styles.cookieListItemGroup}" role="radiogroup" aria-label="Targeting/personalization cookies setting">
+                                <h3 class="${styles.cookieListItemTitle}">Targeting/personalization</h3>
                                 <p class="${styles.cookieListItemDescription}">
                                     We use targeting/personalization cookies to enhance the quality of ads you see. Message text. 
                                     This is where the message dialog text goes. The text can wrap and wrap and wrap and wrap.
@@ -124,12 +124,12 @@ const banner =
                                         <span class="${styles.cookieItemRadioBtnLabel}">Reject</span>
                                     </label>
                                 </div>
-                            </fieldset>
+                            </div>
                         </li>
 
                         <li class="${styles.cookieListItem}">
-                            <fieldset class="${styles.cookieListItemGroup}" role="radiogroup" aria-label="Social media cookies setting">
-                                <legend class="${styles.cookieListItemTitle}">Social media</legend>
+                            <div class="${styles.cookieListItemGroup}" role="radiogroup" aria-label="Social media cookies setting">
+                                <h3 class="${styles.cookieListItemTitle}">Social media</h3>
                                 <p class="${styles.cookieListItemDescription}">
                                     We use social media cookies to improve the experience you see. Message text. This is where 
                                     the message dialog text goes. The text can wrap and wrap and wrap and wrap.
@@ -144,7 +144,7 @@ const banner =
                                         <span class="${styles.cookieItemRadioBtnLabel}">Reject</span>
                                     </label>
                                 </div>
-                            </fieldset>
+                            </div>
                         </li>
                     </ol>
                 </form>
@@ -166,7 +166,7 @@ let cookieInfo = document.getElementsByClassName(`${styles.bannerButton}`)[2];
 let modal: HTMLElement = <HTMLElement> document.getElementsByClassName(`${styles.cookieModal}`)[0];
 let closeModalIcon = document.getElementsByClassName(`${styles.closeModalIcon}`)[0];
 
-let cookieItemRadioBtn: Element[] = Array.from(document.getElementsByClassName(`${ styles.cookieItemRadioBtn }`));
+let cookieItemRadioBtn: Element[] = [].slice.call(document.getElementsByClassName(`${ styles.cookieItemRadioBtn }`));
 let modalButtonSave: HTMLInputElement = <HTMLInputElement> document.getElementsByClassName(`${ styles.modalButtonSave }`)[0];
 let modalButtonReset: HTMLInputElement = <HTMLInputElement> document.getElementsByClassName(`${ styles.modalButtonReset }`)[0];
 
