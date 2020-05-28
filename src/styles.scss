@@ -7,24 +7,34 @@
   }
 }
 
+// For right-to-left direction
+@mixin rtlDesign($margin, $padding, $float: none) {
+  html[dir="rtl"] &, body[dir="rtl"] & {
+    margin: $margin;
+    padding: $padding;
+    float: $float;
+  }
+}
+
 .bannerBody {
   position: relative;
   z-index: 9999;          /* on top of the page */
   width: 100%;
-  min-height: 64px;
   background-color: #F2F2F2;
 }
 
 .bannerInform {
-  display: table;
-  float: left;
+  display: inline-table;
   margin : {
     left: 5%;
+    right: 5%;
     top: 8px;
     bottom: 8px;
   }
   
-  width: 50%;
+  width: 45%;   /* If "calc()" is not supported */
+
+  width: calc(85% - 400px);
 }
 
 .infoIcon {
@@ -60,16 +70,14 @@
 }
 
 .buttonGroup {
-  float: right;
-  margin : {
-    top: 8px;
-    bottom: 8px;
-    right: 5%;
-  }
+  display: inline-block;
+  position: relative;
+  bottom: 4px;
 }
 
 .bannerButton {
   margin: 4px;
+  padding: 0;
   border: none;
 
   width: 120px;
@@ -144,6 +152,8 @@
   text-align: center;
   color: #666666;
   background-color: #ffffff;
+
+  @include rtlDesign(0, 12px, left);
 }
 
 .modalBody {
@@ -196,6 +206,7 @@ ol.cookieOrderedList {
   }
   padding : {
     left: 24px;
+    right: 24px;
   }
 
   /* Add decimal numbers in front of list items in case websites close the default styles */
@@ -252,7 +263,6 @@ li.cookieListItem {
   display: inline-block;
   margin : {
     bottom: 16px;
-    right: 34px;
   }
 }
 
@@ -323,12 +333,12 @@ li.cookieListItem {
 }
 
 input[type="radio"].cookieItemRadioBtn {
-  display: block;
-  float: left;
+  display: inline-block;
   position: relative;   /* Adjust the position */
   margin : {
     top: 0;
-    right: 8px;
+    left: 0;
+    right: 0;
   }
 
   width: 20px;
@@ -346,12 +356,16 @@ input[type="radio"].cookieItemRadioBtn {
 }
 
 .cookieItemRadioBtnLabel {
-  display: inline-block;
+  display: block;
+  float: right;
   position: relative;   /* Adjust the position */
-  bottom: 3px;
+  margin : {
+    left: 8px;
+    right: 34px;
+  }
   width: 80%;   /* If "calc()" is not supported */
 
-  width: calc(100% - 33px);
+  width: calc(100% - 62px);
 
   @include bannerFont(normal, 15px);
   line-height: 20px;
@@ -359,6 +373,8 @@ input[type="radio"].cookieItemRadioBtn {
 
   text-transform: none;
   color: #000000;
+
+  @include rtlDesign(0 8px 0 34px, 0, left);
 }
 
 .modalButtonGroup {
@@ -369,6 +385,7 @@ input[type="radio"].cookieItemRadioBtn {
 }
 
 .modalButtonReset {
+  padding: 0;
   border: none;
 
   width: 278px;
@@ -409,6 +426,7 @@ input[type="radio"].cookieItemRadioBtn {
   margin : {
     left: 10px;
   }
+  padding: 0;
   border: none;
 
   width: 278px;
@@ -442,17 +460,19 @@ input[type="radio"].cookieItemRadioBtn {
     color: rgba(0, 0, 0, 0.2);
     background-color: rgba(0, 120, 215, 0.2);
   }
+
+  @include rtlDesign(0 10px 0 0, 0, left);
 }
 
-@media only screen and (max-width: 995px) {
+@media only screen and (max-width: 800px) {
   /* For mobile phones: */
   
   .buttonGroup, .bannerInform {
-    float: none;
     margin : {
       top: 8px;
       bottom: 8px;
       left: 3.75%;
+      right: 3.75%;
     }
 
     width: 92.5%;
@@ -506,5 +526,7 @@ input[type="radio"].cookieItemRadioBtn {
     }
 
     width: 100%;
+
+    @include rtlDesign(0 0 12px 0, 0);
   }
 }
