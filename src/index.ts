@@ -1,5 +1,120 @@
 import styles from "./styles.scss";
 
+import { languageDirection, languageCountryDirection } from './language-list.const';
+import { ICookieCategories, ICookieCategoriesPreferences } from './interfaces/CookieCategories';
+import { TextResources } from './interfaces/TextResources';
+
+class ConsentControl {
+    culture: string;
+    cookieCategories: ICookieCategories[];
+    textResources: TextResources;
+
+    private direction: string = 'ltr';
+
+    // All categories should be replaced with the passed ones in the control
+    defaultCookieCategories: ICookieCategories[] =
+    [
+        {
+            id: "c0",
+            name: "1. Essential cookies",
+            descHtml: "We use this cookie, read more <a href='link'>here<a>.",
+            isUnswitchable: true        // optional, prevents toggling the category. True only for categories like Essential cookies.
+        },
+        {
+            id: "c1",
+            name: "2. Performance & analytics",
+            descHtml: "We use this cookie, read more <a href='link'>here<a>."
+        },
+        {
+            id: "c2",
+            name: "3. Advertising/Marketing",
+            descHtml: "Blah"
+        },
+        {
+            id: "c3",
+            name: "4. Targeting/personalization",
+            descHtml: "Blah"
+        }
+    ];
+
+    constructor(culture: string, cookieCategories?: ICookieCategories[], textResources?: TextResources) {
+        this.culture = culture;
+
+        if (cookieCategories) {
+            this.cookieCategories = cookieCategories;
+        }
+        else {
+            this.cookieCategories = this.defaultCookieCategories;
+        }
+
+        if (textResources) {
+            this.textResources = textResources;
+        }
+        else {
+            let defaultTextResources: TextResources = new TextResources();
+            this.textResources = defaultTextResources;
+        }
+
+        this.setDirection();
+    }
+
+    /**
+     * callback function, called on preferences changes (via "Accept All", "Reject All", or "Save changes"), 
+     * must pass cookieCategoriePreferences
+     * 
+     * @param cookieCategoriesPreferences ICookieCategoriesPreferences[]
+     */
+    public onPreferencesChanged(cookieCategoriesPreferences: ICookieCategoriesPreferences[]): void {
+        // TODO
+    }
+
+    /**
+     * Set the direction by passing the parameter or by checking the culture property
+     * 
+     * @param dir string
+     */
+    public setDirection(dir?: string): void {
+        if (dir) {
+            this.direction = dir;
+        }
+        else {
+            let formatCulture: string = this.culture.toLowerCase();
+
+            // language, e.g. "en"
+            if (languageDirection.hasOwnProperty(formatCulture)) {
+                let langKey = formatCulture as keyof typeof languageDirection;
+                this.direction = languageDirection[langKey];
+            }
+            // language-country, e.g. "en-us"
+            else if (languageCountryDirection.hasOwnProperty(formatCulture)) {
+                let langKey = formatCulture as keyof typeof languageCountryDirection;
+                this.direction = languageCountryDirection[langKey];
+            }
+            // other language-country not in the language-country list.
+            // retrieve the language part
+            else {
+                let cultureArray: string[] = formatCulture.split('-');
+                let lang: string = cultureArray[0];
+
+                if (languageDirection.hasOwnProperty(lang)) {
+                    let langKey = lang as keyof typeof languageDirection;
+                    this.direction = languageDirection[langKey];
+                }
+                else {
+                    this.direction = 'ltr';
+                }
+            }
+        }
+    }
+
+    /**
+     * Return the direction
+     */
+    public getDirection(): string {
+        return this.direction;
+    }
+}
+
 // Add <meta name="viewport" content="width=device-width, initial-scale=1.0">
 // for responsive web design
 if (!document.querySelector('meta[name="viewport"]')) {
