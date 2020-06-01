@@ -1,18 +1,18 @@
 import styles from "./styles.scss";
 
-import { languageDirection, languageCountryDirection } from './language-list.const';
-import { ICookieCategories } from './interfaces/CookieCategories';
-import { TextResources } from './interfaces/TextResources';
+import { rtlLanguage } from './language-list.const';
+import { ICookieCategory } from './interfaces/CookieCategories';
+import { ITextResources } from './interfaces/TextResources';
 
 class ConsentControl {
     culture: string;
-    cookieCategories: ICookieCategories[];
-    textResources: TextResources;
+    cookieCategories: ICookieCategory[];
+    textResources: ITextResources;
 
     private direction: string = 'ltr';
 
     // All categories should be replaced with the passed ones in the control
-    defaultCookieCategories: ICookieCategories[] =
+    defaultCookieCategories: ICookieCategory[] =
     [
         {
             id: "c0",
@@ -37,7 +37,22 @@ class ConsentControl {
         }
     ];
 
-    constructor(culture: string, cookieCategories?: ICookieCategories[], textResources?: TextResources) {
+    // only the passed text resources should be replaced in the control.
+    // If any string is not passed the control should keep the default value
+    defaultTextResources: ITextResources = {
+        bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here<a>.",
+        acceptAllLabel: "Accept all",
+        rejectAllLabel: "Reject all",
+        moreInfoLabel: "More info",
+        preferencesDialogTitle: "Manage cookie preferences",
+        preferencesDialogDescHtml: "Most Microsoft sites...",
+        acceptLabel: "Accept",
+        rejectLabel: "Reject",
+        saveLabel: "Save changes",
+        resetLabel: "Reset all"
+    };
+
+    constructor(culture: string, cookieCategories?: ICookieCategory[], textResources?: ITextResources) {
         this.culture = culture;
 
         if (cookieCategories) {
@@ -47,12 +62,9 @@ class ConsentControl {
             this.cookieCategories = this.defaultCookieCategories;
         }
 
+        this.textResources = this.defaultTextResources;
         if (textResources) {
-            this.textResources = textResources;
-        }
-        else {
-            let defaultTextResources: TextResources = new TextResources();
-            this.textResources = defaultTextResources;
+            this.setTextResources(textResources);
         }
 
         this.setDirection();
@@ -68,6 +80,39 @@ class ConsentControl {
         // TODO
     }
 
+    public setTextResources(textResources: ITextResources): void {
+        if (textResources.bannerMessageHtml) {
+            this.textResources.bannerMessageHtml = textResources.bannerMessageHtml;
+        }
+        if (textResources.acceptAllLabel) {
+            this.textResources.acceptAllLabel = textResources.acceptAllLabel;
+        }
+        if (textResources.rejectAllLabel) {
+            this.textResources.rejectAllLabel = textResources.rejectAllLabel;
+        }
+        if (textResources.moreInfoLabel) {
+            this.textResources.moreInfoLabel = textResources.moreInfoLabel;
+        }
+        if (textResources.preferencesDialogTitle) {
+            this.textResources.preferencesDialogTitle = textResources.preferencesDialogTitle;
+        }
+        if (textResources.preferencesDialogDescHtml) {
+            this.textResources.preferencesDialogDescHtml = textResources.preferencesDialogDescHtml;
+        }
+        if (textResources.acceptLabel) {
+            this.textResources.acceptLabel = textResources.acceptLabel;
+        }
+        if (textResources.rejectLabel) {
+            this.textResources.rejectLabel = textResources.rejectLabel;
+        }
+        if (textResources.saveLabel) {
+            this.textResources.saveLabel = textResources.saveLabel;
+        }
+        if (textResources.resetLabel) {
+            this.textResources.resetLabel = textResources.resetLabel;
+        }
+    }
+
     /**
      * Set the direction by passing the parameter or by checking the culture property
      * 
@@ -79,30 +124,19 @@ class ConsentControl {
         }
         else {
             let formatCulture: string = this.culture.toLowerCase();
-
-            // language, e.g. "en"
-            if (languageDirection.hasOwnProperty(formatCulture)) {
-                let langKey = formatCulture as keyof typeof languageDirection;
-                this.direction = languageDirection[langKey];
+            let cultureArray: string[] = formatCulture.split('-');
+            let lang: string = cultureArray[0];
+    
+            if (rtlLanguage.hasOwnProperty(lang)) {
+                this.direction = 'rtl';
             }
-            // language-country, e.g. "en-us"
-            else if (languageCountryDirection.hasOwnProperty(formatCulture)) {
-                let langKey = formatCulture as keyof typeof languageCountryDirection;
-                this.direction = languageCountryDirection[langKey];
+            // ks-Arab-IN is right to left (in language-list.const.ts)
+            // ks-Deva-IN is left to right
+            else if (rtlLanguage.hasOwnProperty(cultureArray[0] + '-' + cultureArray[1])) {
+                this.direction = 'rtl';
             }
-            // other language-country not in the language-country list.
-            // retrieve the language part
             else {
-                let cultureArray: string[] = formatCulture.split('-');
-                let lang: string = cultureArray[0];
-
-                if (languageDirection.hasOwnProperty(lang)) {
-                    let langKey = lang as keyof typeof languageDirection;
-                    this.direction = languageDirection[langKey];
-                }
-                else {
-                    this.direction = 'ltr';
-                }
+                this.direction = 'ltr';
             }
         }
     }

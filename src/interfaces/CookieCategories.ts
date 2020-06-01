@@ -1,4 +1,4 @@
-export interface ICookieCategories {
+export interface ICookieCategory {
     id: string;
     name: string;
     descHtml: string;

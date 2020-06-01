@@ -1,47 +1,19 @@
 // culture can be just language "en" or language-country "en-us". 
 // Based on language RTL should be applied (https://www.w3.org/International/questions/qa-scripts.en)
-// Language list is from
+// Locale IDs are from
 // https://help.bing.microsoft.com/#apex/18/en-US/10004/-1
-export enum languageDirection {
-    'ar-XA' = 'rtl',
-    bg = 'ltr',
-    hr = 'ltr',
-    cs = 'ltr',
-    da = 'ltr',
-    de = 'ltr',
-    el = 'ltr',
-    en = 'ltr',
-    et = 'ltr',
-    es = 'ltr',
-    fi = 'ltr',
-    fr = 'ltr',
-    ga = 'ltr',
-    hi = 'ltr',
-    hu = 'ltr',
+// https://docs.microsoft.com/en-us/openspecs/office_standards/ms-oe376/6c085406-a698-4e12-9d4d-c3b0ee3dbc4a
+export enum rtlLanguage {
+    ar = 'rtl',
     he = 'rtl',
-    it = 'ltr',
-    ja = 'ltr',
-    ko = 'ltr',
-    lv = 'ltr',
-    lt = 'ltr',
-    nl = 'ltr',
-    no = 'ltr',
-    pl = 'ltr',
-    pt = 'ltr',
-    sv = 'ltr',
-    ro = 'ltr',
-    ru = 'ltr',
-    'sr-CS' = 'ltr',
-    sk = 'ltr',
-    sl = 'ltr',
-    th = 'ltr',
-    tr = 'ltr',
-    'uk-UA' = 'ltr',
-    'zh-chs' = 'ltr',
-    'zh-cht' = 'ltr'
-};
-
-export enum languageCountryDirection {
-    'ar-sa' = 'rtl',
-    'en-us' = 'ltr',
+    ps = 'rtl',
+    ur = 'rtl',
+    fa = 'rtl',
+    pa = 'rtl',
+    sd = 'rtl',
+    tk = 'rtl',
+    ug = 'rtl',
+    yi = 'rtl',
+    syr = 'rtl',
+    'ks-arab' = 'rtl'     // Kashmiri (Arabic) is rtl
 };
