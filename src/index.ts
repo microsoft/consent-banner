@@ -1,7 +1,7 @@
 import styles from "./styles.scss";
 
 import { languageDirection, languageCountryDirection } from './language-list.const';
-import { ICookieCategories, ICookieCategoriesPreferences } from './interfaces/CookieCategories';
+import { ICookieCategories } from './interfaces/CookieCategories';
 import { TextResources } from './interfaces/TextResources';
 
 class ConsentControl {
@@ -62,16 +62,16 @@ class ConsentControl {
      * callback function, called on preferences changes (via "Accept All", "Reject All", or "Save changes"), 
      * must pass cookieCategoriePreferences
      * 
-     * @param cookieCategoriesPreferences ICookieCategoriesPreferences[]
+     * @param cookieCategoriesPreferences preferences for each cookie categories
      */
-    public onPreferencesChanged(cookieCategoriesPreferences: ICookieCategoriesPreferences[]): void {
+    public onPreferencesChanged(cookieCategoriesPreferences: any): void {
         // TODO
     }
 
     /**
      * Set the direction by passing the parameter or by checking the culture property
      * 
-     * @param dir string
+     * @param dir direction for the web, ltr or rtl
      */
     public setDirection(dir?: string): void {
         if (dir) {
