@@ -1,10 +1,10 @@
 import styles from "./styles.scss";
 
-import { rtlLanguage } from './language-list.const';
+import { RTL_LANGUAGE } from './language-list.const';
 import { ICookieCategory } from './interfaces/CookieCategories';
 import { ITextResources } from './interfaces/TextResources';
 
-class ConsentControl {
+export class ConsentControl {
     culture: string;
     cookieCategories: ICookieCategory[];
     textResources: ITextResources;
@@ -127,16 +127,26 @@ class ConsentControl {
             let cultureArray: string[] = formatCulture.split('-');
             let lang: string = cultureArray[0];
     
-            if (rtlLanguage.hasOwnProperty(lang)) {
-                this.direction = 'rtl';
+            // Check <html dir="rtl"> or <html dir="ltr">
+            if (document.dir) {
+                this.direction = document.dir;
             }
-            // ks-Arab-IN is right to left (in language-list.const.ts)
-            // ks-Deva-IN is left to right
-            else if (rtlLanguage.hasOwnProperty(cultureArray[0] + '-' + cultureArray[1])) {
-                this.direction = 'rtl';
+            // Check <body dir="rtl"> or <body dir="ltr">
+            else if (document.body.dir) {
+                this.direction = document.body.dir;
             }
             else {
-                this.direction = 'ltr';
+                if (RTL_LANGUAGE.includes(lang)) {
+                    this.direction = 'rtl';
+                }
+                // ks-Arab-IN is right to left (in language-list.const.ts)
+                // ks-Deva-IN is left to right
+                else if (RTL_LANGUAGE.includes(cultureArray[0] + '-' + cultureArray[1])) {
+                    this.direction = 'rtl';
+                }
+                else {
+                    this.direction = 'ltr';
+                }
             }
         }
     }
