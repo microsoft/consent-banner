@@ -136,12 +136,12 @@ export class ConsentControl {
                 this.direction = document.body.dir;
             }
             else {
-                if (RTL_LANGUAGE.includes(lang)) {
+                if (RTL_LANGUAGE.indexOf(lang) !== -1) {
                     this.direction = 'rtl';
                 }
                 // ks-Arab-IN is right to left (in language-list.const.ts)
                 // ks-Deva-IN is left to right
-                else if (RTL_LANGUAGE.includes(cultureArray[0] + '-' + cultureArray[1])) {
+                else if (RTL_LANGUAGE.indexOf(cultureArray[0] + '-' + cultureArray[1]) !== -1) {
                     this.direction = 'rtl';
                 }
                 else {
