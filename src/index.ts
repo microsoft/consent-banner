@@ -1,5 +1,164 @@
 import styles from "./styles.scss";
 
+import { RTL_LANGUAGE } from './language-list.const';
+import { ICookieCategory } from './interfaces/CookieCategories';
+import { ITextResources } from './interfaces/TextResources';
+
+export class ConsentControl {
+    culture: string;
+    cookieCategories: ICookieCategory[];
+    textResources: ITextResources;
+
+    private direction: string = 'ltr';
+
+    // All categories should be replaced with the passed ones in the control
+    defaultCookieCategories: ICookieCategory[] =
+    [
+        {
+            id: "c0",
+            name: "1. Essential cookies",
+            descHtml: "We use this cookie, read more <a href='link'>here<a>.",
+            isUnswitchable: true        // optional, prevents toggling the category. True only for categories like Essential cookies.
+        },
+        {
+            id: "c1",
+            name: "2. Performance & analytics",
+            descHtml: "We use this cookie, read more <a href='link'>here<a>."
+        },
+        {
+            id: "c2",
+            name: "3. Advertising/Marketing",
+            descHtml: "Blah"
+        },
+        {
+            id: "c3",
+            name: "4. Targeting/personalization",
+            descHtml: "Blah"
+        }
+    ];
+
+    // only the passed text resources should be replaced in the control.
+    // If any string is not passed the control should keep the default value
+    defaultTextResources: ITextResources = {
+        bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here<a>.",
+        acceptAllLabel: "Accept all",
+        rejectAllLabel: "Reject all",
+        moreInfoLabel: "More info",
+        preferencesDialogTitle: "Manage cookie preferences",
+        preferencesDialogDescHtml: "Most Microsoft sites...",
+        acceptLabel: "Accept",
+        rejectLabel: "Reject",
+        saveLabel: "Save changes",
+        resetLabel: "Reset all"
+    };
+
+    constructor(culture: string, cookieCategories?: ICookieCategory[], textResources?: ITextResources) {
+        this.culture = culture;
+
+        if (cookieCategories) {
+            this.cookieCategories = cookieCategories;
+        }
+        else {
+            this.cookieCategories = this.defaultCookieCategories;
+        }
+
+        this.textResources = this.defaultTextResources;
+        if (textResources) {
+            this.setTextResources(textResources);
+        }
+
+        this.setDirection();
+    }
+
+    /**
+     * callback function, called on preferences changes (via "Accept All", "Reject All", or "Save changes"), 
+     * must pass cookieCategoriePreferences
+     * 
+     * @param cookieCategoriesPreferences preferences for each cookie categories
+     */
+    public onPreferencesChanged(cookieCategoriesPreferences: any): void {
+        // TODO
+    }
+
+    public setTextResources(textResources: ITextResources): void {
+        if (textResources.bannerMessageHtml) {
+            this.textResources.bannerMessageHtml = textResources.bannerMessageHtml;
+        }
+        if (textResources.acceptAllLabel) {
+            this.textResources.acceptAllLabel = textResources.acceptAllLabel;
+        }
+        if (textResources.rejectAllLabel) {
+            this.textResources.rejectAllLabel = textResources.rejectAllLabel;
+        }
+        if (textResources.moreInfoLabel) {
+            this.textResources.moreInfoLabel = textResources.moreInfoLabel;
+        }
+        if (textResources.preferencesDialogTitle) {
+            this.textResources.preferencesDialogTitle = textResources.preferencesDialogTitle;
+        }
+        if (textResources.preferencesDialogDescHtml) {
+            this.textResources.preferencesDialogDescHtml = textResources.preferencesDialogDescHtml;
+        }
+        if (textResources.acceptLabel) {
+            this.textResources.acceptLabel = textResources.acceptLabel;
+        }
+        if (textResources.rejectLabel) {
+            this.textResources.rejectLabel = textResources.rejectLabel;
+        }
+        if (textResources.saveLabel) {
+            this.textResources.saveLabel = textResources.saveLabel;
+        }
+        if (textResources.resetLabel) {
+            this.textResources.resetLabel = textResources.resetLabel;
+        }
+    }
+
+    /**
+     * Set the direction by passing the parameter or by checking the culture property
+     * 
+     * @param dir direction for the web, ltr or rtl
+     */
+    public setDirection(dir?: string): void {
+        if (dir) {
+            this.direction = dir;
+        }
+        else {
+            let formatCulture: string = this.culture.toLowerCase();
+            let cultureArray: string[] = formatCulture.split('-');
+            let lang: string = cultureArray[0];
+    
+            // Check <html dir="rtl"> or <html dir="ltr">
+            if (document.dir) {
+                this.direction = document.dir;
+            }
+            // Check <body dir="rtl"> or <body dir="ltr">
+            else if (document.body.dir) {
+                this.direction = document.body.dir;
+            }
+            else {
+                if (RTL_LANGUAGE.indexOf(lang) !== -1) {
+                    this.direction = 'rtl';
+                }
+                // ks-Arab-IN is right to left (in language-list.const.ts)
+                // ks-Deva-IN is left to right
+                else if (RTL_LANGUAGE.indexOf(cultureArray[0] + '-' + cultureArray[1]) !== -1) {
+                    this.direction = 'rtl';
+                }
+                else {
+                    this.direction = 'ltr';
+                }
+            }
+        }
+    }
+
+    /**
+     * Return the direction
+     */
+    public getDirection(): string {
+        return this.direction;
+    }
+}
+
 // Add <meta name="viewport" content="width=device-width, initial-scale=1.0">
 // for responsive web design
 if (!document.querySelector('meta[name="viewport"]')) {
