@@ -1,7 +1,7 @@
 import * as ind from "./index";
 
 describe("Test constructor", () => {
-    test('CookieCategories and textResources full provided', () => {
+    test("CookieCategories and textResources full provided", () => {
         let cookieCategories = [
             {
                 id: "cookie1",
@@ -29,17 +29,17 @@ describe("Test constructor", () => {
             resetLabel: "This is reset all"
         };
 
-        let cc = new ind.ConsentControl('en', cookieCategories, textResources);
+        let cc = new ind.ConsentControl("en", cookieCategories, textResources);
 
-        expect(cc.culture).toBe('en');
+        expect(cc.culture).toBe("en");
         expect(cc.cookieCategories).toEqual(cookieCategories);
         expect(cc.textResources).toEqual(textResources);
     });
 
-    test('No cookieCategories, no textResources', () => {
-        let cc = new ind.ConsentControl('en');
+    test("No cookieCategories, no textResources", () => {
+        let cc = new ind.ConsentControl("en");
 
-        expect(cc.culture).toBe('en');
+        expect(cc.culture).toBe("en");
         expect(cc.cookieCategories).toEqual([
             {
                 id: "c0",
@@ -77,7 +77,7 @@ describe("Test constructor", () => {
         });
     });
 
-    test('No cookieCategories, textResources full provided', () => {
+    test("No cookieCategories, textResources full provided", () => {
         let textResources = {
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
@@ -91,9 +91,9 @@ describe("Test constructor", () => {
             resetLabel: "This is reset all"
         };
 
-        let cc = new ind.ConsentControl('en', undefined, textResources);
+        let cc = new ind.ConsentControl("en", undefined, textResources);
 
-        expect(cc.culture).toBe('en');
+        expect(cc.culture).toBe("en");
         expect(cc.cookieCategories).toEqual([
             {
                 id: "c0",
@@ -120,7 +120,7 @@ describe("Test constructor", () => {
         expect(cc.textResources).toEqual(textResources);
     });
 
-    test('CookieCategories provided, no textResources', () => {
+    test("CookieCategories provided, no textResources", () => {
         let cookieCategories = [
             {
                 id: "cookie1",
@@ -135,9 +135,9 @@ describe("Test constructor", () => {
             }
         ];
 
-        let cc = new ind.ConsentControl('en', cookieCategories);
+        let cc = new ind.ConsentControl("en", cookieCategories);
 
-        expect(cc.culture).toBe('en');
+        expect(cc.culture).toBe("en");
         expect(cc.cookieCategories).toEqual(cookieCategories);
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here<a>.",
@@ -153,7 +153,7 @@ describe("Test constructor", () => {
         });
     });
 
-    test('No cookieCategories, textResources without bannerMessageHtml', () => {
+    test("No cookieCategories, textResources without bannerMessageHtml", () => {
         let textResources = {
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
@@ -166,9 +166,9 @@ describe("Test constructor", () => {
             resetLabel: "This is reset all"
         };
 
-        let cc = new ind.ConsentControl('en', undefined, textResources);
+        let cc = new ind.ConsentControl("en", undefined, textResources);
 
-        expect(cc.culture).toBe('en');
+        expect(cc.culture).toBe("en");
         expect(cc.cookieCategories).toEqual([
             {
                 id: "c0",
@@ -206,7 +206,7 @@ describe("Test constructor", () => {
         });
     });
 
-    test('No cookieCategories, textResources without acceptAllLabel', () => {
+    test("No cookieCategories, textResources without acceptAllLabel", () => {
         let textResources = {
             bannerMessageHtml: "This is banner message.",
             rejectAllLabel: "This is reject all",
@@ -219,7 +219,7 @@ describe("Test constructor", () => {
             resetLabel: "This is reset all"
         };
 
-        let cc = new ind.ConsentControl('en', undefined, textResources);
+        let cc = new ind.ConsentControl("en", undefined, textResources);
 
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
@@ -235,7 +235,7 @@ describe("Test constructor", () => {
         });
     });
 
-    test('No cookieCategories, textResources without rejectAllLabel', () => {
+    test("No cookieCategories, textResources without rejectAllLabel", () => {
         let textResources = {
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
@@ -248,7 +248,7 @@ describe("Test constructor", () => {
             resetLabel: "This is reset all"
         };
 
-        let cc = new ind.ConsentControl('en', undefined, textResources);
+        let cc = new ind.ConsentControl("en", undefined, textResources);
 
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
@@ -264,7 +264,7 @@ describe("Test constructor", () => {
         });
     });
 
-    test('No cookieCategories, textResources without moreInfoLabel', () => {
+    test("No cookieCategories, textResources without moreInfoLabel", () => {
         let textResources = {
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
@@ -277,7 +277,7 @@ describe("Test constructor", () => {
             resetLabel: "This is reset all"
         };
 
-        let cc = new ind.ConsentControl('en', undefined, textResources);
+        let cc = new ind.ConsentControl("en", undefined, textResources);
 
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
@@ -293,7 +293,7 @@ describe("Test constructor", () => {
         });
     });
 
-    test('No cookieCategories, textResources without preferencesDialogTitle', () => {
+    test("No cookieCategories, textResources without preferencesDialogTitle", () => {
         let textResources = {
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
@@ -306,7 +306,7 @@ describe("Test constructor", () => {
             resetLabel: "This is reset all"
         };
 
-        let cc = new ind.ConsentControl('en', undefined, textResources);
+        let cc = new ind.ConsentControl("en", undefined, textResources);
 
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
@@ -322,7 +322,7 @@ describe("Test constructor", () => {
         });
     });
 
-    test('No cookieCategories, textResources without preferencesDialogDescHtml', () => {
+    test("No cookieCategories, textResources without preferencesDialogDescHtml", () => {
         let textResources = {
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
@@ -335,7 +335,7 @@ describe("Test constructor", () => {
             resetLabel: "This is reset all"
         };
 
-        let cc = new ind.ConsentControl('en', undefined, textResources);
+        let cc = new ind.ConsentControl("en", undefined, textResources);
 
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
@@ -351,7 +351,7 @@ describe("Test constructor", () => {
         });
     });
 
-    test('No cookieCategories, textResources without acceptLabel', () => {
+    test("No cookieCategories, textResources without acceptLabel", () => {
         let textResources = {
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
@@ -364,7 +364,7 @@ describe("Test constructor", () => {
             resetLabel: "This is reset all"
         };
 
-        let cc = new ind.ConsentControl('en', undefined, textResources);
+        let cc = new ind.ConsentControl("en", undefined, textResources);
 
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
@@ -380,7 +380,7 @@ describe("Test constructor", () => {
         });
     });
 
-    test('No cookieCategories, textResources without rejectLabel', () => {
+    test("No cookieCategories, textResources without rejectLabel", () => {
         let textResources = {
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
@@ -393,7 +393,7 @@ describe("Test constructor", () => {
             resetLabel: "This is reset all"
         };
 
-        let cc = new ind.ConsentControl('en', undefined, textResources);
+        let cc = new ind.ConsentControl("en", undefined, textResources);
 
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
@@ -409,7 +409,7 @@ describe("Test constructor", () => {
         });
     });
 
-    test('No cookieCategories, textResources without saveLabel', () => {
+    test("No cookieCategories, textResources without saveLabel", () => {
         let textResources = {
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
@@ -422,7 +422,7 @@ describe("Test constructor", () => {
             resetLabel: "This is reset all"
         };
 
-        let cc = new ind.ConsentControl('en', undefined, textResources);
+        let cc = new ind.ConsentControl("en", undefined, textResources);
 
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
@@ -438,7 +438,7 @@ describe("Test constructor", () => {
         });
     });
 
-    test('No cookieCategories, textResources without resetLabel', () => {
+    test("No cookieCategories, textResources without resetLabel", () => {
         let textResources = {
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
@@ -451,7 +451,7 @@ describe("Test constructor", () => {
             saveLabel: "This is save changes",
         };
 
-        let cc = new ind.ConsentControl('en', undefined, textResources);
+        let cc = new ind.ConsentControl("en", undefined, textResources);
 
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
@@ -467,7 +467,7 @@ describe("Test constructor", () => {
         });
     });
 
-    test('No cookieCategories, textResources without bannerMessageHtml, acceptAllLabel', () => {
+    test("No cookieCategories, textResources without bannerMessageHtml, acceptAllLabel", () => {
         let textResources = {
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
@@ -479,9 +479,9 @@ describe("Test constructor", () => {
             resetLabel: "This is reset all"
         };
 
-        let cc = new ind.ConsentControl('en', undefined, textResources);
+        let cc = new ind.ConsentControl("en", undefined, textResources);
 
-        expect(cc.culture).toBe('en');
+        expect(cc.culture).toBe("en");
         expect(cc.cookieCategories).toEqual([
             {
                 id: "c0",
@@ -519,7 +519,7 @@ describe("Test constructor", () => {
         });
     });
 
-    test('No cookieCategories, textResources without bannerMessageHtml, rejectAllLabel', () => {
+    test("No cookieCategories, textResources without bannerMessageHtml, rejectAllLabel", () => {
         let textResources = {
             acceptAllLabel: "This is accept all",
             moreInfoLabel: "This is more info",
@@ -531,7 +531,7 @@ describe("Test constructor", () => {
             resetLabel: "This is reset all"
         };
 
-        let cc = new ind.ConsentControl('en', undefined, textResources);
+        let cc = new ind.ConsentControl("en", undefined, textResources);
 
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here<a>.",
@@ -549,85 +549,85 @@ describe("Test constructor", () => {
 });
 
 describe("Test language direction", () => {
-    test('Language is ms (ltr). No cookieCategories, no textResources', () => {
-        let cc = new ind.ConsentControl('ms');
-        expect(cc.getDirection()).toBe('ltr');
+    test("Language is ms (ltr). No cookieCategories, no textResources", () => {
+        let cc = new ind.ConsentControl("ms");
+        expect(cc.getDirection()).toBe("ltr");
     });
 
-    test('Language is ms (ltr). Set direction to rtl. No cookieCategories, no textResources', () => {
-        let cc = new ind.ConsentControl('ms');
-        cc.setDirection('rtl');
-        expect(cc.getDirection()).toBe('rtl');
+    test("Language is ms (ltr). Set direction to rtl. No cookieCategories, no textResources", () => {
+        let cc = new ind.ConsentControl("ms");
+        cc.setDirection("rtl");
+        expect(cc.getDirection()).toBe("rtl");
     });
 
-    test('Language is ar (rtl). No cookieCategories, no textResources', () => {
-        let cc = new ind.ConsentControl('ar');
-        expect(cc.getDirection()).toBe('rtl');
+    test("Language is ar (rtl). No cookieCategories, no textResources", () => {
+        let cc = new ind.ConsentControl("ar");
+        expect(cc.getDirection()).toBe("rtl");
     });
 
-    test('Language is he (rtl). No cookieCategories, no textResources', () => {
-        let cc = new ind.ConsentControl('he');
-        expect(cc.getDirection()).toBe('rtl');
+    test("Language is he (rtl). No cookieCategories, no textResources", () => {
+        let cc = new ind.ConsentControl("he");
+        expect(cc.getDirection()).toBe("rtl");
     });
 
-    test('Language is ps (rtl). No cookieCategories, no textResources', () => {
-        let cc = new ind.ConsentControl('ps');
-        expect(cc.getDirection()).toBe('rtl');
+    test("Language is ps (rtl). No cookieCategories, no textResources", () => {
+        let cc = new ind.ConsentControl("ps");
+        expect(cc.getDirection()).toBe("rtl");
     });
 
-    test('Language is ur (rtl). No cookieCategories, no textResources', () => {
-        let cc = new ind.ConsentControl('ur');
-        expect(cc.getDirection()).toBe('rtl');
+    test("Language is ur (rtl). No cookieCategories, no textResources", () => {
+        let cc = new ind.ConsentControl("ur");
+        expect(cc.getDirection()).toBe("rtl");
     });
 
-    test('Language is fa (rtl). No cookieCategories, no textResources', () => {
-        let cc = new ind.ConsentControl('fa');
-        expect(cc.getDirection()).toBe('rtl');
+    test("Language is fa (rtl). No cookieCategories, no textResources", () => {
+        let cc = new ind.ConsentControl("fa");
+        expect(cc.getDirection()).toBe("rtl");
     });
     
-    test('Language is pa (rtl). No cookieCategories, no textResources', () => {
-        let cc = new ind.ConsentControl('pa');
-        expect(cc.getDirection()).toBe('rtl');
+    test("Language is pa (rtl). No cookieCategories, no textResources", () => {
+        let cc = new ind.ConsentControl("pa");
+        expect(cc.getDirection()).toBe("rtl");
     });
     
-    test('Language is sd (rtl). No cookieCategories, no textResources', () => {
-        let cc = new ind.ConsentControl('sd');
-        expect(cc.getDirection()).toBe('rtl');
+    test("Language is sd (rtl). No cookieCategories, no textResources", () => {
+        let cc = new ind.ConsentControl("sd");
+        expect(cc.getDirection()).toBe("rtl");
     });
 
-    test('Language is tk (rtl). No cookieCategories, no textResources', () => {
-        let cc = new ind.ConsentControl('tk');
-        expect(cc.getDirection()).toBe('rtl');
+    test("Language is tk (rtl). No cookieCategories, no textResources", () => {
+        let cc = new ind.ConsentControl("tk");
+        expect(cc.getDirection()).toBe("rtl");
     });
 
-    test('Language is ug (rtl). No cookieCategories, no textResources', () => {
-        let cc = new ind.ConsentControl('ug');
-        expect(cc.getDirection()).toBe('rtl');
+    test("Language is ug (rtl). No cookieCategories, no textResources", () => {
+        let cc = new ind.ConsentControl("ug");
+        expect(cc.getDirection()).toBe("rtl");
     });
 
-    test('Language is yi (rtl). No cookieCategories, no textResources', () => {
-        let cc = new ind.ConsentControl('yi');
-        expect(cc.getDirection()).toBe('rtl');
+    test("Language is yi (rtl). No cookieCategories, no textResources", () => {
+        let cc = new ind.ConsentControl("yi");
+        expect(cc.getDirection()).toBe("rtl");
     });
 
-    test('Language is syr (rtl). No cookieCategories, no textResources', () => {
-        let cc = new ind.ConsentControl('syr');
-        expect(cc.getDirection()).toBe('rtl');
+    test("Language is syr (rtl). No cookieCategories, no textResources", () => {
+        let cc = new ind.ConsentControl("syr");
+        expect(cc.getDirection()).toBe("rtl");
     });
 
-    test('Language is ks-arab (rtl). No cookieCategories, no textResources', () => {
-        let cc = new ind.ConsentControl('ks-arab');
-        expect(cc.getDirection()).toBe('rtl');
+    test("Language is ks-arab (rtl). No cookieCategories, no textResources", () => {
+        let cc = new ind.ConsentControl("ks-arab");
+        expect(cc.getDirection()).toBe("rtl");
     });
 
-    test('Language is en-US (ltr). No cookieCategories, no textResources', () => {
-        let cc = new ind.ConsentControl('en-US');
-        expect(cc.getDirection()).toBe('ltr');
+    test("Language is en-US (ltr). No cookieCategories, no textResources", () => {
+        let cc = new ind.ConsentControl("en-US");
+        expect(cc.getDirection()).toBe("ltr");
     });
 
-    test('Language is ar-SA (rtl). No cookieCategories, no textResources', () => {
-        let cc = new ind.ConsentControl('ar-SA');
-        expect(cc.getDirection()).toBe('rtl');
+    test("Language is ar-SA (rtl). No cookieCategories, no textResources", () => {
+        let cc = new ind.ConsentControl("ar-SA");
+        expect(cc.getDirection()).toBe("rtl");
     });
 });
 
@@ -636,47 +636,47 @@ describe("Test html and body direction", () => {
     let bodyDir: string | null;
 
     beforeAll(() => {
-        htmlDir = document.getElementsByTagName("html")[0].getAttribute('dir');
-        bodyDir = document.getElementsByTagName("body")[0].getAttribute('dir');
+        htmlDir = document.getElementsByTagName("html")[0].getAttribute("dir");
+        bodyDir = document.getElementsByTagName("body")[0].getAttribute("dir");
     });
 
     afterEach(() => {
         if (htmlDir) {
-            document.getElementsByTagName("html")[0].setAttribute('dir', htmlDir);
+            document.getElementsByTagName("html")[0].setAttribute("dir", htmlDir);
         }
         else {
-            document.getElementsByTagName("html")[0].removeAttribute('dir');
+            document.getElementsByTagName("html")[0].removeAttribute("dir");
         }
 
         if (bodyDir) {
-            document.getElementsByTagName("body")[0].setAttribute('dir', bodyDir);
+            document.getElementsByTagName("body")[0].setAttribute("dir", bodyDir);
         }
         else {
-            document.getElementsByTagName("body")[0].removeAttribute('dir');
+            document.getElementsByTagName("body")[0].removeAttribute("dir");
         }
     });
 
-    test('Language is en (ltr). Html dir is rtl. No cookieCategories, no textResources', () => {
-        document.getElementsByTagName("html")[0].setAttribute('dir', 'rtl');
-        let cc = new ind.ConsentControl('en');
-        expect(cc.getDirection()).toBe('rtl');
+    test("Language is en (ltr). Html dir is rtl. No cookieCategories, no textResources", () => {
+        document.getElementsByTagName("html")[0].setAttribute("dir", "rtl");
+        let cc = new ind.ConsentControl("en");
+        expect(cc.getDirection()).toBe("rtl");
     });
 
-    test('Language is ar (rtl). Html dir is ltr. No cookieCategories, no textResources', () => {
-        document.getElementsByTagName("html")[0].setAttribute('dir', 'ltr');
-        let cc = new ind.ConsentControl('ar');
-        expect(cc.getDirection()).toBe('ltr');
+    test("Language is ar (rtl). Html dir is ltr. No cookieCategories, no textResources", () => {
+        document.getElementsByTagName("html")[0].setAttribute("dir", "ltr");
+        let cc = new ind.ConsentControl("ar");
+        expect(cc.getDirection()).toBe("ltr");
     });
 
-    test('Language is en (ltr). Body dir is rtl. No cookieCategories, no textResources', () => {
-        document.getElementsByTagName("body")[0].setAttribute('dir', 'rtl');
-        let cc = new ind.ConsentControl('en');
-        expect(cc.getDirection()).toBe('rtl');
+    test("Language is en (ltr). Body dir is rtl. No cookieCategories, no textResources", () => {
+        document.getElementsByTagName("body")[0].setAttribute("dir", "rtl");
+        let cc = new ind.ConsentControl("en");
+        expect(cc.getDirection()).toBe("rtl");
     });
 
-    test('Language is ar (rtl). Body dir is ltr. No cookieCategories, no textResources', () => {
-        document.getElementsByTagName("body")[0].setAttribute('dir', 'ltr');
-        let cc = new ind.ConsentControl('ar');
-        expect(cc.getDirection()).toBe('ltr');
+    test("Language is ar (rtl). Body dir is ltr. No cookieCategories, no textResources", () => {
+        document.getElementsByTagName("body")[0].setAttribute("dir", "ltr");
+        let cc = new ind.ConsentControl("ar");
+        expect(cc.getDirection()).toBe("ltr");
     });
 });
