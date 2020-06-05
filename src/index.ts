@@ -74,12 +74,17 @@ export class ConsentControl {
      * callback function, called on preferences changes (via "Accept All", "Reject All", or "Save changes"), 
      * must pass cookieCategoriePreferences
      * 
-     * @param cookieCategoriesPreferences preferences for each cookie categories
+     * @param {any} cookieCategoriesPreferences preferences for each cookie categories
      */
     public onPreferencesChanged(cookieCategoriesPreferences: any): void {
         // TODO
     }
 
+    /**
+     * Set the text resources for the banner to display the text in each area
+     * 
+     * @param {ITextResources} textResources the text want to be displayed
+     */
     public setTextResources(textResources: ITextResources): void {
         if (textResources.bannerMessageHtml) {
             this.textResources.bannerMessageHtml = textResources.bannerMessageHtml;
@@ -116,7 +121,7 @@ export class ConsentControl {
     /**
      * Set the direction by passing the parameter or by checking the culture property
      * 
-     * @param dir direction for the web, ltr or rtl
+     * @param {string} dir direction for the web, ltr or rtl
      */
     public setDirection(dir?: string): void {
         if (dir) {
