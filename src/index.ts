@@ -179,9 +179,17 @@ let infoIcon = `
 </svg>
 `;
 
+let dir = 'ltr';
+if (document.dir) {
+    dir = document.dir;
+}
+else if (document.body.dir) {
+    dir = document.body.dir;
+}
+
 const banner = 
 `
-    <div class="${styles.bannerBody}" role="alert">
+    <div class="${styles.bannerBody}" dir=${dir} role="alert">
         <div class="${styles.bannerInform}">
             <span class="${styles.infoIcon}" aria-label="Information message">${infoIcon}</span> <!--  used for icon  -->
             <p class="${styles.bannerInformBody}">
@@ -198,7 +206,7 @@ const banner =
     </div>
 
     <!-- The Modal -->
-    <div class="${styles.cookieModal}">
+    <div class="${styles.cookieModal}" dir=${dir}>
         <div role="presentation" tabindex="-1"></div>
         <div role="dialog" aria-modal="true" aria-label="Flow scroll" class="${styles.modalContainer}" tabindex="-1">
             <button aria-label="Close dialog" class="${styles.closeModalIcon}" tabindex="0">&#x2715;</button>
@@ -220,7 +228,7 @@ const banner =
 
                     <ol class="${styles.cookieOrderedList}">
                         <li class="${styles.cookieListItem}">
-                            <h3 class="${styles.cookieListItemTitle}">Essential cookies</h3>
+                            <h3 class="${styles.cookieListItemTitle}">1. Essential cookies</h3>
                             <p class="${styles.cookieListItemDescription}">
                                 We use essential cookies to do things.
                             </p>
@@ -228,7 +236,7 @@ const banner =
                 
                         <li class="${styles.cookieListItem}">
                             <div class="${styles.cookieListItemGroup}" role="radiogroup" aria-label="Performance and analytics cookies setting">
-                                <h3 class="${styles.cookieListItemTitle}">Performance & analytics</h3>
+                                <h3 class="${styles.cookieListItemTitle}">2. Performance & analytics</h3>
                                 <p class="${styles.cookieListItemDescription}">
                                     We use performance & analytics cookies to track how things are working. Message text. This 
                                     is where the message dialog text goes. The text can wrap and wrap and wrap and wrap.
@@ -248,7 +256,7 @@ const banner =
 
                         <li class="${styles.cookieListItem}">
                             <div class="${styles.cookieListItemGroup}" role="radiogroup" aria-label="Advertising/Marketing cookies setting">
-                                <h3 class="${styles.cookieListItemTitle}">Advertising/Marketing</h3>
+                                <h3 class="${styles.cookieListItemTitle}">3. Advertising/Marketing</h3>
                                 <p class="${styles.cookieListItemDescription}">
                                     We use advertising/marketing cookies to provide our partners with data. Message text. This 
                                     is where the message dialog text goes. The text can wrap and wrap and wrap and wrap.
@@ -268,7 +276,7 @@ const banner =
 
                         <li class="${styles.cookieListItem}">
                             <div class="${styles.cookieListItemGroup}" role="radiogroup" aria-label="Targeting/personalization cookies setting">
-                                <h3 class="${styles.cookieListItemTitle}">Targeting/personalization</h3>
+                                <h3 class="${styles.cookieListItemTitle}">4. Targeting/personalization</h3>
                                 <p class="${styles.cookieListItemDescription}">
                                     We use targeting/personalization cookies to enhance the quality of ads you see. Message text. 
                                     This is where the message dialog text goes. The text can wrap and wrap and wrap and wrap.
@@ -288,7 +296,7 @@ const banner =
 
                         <li class="${styles.cookieListItem}">
                             <div class="${styles.cookieListItemGroup}" role="radiogroup" aria-label="Social media cookies setting">
-                                <h3 class="${styles.cookieListItemTitle}">Social media</h3>
+                                <h3 class="${styles.cookieListItemTitle}">5. Social media</h3>
                                 <p class="${styles.cookieListItemDescription}">
                                     We use social media cookies to improve the experience you see. Message text. This is where 
                                     the message dialog text goes. The text can wrap and wrap and wrap and wrap.
