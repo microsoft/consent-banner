@@ -1,4 +1,4 @@
-import styles from "./styles.scss";
+import * as styles from "./styles.scss";
 
 import { RTL_LANGUAGE } from './language-list.const';
 import { ICookieCategory } from './interfaces/CookieCategories';
@@ -10,6 +10,7 @@ export class ConsentControl {
     textResources: ITextResources;
 
     private direction: string = 'ltr';
+    private containerElement: string = '';
 
     // All categories should be replaced with the passed ones in the control
     defaultCookieCategories: ICookieCategory[] =
@@ -116,6 +117,175 @@ export class ConsentControl {
         if (textResources.resetLabel) {
             this.textResources.resetLabel = textResources.resetLabel;
         }
+    }
+
+    /**
+     * Insert all necessary HTML code and shows the banner. 
+     * Until this method is called there should be no HTML elements of the Consent Control anywhere in the DOM
+     * 
+     * @param {string} containerElementOrId here the banner will be inserted
+     * @param {any} cookieCategoriePreferences see below
+     */
+    public showBanner(containerElementOrId: string, cookieCategoriePreferences: any): void {
+        // Add <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        // for responsive web design
+        if (!document.querySelector('meta[name="viewport"]')) {
+            let meta = document.createElement('meta');
+            meta.name = "viewport";
+            meta.content = "width=device-width, initial-scale=1.0";
+            document.getElementsByTagName('head')[0].appendChild(meta);
+        }
+
+        this.setContainerElementId(containerElementOrId);
+        let insert = document.querySelector('#' + this.containerElement);
+
+        let infoIcon = `
+        <svg xmlns="http://www.w3.org/2000/svg" x='0px' y='0px' viewBox='0 0 44 44' width='24px' height='24px' fill='none' stroke='currentColor'>
+          <circle cx='22' cy='22' r='20' stroke-width='2'></circle>
+          <line x1='22' x2='22' y1='18' y2='33' stroke-width='3'></line>
+          <line x1='22' x2='22' y1='12' y2='15' stroke-width='3'></line>
+        </svg>
+        `;
+
+        const bannerInnerHtml = `
+        <div class="${ styles.bannerInform }">
+            <span class="${ styles.infoIcon }" aria-label="Information message">${ infoIcon }</span> <!--  used for icon  -->
+            <p class="${ styles.bannerInformBody }">
+                ${ this.textResources.bannerMessageHtml }
+            </p>
+        </div>
+
+        <div class="${ styles.buttonGroup }">
+            <button type="button" class="${ styles.bannerButton }">${ this.textResources.acceptAllLabel }</button>
+            <button type="button" class="${ styles.bannerButton }">${ this.textResources.rejectAllLabel }</button>
+            <button type="button" class="${ styles.bannerButton }">${ this.textResources.moreInfoLabel }</button>
+        </div>
+        `;
+
+        let cookieModalHead = `
+        <div role="presentation" tabindex="-1"></div>
+        <div role="dialog" aria-modal="true" aria-label="Flow scroll" class="${ styles.modalContainer }" tabindex="-1">
+            <button aria-label="Close dialog" class="${ styles.closeModalIcon }" tabindex="0">&#x2715;</button>
+            <div role="document" class="${ styles.modalBody }">
+                <div>
+                    <h2 class="${ styles.modalTitle }">${ this.textResources.preferencesDialogTitle }</h2>
+                </div>
+                
+                <form class="${ styles.modalContent }">
+                    <p class="${ styles.cookieStatement }">
+                        ${ this.textResources.preferencesDialogDescHtml }
+                    </p>
+
+                    <ol class="${ styles.cookieOrderedList }">
+        `;
+
+        let cookieModalBody = ``;
+        for (let cookieCategory of this.cookieCategories) {
+            if (cookieCategory.isUnswitchable) {
+                let item = `
+                    <li class="${ styles.cookieListItem }">
+                        <h3 class="${ styles.cookieListItemTitle }">${ cookieCategory.name }</h3>
+                        <p class="${ styles.cookieListItemDescription }">${ cookieCategory.descHtml }</p>
+                    </li>
+                `;
+                cookieModalBody = cookieModalBody + item;
+            }
+            else {
+                let nameArray: string[] = cookieCategory.name.split(' ');
+                let nameAttribute: string = nameArray[0] + 'Cookies';
+
+                let acceptRadio = `<input type="radio" aria-label="Accept" class="${ styles.cookieItemRadioBtn }" name="${ nameAttribute }" value="accept"`;
+                let rejectRadio = `<input type="radio" aria-label="Reject" class="${ styles.cookieItemRadioBtn }" name="${ nameAttribute }" value="reject"`;
+                if (cookieCategoriePreferences.hasOwnProperty(cookieCategory.id)) {
+                    if (cookieCategoriePreferences[cookieCategory.id]) {
+                        acceptRadio = acceptRadio + ' checked' + '>';
+                        rejectRadio = rejectRadio + '>';
+                    }
+                    else if (cookieCategoriePreferences[cookieCategory.id] === false) {
+                        acceptRadio = acceptRadio + '>';
+                        rejectRadio = rejectRadio + ' checked' + '>';
+                    }
+                    else {
+                        acceptRadio = acceptRadio + '>';
+                        rejectRadio = rejectRadio + '>';
+                    }
+                }
+
+                let item = `
+                    <li class="${ styles.cookieListItem }">
+                        <div class="${ styles.cookieListItemGroup }" role="radiogroup" aria-label="${ cookieCategory.name } cookies setting">
+                            <h3 class="${ styles.cookieListItemTitle }">${ cookieCategory.name }</h3>
+                            <p class="${ styles.cookieListItemDescription }">${ cookieCategory.descHtml }</p>
+                            <div class="${ styles.cookieItemRadioBtnGroup }">
+                                <label class="${ styles.cookieItemRadioBtnCtrl }" role="radio">
+                                    ${ acceptRadio }
+                                    <span class="${ styles.cookieItemRadioBtnLabel }">${ this.textResources.acceptLabel }</span>
+                                </label>
+                                <label class="${ styles.cookieItemRadioBtnCtrl }" role="radio">
+                                    ${ rejectRadio }
+                                    <span class="${ styles.cookieItemRadioBtnLabel }">${ this.textResources.rejectLabel }</span>
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+                `;
+                cookieModalBody = cookieModalBody + item;
+            }
+        }
+        
+        let cookieModalFoot = `
+                    </ol>
+                </form>
+                
+                <div class="${ styles.modalButtonGroup }">
+                    <button type="button" aria-label="Save changes" class="${ styles.modalButtonSave }" disabled>${ this.textResources.saveLabel }</button>
+                    <button type="button" aria-label="Reset all" class="${ styles.modalButtonReset }" disabled>${ this.textResources.resetLabel }</button>
+                </div>
+            </div>
+        </div>
+        `;
+
+        const cookieModalInnerHtml = cookieModalHead + cookieModalBody + cookieModalFoot;
+
+        const banner = document.createElement('div');
+        banner.setAttribute('class', styles.bannerBody);
+        banner.setAttribute('dir', this.direction);
+        banner.setAttribute('role', 'alert');
+        banner.innerHTML = bannerInnerHtml;
+
+        const cookieModal = document.createElement('div');
+        cookieModal.setAttribute('class', styles.cookieModal);
+        cookieModal.setAttribute('dir', this.direction);
+        cookieModal.innerHTML = cookieModalInnerHtml;
+        
+        if (insert) {
+            insert.appendChild(banner);
+            insert.appendChild(cookieModal);
+        }
+    }
+
+    /**
+     * Hides the banner and the Preferences Dialog. 
+     * Removes all HTML elements of the Consent Control from the DOM
+     */
+    public hideBanner(): void {
+        let parent = document.querySelector('#' + this.containerElement);
+        if (parent) {
+            let banner = document.getElementsByClassName(styles.bannerBody)[0];
+            let cookieModal = document.getElementsByClassName(styles.cookieModal)[0];
+
+            parent.removeChild(banner);
+            parent.removeChild(cookieModal);
+        }
+    }
+
+    /**
+     * Set the id of container that will be used for the banner
+     * 
+     * @param {string} containerElementOrId here the banner will be inserted
+     */
+    public setContainerElementId(containerElementOrId: string): void {
+        this.containerElement = containerElementOrId;
     }
 
     /**
