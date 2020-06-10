@@ -162,6 +162,59 @@ export class ConsentControl {
         </div>
         `;
 
+        const banner = document.createElement('div');
+        banner.setAttribute('class', styles.bannerBody);
+        banner.setAttribute('dir', this.direction);
+        banner.setAttribute('role', 'alert');
+        banner.innerHTML = bannerInnerHtml;
+
+        if (insert) {
+            insert.appendChild(banner);
+        }
+
+        this.createPreferencesDialog(cookieCategoriePreferences);
+
+        // Add event handler to show preferences dialog (from hidden state) when "More info" button is clicked
+        let cookieInfo = document.getElementsByClassName(styles.bannerButton)[2];
+        let modal: HTMLElement = <HTMLElement>document.getElementsByClassName(styles.cookieModal)[0];
+
+        function popup() {
+            if (modal) {
+                modal.style.display = 'block';
+            }
+        }
+
+        if (cookieInfo) {
+            cookieInfo.addEventListener('click', popup);
+        
+            // Add this line in case some browsers in mobile do not like click event
+            // cookieInfo.addEventListener('touchstart', popup);
+        }
+    }
+
+    /**
+     * Hides the banner and the Preferences Dialog. 
+     * Removes all HTML elements of the Consent Control from the DOM
+     */
+    public hideBanner(): void {
+        let parent = document.querySelector('#' + this.containerElement);
+        if (parent) {
+            let banner = document.getElementsByClassName(styles.bannerBody)[0];
+            let cookieModal = document.getElementsByClassName(styles.cookieModal)[0];
+
+            parent.removeChild(banner);
+            parent.removeChild(cookieModal);
+        }
+    }
+
+    /**
+     * Create a hidden Preferences Dialog and insert in the bottom of the container.
+     * 
+     * @param {any} cookieCategoriePreferences cookie categories preferences
+     */
+    private createPreferencesDialog(cookieCategoriePreferences: any): void {
+        let insert = document.querySelector('#' + this.containerElement);
+
         let cookieModalHead = `
         <div role="presentation" tabindex="-1"></div>
         <div role="dialog" aria-modal="true" aria-label="Flow scroll" class="${ styles.modalContainer }" tabindex="-1">
@@ -179,7 +232,7 @@ export class ConsentControl {
                     <ol class="${ styles.cookieOrderedList }">
         `;
 
-        let cookieModalBody = ``;
+        let cookieModalBody = '';
         for (let cookieCategory of this.cookieCategories) {
             if (cookieCategory.isUnswitchable) {
                 let item = `
@@ -247,35 +300,47 @@ export class ConsentControl {
 
         const cookieModalInnerHtml = cookieModalHead + cookieModalBody + cookieModalFoot;
 
-        const banner = document.createElement('div');
-        banner.setAttribute('class', styles.bannerBody);
-        banner.setAttribute('dir', this.direction);
-        banner.setAttribute('role', 'alert');
-        banner.innerHTML = bannerInnerHtml;
-
         const cookieModal = document.createElement('div');
         cookieModal.setAttribute('class', styles.cookieModal);
         cookieModal.setAttribute('dir', this.direction);
         cookieModal.innerHTML = cookieModalInnerHtml;
-        
+
         if (insert) {
-            insert.appendChild(banner);
             insert.appendChild(cookieModal);
         }
-    }
 
-    /**
-     * Hides the banner and the Preferences Dialog. 
-     * Removes all HTML elements of the Consent Control from the DOM
-     */
-    public hideBanner(): void {
-        let parent = document.querySelector('#' + this.containerElement);
-        if (parent) {
-            let banner = document.getElementsByClassName(styles.bannerBody)[0];
-            let cookieModal = document.getElementsByClassName(styles.cookieModal)[0];
+        // Add those event handler
+        let closeModalIcon = document.getElementsByClassName(styles.closeModalIcon)[0];
 
-            parent.removeChild(banner);
-            parent.removeChild(cookieModal);
+        let cookieItemRadioBtn: Element[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
+        let modalButtonSave: HTMLInputElement = <HTMLInputElement>document.getElementsByClassName(styles.modalButtonSave)[0];
+        let modalButtonReset: HTMLInputElement = <HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0];
+
+        function close() {
+            let parent = cookieModal.parentNode;
+            if (parent) {
+                parent.removeChild(cookieModal);
+            }
+        }
+        
+        function enableModalButtons() {
+            if (modalButtonSave) {
+                modalButtonSave.disabled = false;
+            }
+        
+            if (modalButtonReset) {
+                modalButtonReset.disabled = false;
+            }
+        }
+        
+        if (closeModalIcon) {
+            closeModalIcon.addEventListener('click', close);
+        }
+        
+        if (cookieItemRadioBtn && cookieItemRadioBtn.length) {
+            for (let radio of cookieItemRadioBtn) {
+                radio.addEventListener('click', enableModalButtons);
+            }
         }
     }
 
