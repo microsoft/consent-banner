@@ -920,6 +920,14 @@ describe("Test show and hide banner", () => {
         testShowingPreferences(cc, cookieCategoriePreferences);
     });
 
+    test("If switchable id is not in cookieCategoriePreferences, the category in preferences dialog will not be set", () => {
+        let cc = new ind.ConsentControl("en");
+        let cookieCategoriePreferences = { "c1": true, "c3": undefined };
+        cc.showBanner(testId, cookieCategoriePreferences);
+
+        testShowingPreferences(cc, cookieCategoriePreferences);
+    });
+
     test("Preferences dialog will appear when 'More info' button is clicked", () => {
         let cc = new ind.ConsentControl("en");
         cc.showBanner(testId, { "c1": true, "c2": false,"c3": undefined });

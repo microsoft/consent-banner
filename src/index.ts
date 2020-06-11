@@ -1,4 +1,5 @@
-import * as styles from "./styles.scss";
+import * as styles from './styles.scss';
+import { PreferenceControl } from './preference';
 
 import { RTL_LANGUAGE } from './language-list.const';
 import { ICookieCategory } from './interfaces/CookieCategories';
@@ -11,6 +12,7 @@ export class ConsentControl {
 
     private direction: string = 'ltr';
     private containerElement: string = '';
+    private preferenceControl: PreferenceControl;
 
     // All categories should be replaced with the passed ones in the control
     defaultCookieCategories: ICookieCategory[] =
@@ -68,6 +70,7 @@ export class ConsentControl {
             this.setTextResources(textResources);
         }
 
+        this.preferenceControl = new PreferenceControl(this.cookieCategories, this.textResources);
         this.setDirection();
     }
 
@@ -175,21 +178,7 @@ export class ConsentControl {
         this.createPreferencesDialog(cookieCategoriePreferences);
 
         // Add event handler to show preferences dialog (from hidden state) when "More info" button is clicked
-        let cookieInfo = document.getElementsByClassName(styles.bannerButton)[2];
-        let modal: HTMLElement = <HTMLElement>document.getElementsByClassName(styles.cookieModal)[0];
-
-        function popup() {
-            if (modal) {
-                modal.style.display = 'block';
-            }
-        }
-
-        if (cookieInfo) {
-            cookieInfo.addEventListener('click', popup);
-        
-            // Add this line in case some browsers in mobile do not like click event
-            // cookieInfo.addEventListener('touchstart', popup);
-        }
+        this.preferenceControl.moreInfoButtonEvent();
     }
 
     /**
@@ -215,90 +204,8 @@ export class ConsentControl {
     private createPreferencesDialog(cookieCategoriePreferences: any): void {
         let insert = document.querySelector('#' + this.containerElement);
 
-        let cookieModalHead = `
-        <div role="presentation" tabindex="-1"></div>
-        <div role="dialog" aria-modal="true" aria-label="Flow scroll" class="${ styles.modalContainer }" tabindex="-1">
-            <button aria-label="Close dialog" class="${ styles.closeModalIcon }" tabindex="0">&#x2715;</button>
-            <div role="document" class="${ styles.modalBody }">
-                <div>
-                    <h2 class="${ styles.modalTitle }">${ this.textResources.preferencesDialogTitle }</h2>
-                </div>
-                
-                <form class="${ styles.modalContent }">
-                    <p class="${ styles.cookieStatement }">
-                        ${ this.textResources.preferencesDialogDescHtml }
-                    </p>
-
-                    <ol class="${ styles.cookieOrderedList }">
-        `;
-
-        let cookieModalBody = '';
-        for (let cookieCategory of this.cookieCategories) {
-            if (cookieCategory.isUnswitchable) {
-                let item = `
-                    <li class="${ styles.cookieListItem }">
-                        <h3 class="${ styles.cookieListItemTitle }">${ cookieCategory.name }</h3>
-                        <p class="${ styles.cookieListItemDescription }">${ cookieCategory.descHtml }</p>
-                    </li>
-                `;
-                cookieModalBody = cookieModalBody + item;
-            }
-            else {
-                let nameArray: string[] = cookieCategory.name.split(' ');
-                let nameAttribute: string = nameArray[0] + 'Cookies';
-
-                let acceptRadio = `<input type="radio" aria-label="Accept" class="${ styles.cookieItemRadioBtn }" name="${ nameAttribute }" value="accept"`;
-                let rejectRadio = `<input type="radio" aria-label="Reject" class="${ styles.cookieItemRadioBtn }" name="${ nameAttribute }" value="reject"`;
-                if (cookieCategoriePreferences.hasOwnProperty(cookieCategory.id)) {
-                    if (cookieCategoriePreferences[cookieCategory.id]) {
-                        acceptRadio = acceptRadio + ' checked' + '>';
-                        rejectRadio = rejectRadio + '>';
-                    }
-                    else if (cookieCategoriePreferences[cookieCategory.id] === false) {
-                        acceptRadio = acceptRadio + '>';
-                        rejectRadio = rejectRadio + ' checked' + '>';
-                    }
-                    else {
-                        acceptRadio = acceptRadio + '>';
-                        rejectRadio = rejectRadio + '>';
-                    }
-                }
-
-                let item = `
-                    <li class="${ styles.cookieListItem }">
-                        <div class="${ styles.cookieListItemGroup }" role="radiogroup" aria-label="${ cookieCategory.name } cookies setting">
-                            <h3 class="${ styles.cookieListItemTitle }">${ cookieCategory.name }</h3>
-                            <p class="${ styles.cookieListItemDescription }">${ cookieCategory.descHtml }</p>
-                            <div class="${ styles.cookieItemRadioBtnGroup }">
-                                <label class="${ styles.cookieItemRadioBtnCtrl }" role="radio">
-                                    ${ acceptRadio }
-                                    <span class="${ styles.cookieItemRadioBtnLabel }">${ this.textResources.acceptLabel }</span>
-                                </label>
-                                <label class="${ styles.cookieItemRadioBtnCtrl }" role="radio">
-                                    ${ rejectRadio }
-                                    <span class="${ styles.cookieItemRadioBtnLabel }">${ this.textResources.rejectLabel }</span>
-                                </label>
-                            </div>
-                        </div>
-                    </li>
-                `;
-                cookieModalBody = cookieModalBody + item;
-            }
-        }
-        
-        let cookieModalFoot = `
-                    </ol>
-                </form>
-                
-                <div class="${ styles.modalButtonGroup }">
-                    <button type="button" aria-label="Save changes" class="${ styles.modalButtonSave }" disabled>${ this.textResources.saveLabel }</button>
-                    <button type="button" aria-label="Reset all" class="${ styles.modalButtonReset }" disabled>${ this.textResources.resetLabel }</button>
-                </div>
-            </div>
-        </div>
-        `;
-
-        const cookieModalInnerHtml = cookieModalHead + cookieModalBody + cookieModalFoot;
+        this.preferenceControl.cookieCategoriePreferences = cookieCategoriePreferences;
+        const cookieModalInnerHtml = this.preferenceControl.preferenceHTMLString();
 
         const cookieModal = document.createElement('div');
         cookieModal.setAttribute('class', styles.cookieModal);
@@ -310,38 +217,7 @@ export class ConsentControl {
         }
 
         // Add those event handler
-        let closeModalIcon = document.getElementsByClassName(styles.closeModalIcon)[0];
-
-        let cookieItemRadioBtn: Element[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
-        let modalButtonSave: HTMLInputElement = <HTMLInputElement>document.getElementsByClassName(styles.modalButtonSave)[0];
-        let modalButtonReset: HTMLInputElement = <HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0];
-
-        function close() {
-            let parent = cookieModal.parentNode;
-            if (parent) {
-                parent.removeChild(cookieModal);
-            }
-        }
-        
-        function enableModalButtons() {
-            if (modalButtonSave) {
-                modalButtonSave.disabled = false;
-            }
-        
-            if (modalButtonReset) {
-                modalButtonReset.disabled = false;
-            }
-        }
-        
-        if (closeModalIcon) {
-            closeModalIcon.addEventListener('click', close);
-        }
-        
-        if (cookieItemRadioBtn && cookieItemRadioBtn.length) {
-            for (let radio of cookieItemRadioBtn) {
-                radio.addEventListener('click', enableModalButtons);
-            }
-        }
+        this.preferenceControl.preferenceButtonEvent();
     }
 
     /**
