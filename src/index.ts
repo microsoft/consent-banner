@@ -47,6 +47,7 @@ export class ConsentControl {
         acceptAllLabel: "Accept all",
         rejectAllLabel: "Reject all",
         moreInfoLabel: "More info",
+        preferencesDialogCloseLabel: "Close",
         preferencesDialogTitle: "Manage cookie preferences",
         preferencesDialogDescHtml: "Most Microsoft sites...",
         acceptLabel: "Accept",
@@ -101,6 +102,9 @@ export class ConsentControl {
         if (textResources.moreInfoLabel) {
             this.textResources.moreInfoLabel = textResources.moreInfoLabel;
         }
+        if (textResources.preferencesDialogCloseLabel) {
+            this.textResources.preferencesDialogCloseLabel = textResources.preferencesDialogCloseLabel;
+        }
         if (textResources.preferencesDialogTitle) {
             this.textResources.preferencesDialogTitle = textResources.preferencesDialogTitle;
         }
@@ -151,16 +155,16 @@ export class ConsentControl {
 
         const bannerInnerHtml = `
         <div class="${ styles.bannerInform }">
-            <span class="${ styles.infoIcon }" aria-label="Information message">${ infoIcon }</span> <!--  used for icon  -->
+            <span class="${ styles.infoIcon }">${ infoIcon }</span> <!--  used for icon  -->
             <p class="${ styles.bannerInformBody }">
                 ${ this.textResources.bannerMessageHtml }
             </p>
         </div>
 
         <div class="${ styles.buttonGroup }">
-            <button type="button" class="${ styles.bannerButton }">${ this.textResources.acceptAllLabel }</button>
-            <button type="button" class="${ styles.bannerButton }">${ this.textResources.rejectAllLabel }</button>
-            <button type="button" class="${ styles.bannerButton }">${ this.textResources.moreInfoLabel }</button>
+            <button type="button" class="${ styles.bannerButton }"></button>
+            <button type="button" class="${ styles.bannerButton }"></button>
+            <button type="button" class="${ styles.bannerButton }"></button>
         </div>
         `;
 
@@ -172,6 +176,27 @@ export class ConsentControl {
 
         if (insert) {
             insert.appendChild(banner);
+
+            if (this.textResources.acceptAllLabel) {
+                let acceptAll = document.createTextNode(this.textResources.acceptAllLabel);
+
+                let acceptAllButton = document.getElementsByClassName(styles.bannerButton)[0];
+                acceptAllButton.appendChild(acceptAll);
+            }
+
+            if (this.textResources.rejectAllLabel) {
+                let rejectAll = document.createTextNode(this.textResources.rejectAllLabel);
+
+                let rejectAllButton = document.getElementsByClassName(styles.bannerButton)[1];
+                rejectAllButton.appendChild(rejectAll);
+            }
+
+            if (this.textResources.moreInfoLabel) {
+                let moreInfo = document.createTextNode(this.textResources.moreInfoLabel);
+
+                let moreInfoButton = document.getElementsByClassName(styles.bannerButton)[2];
+                moreInfoButton.appendChild(moreInfo);
+            }
         }
 
         let preferencesControl = new PreferencesControl(this.cookieCategories, 
