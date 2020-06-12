@@ -1,9 +1,10 @@
 import * as styles from './styles.scss';
-import { PreferenceControl } from './preference';
+import { PreferencesControl } from './preferencesControl';
 
 import { RTL_LANGUAGE } from './language-list.const';
 import { ICookieCategory } from './interfaces/CookieCategories';
 import { ITextResources } from './interfaces/TextResources';
+import { ICookieCategoriesPreferences } from './interfaces/CookieCategoriesPreferences';
 
 export class ConsentControl {
     culture: string;
@@ -12,7 +13,6 @@ export class ConsentControl {
 
     private direction: string = 'ltr';
     private containerElement: string = '';
-    private preferenceControl: PreferenceControl;
 
     // All categories should be replaced with the passed ones in the control
     defaultCookieCategories: ICookieCategory[] =
@@ -70,17 +70,16 @@ export class ConsentControl {
             this.setTextResources(textResources);
         }
 
-        this.preferenceControl = new PreferenceControl(this.cookieCategories, this.textResources);
         this.setDirection();
     }
 
     /**
      * callback function, called on preferences changes (via "Accept All", "Reject All", or "Save changes"), 
-     * must pass cookieCategoriePreferences
+     * must pass cookieCategoriesPreferences
      * 
-     * @param {any} cookieCategoriesPreferences preferences for each cookie categories
+     * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences preferences for each cookie categories
      */
-    public onPreferencesChanged(cookieCategoriesPreferences: any): void {
+    public onPreferencesChanged(cookieCategoriesPreferences: ICookieCategoriesPreferences): void {
         // TODO
     }
 
@@ -127,9 +126,9 @@ export class ConsentControl {
      * Until this method is called there should be no HTML elements of the Consent Control anywhere in the DOM
      * 
      * @param {string} containerElementOrId here the banner will be inserted
-     * @param {any} cookieCategoriePreferences see below
+     * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences see below
      */
-    public showBanner(containerElementOrId: string, cookieCategoriePreferences: any): void {
+    public showBanner(containerElementOrId: string, cookieCategoriesPreferences: ICookieCategoriesPreferences): void {
         // Add <meta name="viewport" content="width=device-width, initial-scale=1.0">
         // for responsive web design
         if (!document.querySelector('meta[name="viewport"]')) {
@@ -175,10 +174,12 @@ export class ConsentControl {
             insert.appendChild(banner);
         }
 
-        this.createPreferencesDialog(cookieCategoriePreferences);
-
-        // Add event handler to show preferences dialog (from hidden state) when "More info" button is clicked
-        this.preferenceControl.moreInfoButtonEvent();
+        let preferencesControl = new PreferencesControl(this.cookieCategories, 
+                                                        this.textResources, 
+                                                        cookieCategoriesPreferences, 
+                                                        this.containerElement, 
+                                                        true, 
+                                                        this.direction);
     }
 
     /**
@@ -194,30 +195,6 @@ export class ConsentControl {
             parent.removeChild(banner);
             parent.removeChild(cookieModal);
         }
-    }
-
-    /**
-     * Create a hidden Preferences Dialog and insert in the bottom of the container.
-     * 
-     * @param {any} cookieCategoriePreferences cookie categories preferences
-     */
-    private createPreferencesDialog(cookieCategoriePreferences: any): void {
-        let insert = document.querySelector('#' + this.containerElement);
-
-        this.preferenceControl.cookieCategoriePreferences = cookieCategoriePreferences;
-        const cookieModalInnerHtml = this.preferenceControl.preferenceHTMLString();
-
-        const cookieModal = document.createElement('div');
-        cookieModal.setAttribute('class', styles.cookieModal);
-        cookieModal.setAttribute('dir', this.direction);
-        cookieModal.innerHTML = cookieModalInnerHtml;
-
-        if (insert) {
-            insert.appendChild(cookieModal);
-        }
-
-        // Add those event handler
-        this.preferenceControl.preferenceButtonEvent();
     }
 
     /**

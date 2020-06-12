@@ -1,6 +1,8 @@
 import * as ind from "./index";
 import * as styles from "./styles.scss";
 
+import { ICookieCategoriesPreferences } from "./interfaces/CookieCategoriesPreferences";
+
 describe("Test constructor", () => {
     test("CookieCategories and textResources full provided", () => {
         let cookieCategories = [
@@ -779,7 +781,7 @@ describe("Test show and hide banner", () => {
         </div>
     `;
 
-    function testShowingPreferences(cc: ind.ConsentControl, cookieCategoriePreferences: Record<string, boolean | undefined>): void {
+    function testShowingPreferences(cc: ind.ConsentControl, cookieCategoriePreferences: ICookieCategoriesPreferences): void {
         expect(document.getElementsByClassName(styles.cookieModal)).toBeTruthy;
 
         let cookieModal: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.cookieModal)[0];
