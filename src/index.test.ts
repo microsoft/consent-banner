@@ -800,6 +800,17 @@ function testShowingPreferences(cc: ind.ConsentControl, cookieCategoriePreferenc
     expect(document.getElementsByClassName(styles.modalButtonReset).length).toBe(1);
 }
 
+function testModalButton(testId: string, i: number): void {
+    let cc = new ind.ConsentControl("en");
+    cc.showBanner(testId, { "c1": true, "c2": false,"c3": undefined });
+
+    let cookieItemRadioBtn: HTMLElement[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
+    cookieItemRadioBtn[i].click();
+
+    expect(document.getElementsByClassName(styles.modalButtonSave)[0].getAttribute("disabled")).toBeFalsy;
+    expect(document.getElementsByClassName(styles.modalButtonReset)[0].getAttribute("disabled")).toBeFalsy;
+}
+
 function testRemovingPreferences(): void {
     let cookieModal = document.getElementsByClassName(styles.cookieModal);
     expect(cookieModal).toBeNull;
@@ -926,17 +937,6 @@ describe("Test show and hide banner", () => {
         </div>
     `;
 
-    function testModalButton(i: number): void {
-        let cc = new ind.ConsentControl("en");
-        cc.showBanner(testId, { "c1": true, "c2": false,"c3": undefined });
-
-        let cookieItemRadioBtn: HTMLElement[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
-        cookieItemRadioBtn[i].click();
-
-        expect(document.getElementsByClassName(styles.modalButtonSave)[0].getAttribute("disabled")).toBeFalsy;
-        expect(document.getElementsByClassName(styles.modalButtonReset)[0].getAttribute("disabled")).toBeFalsy;
-    }
-
     beforeEach(() => {
         let newDiv = document.createElement("div");
         newDiv.setAttribute("id", testId);
@@ -1006,7 +1006,7 @@ describe("Test show and hide banner", () => {
 
         let cookieItemRadioBtn: HTMLElement[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
         for (let i = 0; i < cookieItemRadioBtn.length; i++) {
-            testModalButton(i);
+            testModalButton(testId, i);
         }
     });
 
