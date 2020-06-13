@@ -804,8 +804,8 @@ function testModalButton(testId: string, i: number): void {
     let cc = new ind.ConsentControl("en");
     cc.showBanner(testId, { "c1": true, "c2": false,"c3": undefined });
 
-    let cookieItemRadioBtn: HTMLElement[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
-    cookieItemRadioBtn[i].click();
+    let cookieItemRadioBtn: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.cookieItemRadioBtn)[i];
+    cookieItemRadioBtn.click();
 
     expect(document.getElementsByClassName(styles.modalButtonSave)[0].getAttribute("disabled")).toBeFalsy;
     expect(document.getElementsByClassName(styles.modalButtonReset)[0].getAttribute("disabled")).toBeFalsy;
