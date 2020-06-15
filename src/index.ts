@@ -1,5 +1,6 @@
 import * as styles from './styles.scss';
 import { PreferencesControl } from './preferencesControl';
+import { HtmlTools } from './htmlTools';
 
 import { RTL_LANGUAGE } from './language-list.const';
 import { ICookieCategory } from './interfaces/CookieCategories';
@@ -133,19 +134,6 @@ export class ConsentControl {
      * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences see below
      */
     public showBanner(containerElementOrId: string, cookieCategoriesPreferences: ICookieCategoriesPreferences): void {
-        function escapeHtml(s: string | undefined): string {
-            if (s) {
-                return s.replace(/&/g, "&amp;")
-                        .replace(/</g, "&lt;")
-                        .replace(/>/g, "&gt;")
-                        .replace(/"/g, "&quot;")
-                        .replace(/'/g, "&#039;");
-            }
-            else {
-                return "";
-            }
-        }
-
         // Add <meta name="viewport" content="width=device-width, initial-scale=1.0">
         // for responsive web design
         if (!document.querySelector('meta[name="viewport"]')) {
@@ -156,6 +144,8 @@ export class ConsentControl {
         }
 
         this.setContainerElementId(containerElementOrId);
+        
+        let htmlTools = new HtmlTools();
         let insert = document.querySelector('#' + this.containerElement);
 
         let infoIcon = `
@@ -175,9 +165,9 @@ export class ConsentControl {
         </div>
 
         <div class="${ styles.buttonGroup }">
-            <button type="button" class="${ styles.bannerButton }">${ escapeHtml(this.textResources.acceptAllLabel) }</button>
-            <button type="button" class="${ styles.bannerButton }">${ escapeHtml(this.textResources.rejectAllLabel) }</button>
-            <button type="button" class="${ styles.bannerButton }">${ escapeHtml(this.textResources.moreInfoLabel) }</button>
+            <button type="button" class="${ styles.bannerButton }">${ htmlTools.escapeHtml(this.textResources.acceptAllLabel) }</button>
+            <button type="button" class="${ styles.bannerButton }">${ htmlTools.escapeHtml(this.textResources.rejectAllLabel) }</button>
+            <button type="button" class="${ styles.bannerButton }">${ htmlTools.escapeHtml(this.textResources.moreInfoLabel) }</button>
         </div>
         `;
 
