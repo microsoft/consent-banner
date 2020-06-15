@@ -34,15 +34,28 @@ export class PreferencesControl {
      * @param {boolean} banner true for banner, false for preferences dialog. 
      */
     private createPreferencesDialog(banner: boolean): void {
+        function escapeHtml(s: string | undefined): string {
+            if (s) {
+                return s.replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;")
+                        .replace(/"/g, "&quot;")
+                        .replace(/'/g, "&#039;");
+            }
+            else {
+                return "";
+            }
+        }
+
         let insert = document.querySelector('#' + this.containerElement);
 
         let cookieModalInnerHtml = `
         <div role="presentation" tabindex="-1"></div>
-        <div role="dialog" aria-modal="true" aria-label="${ this.textResources.preferencesDialogTitle }" class="${ styles.modalContainer }" tabindex="-1">
-            <button aria-label="${ this.textResources.preferencesDialogCloseLabel }" class="${ styles.closeModalIcon }" tabindex="0">&#x2715;</button>
+        <div role="dialog" aria-modal="true" aria-label="${ escapeHtml(this.textResources.preferencesDialogTitle) }" class="${ styles.modalContainer }" tabindex="-1">
+            <button aria-label="${ escapeHtml(this.textResources.preferencesDialogCloseLabel) }" class="${ styles.closeModalIcon }" tabindex="0">&#x2715;</button>
             <div role="document" class="${ styles.modalBody }">
                 <div>
-                    <h2 class="${styles.modalTitle}"></h2>
+                    <h2 class="${styles.modalTitle}">${ escapeHtml(this.textResources.preferencesDialogTitle) }</h2>
                 </div>
                 
                 <form class="${ styles.modalContent }">
@@ -55,8 +68,8 @@ export class PreferencesControl {
                 </form>
                 
                 <div class="${ styles.modalButtonGroup }">
-                    <button type="button" aria-label="${ this.textResources.saveLabel }" class="${ styles.modalButtonSave }" disabled></button>
-                    <button type="button" aria-label="${ this.textResources.resetLabel }" class="${ styles.modalButtonReset }" disabled></button>
+                    <button type="button" aria-label="${ escapeHtml(this.textResources.saveLabel) }" class="${ styles.modalButtonSave }" disabled>${ escapeHtml(this.textResources.saveLabel) }</button>
+                    <button type="button" aria-label="${ escapeHtml(this.textResources.resetLabel) }" class="${ styles.modalButtonReset }" disabled>${ escapeHtml(this.textResources.resetLabel) }</button>
                 </div>
             </div>
         </div>
@@ -70,57 +83,40 @@ export class PreferencesControl {
         if (insert) {
             insert.appendChild(cookieModal);
             
-            // Insert preferencesDialogTitle to the first position
-            if (this.textResources.preferencesDialogTitle) {
-                let modalDialogTitle = document.createTextNode(this.textResources.preferencesDialogTitle);
-                
-                let modalTitle = document.getElementsByClassName(styles.modalTitle)[0];
-                modalTitle.appendChild(modalDialogTitle);
-            }
-
             // Insert cookie category 
-            let i = 0;
-            let j = 0;
             for (let cookieCategory of this.cookieCategories) {
                 if (cookieCategory.isUnswitchable) {
                     let item = `
                     <li class="${ styles.cookieListItem }">
-                        <h3 class="${ styles.cookieListItemTitle }"></h3>
+                        <h3 class="${ styles.cookieListItemTitle }">${ escapeHtml(cookieCategory.name) }</h3>
                         <p class="${ styles.cookieListItemDescription }">${ cookieCategory.descHtml }</p>
                     </li>
                     `;
 
                     let cookieOrderedList = document.getElementsByClassName(styles.cookieOrderedList)[0];
                     cookieOrderedList.innerHTML += item;
-                    
-                    // Insert cookie category name
-                    let cookieListItemTitle = document.getElementsByClassName(styles.cookieListItemTitle)[i];
-                    let cookieCategoryTitle = document.createTextNode(cookieCategory.name);
-                    cookieListItemTitle.appendChild(cookieCategoryTitle);
-                    
-                    i++;
                 }
                 else {
                     let nameAttribute: string = cookieCategory.id + 'Cookies';
                     let acceptValue = this.cookieCategoriesPreferences[cookieCategory.id] === true ? "checked" : "";
                     let rejectValue = this.cookieCategoriesPreferences[cookieCategory.id] === false ? "checked" : "";
 
-                    let acceptRadio = `<input type="radio" aria-label="${ this.textResources.acceptLabel }" class="${styles.cookieItemRadioBtn}" name="${nameAttribute}" value="accept" ${acceptValue}>`;
-                    let rejectRadio = `<input type="radio" aria-label="${ this.textResources.rejectLabel }" class="${styles.cookieItemRadioBtn}" name="${nameAttribute}" value="reject" ${rejectValue}>`;
+                    let acceptRadio = `<input type="radio" aria-label="${ escapeHtml(this.textResources.acceptLabel) }" class="${styles.cookieItemRadioBtn}" name="${nameAttribute}" value="accept" ${acceptValue}>`;
+                    let rejectRadio = `<input type="radio" aria-label="${ escapeHtml(this.textResources.rejectLabel) }" class="${styles.cookieItemRadioBtn}" name="${nameAttribute}" value="reject" ${rejectValue}>`;
 
                     let item = `
                     <li class="${ styles.cookieListItem }">
-                        <div class="${ styles.cookieListItemGroup}" role="radiogroup" aria-label="${cookieCategory.name}">
-                            <h3 class="${ styles.cookieListItemTitle }"></h3>
+                        <div class="${ styles.cookieListItemGroup}" role="radiogroup" aria-label="${ escapeHtml(cookieCategory.name) }">
+                            <h3 class="${ styles.cookieListItemTitle }">${ escapeHtml(cookieCategory.name) }</h3>
                             <p class="${ styles.cookieListItemDescription}">${cookieCategory.descHtml}</p>
                             <div class="${ styles.cookieItemRadioBtnGroup}">
                                 <label class="${ styles.cookieItemRadioBtnCtrl}" role="radio">
                                     ${ acceptRadio}
-                                    <span class="${ styles.cookieItemRadioBtnLabel}"></span>
+                                    <span class="${ styles.cookieItemRadioBtnLabel}">${ escapeHtml(this.textResources.acceptLabel) }</span>
                                 </label>
                                 <label class="${ styles.cookieItemRadioBtnCtrl}" role="radio">
                                     ${ rejectRadio}
-                                    <span class="${ styles.cookieItemRadioBtnLabel}"></span>
+                                    <span class="${ styles.cookieItemRadioBtnLabel}">${ escapeHtml(this.textResources.rejectLabel) }</span>
                                 </label>
                             </div>
                         </div>
@@ -129,48 +125,7 @@ export class PreferencesControl {
 
                     let cookieOrderedList = document.getElementsByClassName(styles.cookieOrderedList)[0];
                     cookieOrderedList.innerHTML += item;
-                    
-                    // Insert cookie category name
-                    let cookieListItemTitle = document.getElementsByClassName(styles.cookieListItemTitle)[i];
-                    let cookieCategoryTitle = document.createTextNode(cookieCategory.name);
-                    cookieListItemTitle.appendChild(cookieCategoryTitle);
-
-                    i++;
-
-                    // Insert accept label
-                    if (this.textResources.acceptLabel) {
-                        let acceptBtnLabelText = document.createTextNode(this.textResources.acceptLabel);
-
-                        let acceptBtnLabel = document.getElementsByClassName(styles.cookieItemRadioBtnLabel)[j];
-                        acceptBtnLabel.appendChild(acceptBtnLabelText);
-                    }
-                    j++;
-
-                    // Insert reject label
-                    if (this.textResources.rejectLabel) {
-                        let rejectBtnLabelText = document.createTextNode(this.textResources.rejectLabel);
-
-                        let rejectBtnLabel = document.getElementsByClassName(styles.cookieItemRadioBtnLabel)[j];
-                        rejectBtnLabel.appendChild(rejectBtnLabelText);
-                    }
-                    j++;
                 }
-            }
-
-            // Insert save changes label
-            if (this.textResources.saveLabel) {
-                let modalButtonSaveText = document.createTextNode(this.textResources.saveLabel);
-
-                let modalButtonSave = document.getElementsByClassName(styles.modalButtonSave)[0];
-                modalButtonSave.appendChild(modalButtonSaveText);
-            }
-
-            // Insert reset all label
-            if (this.textResources.resetLabel) {
-                let modalButtonResetText = document.createTextNode(this.textResources.resetLabel);
-                
-                let modalButtonReset = document.getElementsByClassName(styles.modalButtonReset)[0];
-                modalButtonReset.appendChild(modalButtonResetText);
             }
             
             if (banner) {

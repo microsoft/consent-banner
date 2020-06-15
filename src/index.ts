@@ -133,6 +133,19 @@ export class ConsentControl {
      * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences see below
      */
     public showBanner(containerElementOrId: string, cookieCategoriesPreferences: ICookieCategoriesPreferences): void {
+        function escapeHtml(s: string | undefined): string {
+            if (s) {
+                return s.replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;")
+                        .replace(/"/g, "&quot;")
+                        .replace(/'/g, "&#039;");
+            }
+            else {
+                return "";
+            }
+        }
+
         // Add <meta name="viewport" content="width=device-width, initial-scale=1.0">
         // for responsive web design
         if (!document.querySelector('meta[name="viewport"]')) {
@@ -162,9 +175,9 @@ export class ConsentControl {
         </div>
 
         <div class="${ styles.buttonGroup }">
-            <button type="button" class="${ styles.bannerButton }"></button>
-            <button type="button" class="${ styles.bannerButton }"></button>
-            <button type="button" class="${ styles.bannerButton }"></button>
+            <button type="button" class="${ styles.bannerButton }">${ escapeHtml(this.textResources.acceptAllLabel) }</button>
+            <button type="button" class="${ styles.bannerButton }">${ escapeHtml(this.textResources.rejectAllLabel) }</button>
+            <button type="button" class="${ styles.bannerButton }">${ escapeHtml(this.textResources.moreInfoLabel) }</button>
         </div>
         `;
 
@@ -176,27 +189,6 @@ export class ConsentControl {
 
         if (insert) {
             insert.appendChild(banner);
-
-            if (this.textResources.acceptAllLabel) {
-                let acceptAll = document.createTextNode(this.textResources.acceptAllLabel);
-
-                let acceptAllButton = document.getElementsByClassName(styles.bannerButton)[0];
-                acceptAllButton.appendChild(acceptAll);
-            }
-
-            if (this.textResources.rejectAllLabel) {
-                let rejectAll = document.createTextNode(this.textResources.rejectAllLabel);
-
-                let rejectAllButton = document.getElementsByClassName(styles.bannerButton)[1];
-                rejectAllButton.appendChild(rejectAll);
-            }
-
-            if (this.textResources.moreInfoLabel) {
-                let moreInfo = document.createTextNode(this.textResources.moreInfoLabel);
-
-                let moreInfoButton = document.getElementsByClassName(styles.bannerButton)[2];
-                moreInfoButton.appendChild(moreInfo);
-            }
         }
 
         let preferencesControl = new PreferencesControl(this.cookieCategories, 
