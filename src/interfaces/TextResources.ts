@@ -3,6 +3,7 @@ export interface ITextResources {
     acceptAllLabel?: string;
     rejectAllLabel?: string;
     moreInfoLabel?: string;
+    preferencesDialogCloseLabel?: string;
     preferencesDialogTitle?: string;
     preferencesDialogDescHtml?: string;
     acceptLabel?: string;

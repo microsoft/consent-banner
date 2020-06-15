@@ -38,6 +38,11 @@
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3"
   },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(s?css|less)$": "identity-obj-proxy"
+    }
+  },
   "browserslist": [
     ">0.2%",
     "not ie <= 9",

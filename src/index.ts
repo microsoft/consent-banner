@@ -1,8 +1,11 @@
-import styles from "./styles.scss";
+import * as styles from './styles.scss';
+import { PreferencesControl } from './preferencesControl';
+import { HtmlTools } from './htmlTools';
 
 import { RTL_LANGUAGE } from './language-list.const';
 import { ICookieCategory } from './interfaces/CookieCategories';
 import { ITextResources } from './interfaces/TextResources';
+import { ICookieCategoriesPreferences } from './interfaces/CookieCategoriesPreferences';
 
 export class ConsentControl {
     culture: string;
@@ -10,6 +13,7 @@ export class ConsentControl {
     textResources: ITextResources;
 
     private direction: string = 'ltr';
+    private containerElement: string = '';
 
     // All categories should be replaced with the passed ones in the control
     defaultCookieCategories: ICookieCategory[] =
@@ -44,6 +48,7 @@ export class ConsentControl {
         acceptAllLabel: "Accept all",
         rejectAllLabel: "Reject all",
         moreInfoLabel: "More info",
+        preferencesDialogCloseLabel: "Close",
         preferencesDialogTitle: "Manage cookie preferences",
         preferencesDialogDescHtml: "Most Microsoft sites...",
         acceptLabel: "Accept",
@@ -72,14 +77,19 @@ export class ConsentControl {
 
     /**
      * callback function, called on preferences changes (via "Accept All", "Reject All", or "Save changes"), 
-     * must pass cookieCategoriePreferences
+     * must pass cookieCategoriesPreferences
      * 
-     * @param cookieCategoriesPreferences preferences for each cookie categories
+     * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences preferences for each cookie categories
      */
-    public onPreferencesChanged(cookieCategoriesPreferences: any): void {
+    public onPreferencesChanged(cookieCategoriesPreferences: ICookieCategoriesPreferences): void {
         // TODO
     }
 
+    /**
+     * Set the text resources for the banner to display the text in each area
+     * 
+     * @param {ITextResources} textResources the text want to be displayed
+     */
     public setTextResources(textResources: ITextResources): void {
         if (textResources.bannerMessageHtml) {
             this.textResources.bannerMessageHtml = textResources.bannerMessageHtml;
@@ -92,6 +102,9 @@ export class ConsentControl {
         }
         if (textResources.moreInfoLabel) {
             this.textResources.moreInfoLabel = textResources.moreInfoLabel;
+        }
+        if (textResources.preferencesDialogCloseLabel) {
+            this.textResources.preferencesDialogCloseLabel = textResources.preferencesDialogCloseLabel;
         }
         if (textResources.preferencesDialogTitle) {
             this.textResources.preferencesDialogTitle = textResources.preferencesDialogTitle;
@@ -114,9 +127,96 @@ export class ConsentControl {
     }
 
     /**
+     * Insert all necessary HTML code and shows the banner. 
+     * Until this method is called there should be no HTML elements of the Consent Control anywhere in the DOM
+     * 
+     * @param {string} containerElementOrId here the banner will be inserted
+     * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences see below
+     */
+    public showBanner(containerElementOrId: string, cookieCategoriesPreferences: ICookieCategoriesPreferences): void {
+        // Add <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        // for responsive web design
+        if (!document.querySelector('meta[name="viewport"]')) {
+            let meta = document.createElement('meta');
+            meta.name = "viewport";
+            meta.content = "width=device-width, initial-scale=1.0";
+            document.getElementsByTagName('head')[0].appendChild(meta);
+        }
+
+        this.setContainerElementId(containerElementOrId);
+        
+        let htmlTools = new HtmlTools();
+        let insert = document.querySelector('#' + this.containerElement);
+
+        let infoIcon = `
+        <svg xmlns="http://www.w3.org/2000/svg" x='0px' y='0px' viewBox='0 0 44 44' width='24px' height='24px' fill='none' stroke='currentColor'>
+          <circle cx='22' cy='22' r='20' stroke-width='2'></circle>
+          <line x1='22' x2='22' y1='18' y2='33' stroke-width='3'></line>
+          <line x1='22' x2='22' y1='12' y2='15' stroke-width='3'></line>
+        </svg>
+        `;
+
+        const bannerInnerHtml = `
+        <div class="${ styles.bannerInform }">
+            <span class="${ styles.infoIcon }">${ infoIcon }</span> <!--  used for icon  -->
+            <p class="${ styles.bannerInformBody }">
+                ${ this.textResources.bannerMessageHtml }
+            </p>
+        </div>
+
+        <div class="${ styles.buttonGroup }">
+            <button type="button" class="${ styles.bannerButton }">${ htmlTools.escapeHtml(this.textResources.acceptAllLabel) }</button>
+            <button type="button" class="${ styles.bannerButton }">${ htmlTools.escapeHtml(this.textResources.rejectAllLabel) }</button>
+            <button type="button" class="${ styles.bannerButton }">${ htmlTools.escapeHtml(this.textResources.moreInfoLabel) }</button>
+        </div>
+        `;
+
+        const banner = document.createElement('div');
+        banner.setAttribute('class', styles.bannerBody);
+        banner.setAttribute('dir', this.direction);
+        banner.setAttribute('role', 'alert');
+        banner.innerHTML = bannerInnerHtml;
+
+        if (insert) {
+            insert.appendChild(banner);
+        }
+
+        let preferencesControl = new PreferencesControl(this.cookieCategories, 
+                                                        this.textResources, 
+                                                        cookieCategoriesPreferences, 
+                                                        this.containerElement, 
+                                                        true, 
+                                                        this.direction);
+    }
+
+    /**
+     * Hides the banner and the Preferences Dialog. 
+     * Removes all HTML elements of the Consent Control from the DOM
+     */
+    public hideBanner(): void {
+        let parent = document.querySelector('#' + this.containerElement);
+        if (parent) {
+            let banner = document.getElementsByClassName(styles.bannerBody)[0];
+            let cookieModal = document.getElementsByClassName(styles.cookieModal)[0];
+
+            parent.removeChild(banner);
+            parent.removeChild(cookieModal);
+        }
+    }
+
+    /**
+     * Set the id of container that will be used for the banner
+     * 
+     * @param {string} containerElementOrId here the banner will be inserted
+     */
+    public setContainerElementId(containerElementOrId: string): void {
+        this.containerElement = containerElementOrId;
+    }
+
+    /**
      * Set the direction by passing the parameter or by checking the culture property
      * 
-     * @param dir direction for the web, ltr or rtl
+     * @param {string} dir direction for the web, ltr or rtl
      */
     public setDirection(dir?: string): void {
         if (dir) {
@@ -179,9 +279,17 @@ let infoIcon = `
 </svg>
 `;
 
+let dir = 'ltr';
+if (document.dir) {
+    dir = document.dir;
+}
+else if (document.body.dir) {
+    dir = document.body.dir;
+}
+
 const banner = 
 `
-    <div class="${styles.bannerBody}" role="alert">
+    <div class="${styles.bannerBody}" dir=${dir} role="alert">
         <div class="${styles.bannerInform}">
             <span class="${styles.infoIcon}" aria-label="Information message">${infoIcon}</span> <!--  used for icon  -->
             <p class="${styles.bannerInformBody}">
@@ -198,7 +306,7 @@ const banner =
     </div>
 
     <!-- The Modal -->
-    <div class="${styles.cookieModal}">
+    <div class="${styles.cookieModal}" dir=${dir}>
         <div role="presentation" tabindex="-1"></div>
         <div role="dialog" aria-modal="true" aria-label="Flow scroll" class="${styles.modalContainer}" tabindex="-1">
             <button aria-label="Close dialog" class="${styles.closeModalIcon}" tabindex="0">&#x2715;</button>
@@ -220,7 +328,7 @@ const banner =
 
                     <ol class="${styles.cookieOrderedList}">
                         <li class="${styles.cookieListItem}">
-                            <h3 class="${styles.cookieListItemTitle}">Essential cookies</h3>
+                            <h3 class="${styles.cookieListItemTitle}">1. Essential cookies</h3>
                             <p class="${styles.cookieListItemDescription}">
                                 We use essential cookies to do things.
                             </p>
@@ -228,7 +336,7 @@ const banner =
                 
                         <li class="${styles.cookieListItem}">
                             <div class="${styles.cookieListItemGroup}" role="radiogroup" aria-label="Performance and analytics cookies setting">
-                                <h3 class="${styles.cookieListItemTitle}">Performance & analytics</h3>
+                                <h3 class="${styles.cookieListItemTitle}">2. Performance & analytics</h3>
                                 <p class="${styles.cookieListItemDescription}">
                                     We use performance & analytics cookies to track how things are working. Message text. This 
                                     is where the message dialog text goes. The text can wrap and wrap and wrap and wrap.
@@ -248,7 +356,7 @@ const banner =
 
                         <li class="${styles.cookieListItem}">
                             <div class="${styles.cookieListItemGroup}" role="radiogroup" aria-label="Advertising/Marketing cookies setting">
-                                <h3 class="${styles.cookieListItemTitle}">Advertising/Marketing</h3>
+                                <h3 class="${styles.cookieListItemTitle}">3. Advertising/Marketing</h3>
                                 <p class="${styles.cookieListItemDescription}">
                                     We use advertising/marketing cookies to provide our partners with data. Message text. This 
                                     is where the message dialog text goes. The text can wrap and wrap and wrap and wrap.
@@ -268,7 +376,7 @@ const banner =
 
                         <li class="${styles.cookieListItem}">
                             <div class="${styles.cookieListItemGroup}" role="radiogroup" aria-label="Targeting/personalization cookies setting">
-                                <h3 class="${styles.cookieListItemTitle}">Targeting/personalization</h3>
+                                <h3 class="${styles.cookieListItemTitle}">4. Targeting/personalization</h3>
                                 <p class="${styles.cookieListItemDescription}">
                                     We use targeting/personalization cookies to enhance the quality of ads you see. Message text. 
                                     This is where the message dialog text goes. The text can wrap and wrap and wrap and wrap.
@@ -288,7 +396,7 @@ const banner =
 
                         <li class="${styles.cookieListItem}">
                             <div class="${styles.cookieListItemGroup}" role="radiogroup" aria-label="Social media cookies setting">
-                                <h3 class="${styles.cookieListItemTitle}">Social media</h3>
+                                <h3 class="${styles.cookieListItemTitle}">5. Social media</h3>
                                 <p class="${styles.cookieListItemDescription}">
                                     We use social media cookies to improve the experience you see. Message text. This is where 
                                     the message dialog text goes. The text can wrap and wrap and wrap and wrap.

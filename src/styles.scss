@@ -9,7 +9,7 @@
 
 // For right-to-left direction
 @mixin rtlDesign($margin, $padding, $float: none) {
-  html[dir="rtl"] &, body[dir="rtl"] & {
+  div[dir="rtl"] & {
     margin: $margin;
     padding: $padding;
     float: $float;
@@ -204,13 +204,10 @@ ol.cookieOrderedList {
     top: 36px;
     bottom: 0;
   }
-  padding : {
-    left: 24px;
-    right: 24px;
-  }
+  padding: 0;
 
-  /* Add decimal numbers in front of list items in case websites close the default styles */
-  list-style-type: decimal;
+  /* Close the default styles which adds decimal numbers in front of list items */
+  list-style: none;
 }
 
 li.cookieListItem {
@@ -222,8 +219,8 @@ li.cookieListItem {
   line-height: 24px;
   color: #000000;
 
-  /* Add decimal numbers in front of list items in case websites close the default styles */
-  list-style-type: decimal;
+  /* Close the default styles which adds decimal numbers in front of list items */
+  list-style: none;
 }
 
 .cookieListItemGroup {
