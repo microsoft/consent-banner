@@ -1,5 +1,6 @@
 import * as ind from "./index";
 import * as styles from "./styles.scss";
+import { PreferencesControl } from './preferencesControl';
 
 import { ICookieCategoriesPreferences } from "./interfaces/CookieCategoriesPreferences";
 
@@ -1071,7 +1072,15 @@ describe("Test show and hide banner", () => {
             throw new Error("Insert point not found error");
         }
 
+        // We only want to test hideBanner() function, so we create HTML elements and preferencesCtrl.
+        let cookieCategoriePreferences = { "c1": undefined, "c2": true, "c3": false };
         cc.setContainerElementId(testId);
+        cc.preferencesCtrl = new PreferencesControl(cc.cookieCategories, 
+                                                    cc.textResources, 
+                                                    cookieCategoriePreferences, 
+                                                    testId, 
+                                                    "ltr");
+
         cc.hideBanner();
 
         testRemovingPreferences();
@@ -1080,7 +1089,7 @@ describe("Test show and hide banner", () => {
 
 describe("Test show and hide preferences dialog", () => {
     let testId: string = "app";
-    let testElementString = `
+    let testElementBanner = `
         <div class="${styles.bannerBody}" dir=ltr role="alert">
             <div class="${styles.bannerInform}">
                 <span class="${styles.infoIcon}" aria-label="Information message"></span> <!--  used for icon  -->
@@ -1093,7 +1102,8 @@ describe("Test show and hide preferences dialog", () => {
                 <button type="button" class="${styles.bannerButton}">More info</button>
             </div>
         </div>
-
+    `;
+    let testElementString = `
         <!-- The Modal -->
         <div class="${styles.cookieModal}" dir=ltr>
             <div role="presentation" tabindex="-1"></div>
@@ -1175,9 +1185,24 @@ describe("Test show and hide preferences dialog", () => {
         </div>
     `;
 
+    function testBannerState(): void {
+        let bannerBody = document.getElementsByClassName(styles.bannerBody);
+        expect(bannerBody).toBeTruthy();
+        expect(bannerBody[0].getAttribute("dir")).toBe("ltr");
+
+        expect(document.getElementsByClassName(styles.bannerInform).length).toBe(1);
+        expect(document.getElementsByClassName(styles.infoIcon).length).toBe(1);
+        expect(document.getElementsByClassName(styles.bannerInformBody).length).toBe(1);
+
+        expect(document.getElementsByClassName(styles.buttonGroup).length).toBe(1);
+        expect(document.getElementsByClassName(styles.bannerButton).length).toBe(3);
+    }
+
     beforeEach(() => {
         let newDiv = document.createElement("div");
         newDiv.setAttribute("id", testId);
+        newDiv.innerHTML = testElementBanner;
+
         document.body.appendChild(newDiv);
     });
 
@@ -1202,6 +1227,7 @@ describe("Test show and hide preferences dialog", () => {
         cc.setContainerElementId(testId);
         cc.showPreferences(cookieCategoriePreferences);
 
+        testBannerState();
         testShowingPreferences(cc, cookieCategoriePreferences, "block");
     });
 
@@ -1212,6 +1238,7 @@ describe("Test show and hide preferences dialog", () => {
         cc.setContainerElementId(testId);
         cc.showPreferences(cookieCategoriePreferences);
 
+        testBannerState();
         testShowingPreferences(cc, cookieCategoriePreferences, "block");
     });
 
@@ -1245,6 +1272,7 @@ describe("Test show and hide preferences dialog", () => {
         let closeModalIcon: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.closeModalIcon)[0];
         closeModalIcon.click();
         
+        testBannerState();
         testRemovingPreferences();
     });
 
@@ -1252,15 +1280,24 @@ describe("Test show and hide preferences dialog", () => {
         let cc = new ind.ConsentControl("en");
         let insert = document.getElementById(testId);
         if (insert) {
-            insert.innerHTML = testElementString;
+            insert.innerHTML = testElementBanner + testElementString;
         }
         else {
             throw new Error("Insert point not found error");
         }
 
+        // We only want to test hidePreferences() function, so we create HTML elements and preferencesCtrl.
+        let cookieCategoriePreferences = { "c1": undefined, "c2": true, "c3": false };
         cc.setContainerElementId(testId);
+        cc.preferencesCtrl = new PreferencesControl(cc.cookieCategories, 
+                                                    cc.textResources, 
+                                                    cookieCategoriePreferences, 
+                                                    testId, 
+                                                    "ltr");
+        
         cc.hidePreferences();
 
+        testBannerState();
         testRemovingPreferences();
     });
 });

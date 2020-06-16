@@ -17,7 +17,6 @@ export class PreferencesControl {
                 textResources: ITextResources, 
                 cookieCategoriesPreferences: ICookieCategoriesPreferences, 
                 containerElement: string, 
-                banner: boolean,
                 direction: string) {
 
         this.cookieCategories = cookieCategories;
@@ -25,8 +24,6 @@ export class PreferencesControl {
         this.cookieCategoriesPreferences = cookieCategoriesPreferences;
         this.containerElement = containerElement;
         this.direction = direction;
-
-        this.createPreferencesDialog(banner);
     }
 
     /**
@@ -34,7 +31,7 @@ export class PreferencesControl {
      * 
      * @param {boolean} banner true for banner, false for preferences dialog. 
      */
-    private createPreferencesDialog(banner: boolean): void {
+    public createPreferencesDialog(): void {
         let htmlTools = new HtmlTools();
         let insert = document.querySelector('#' + this.containerElement);
 
@@ -117,34 +114,26 @@ export class PreferencesControl {
                 }
             }
             
-            if (banner) {
-                // Add event handler to show preferences dialog (from hidden state) when "More info" button is clicked
-                this.addMoreInfoButtonEvent();
-            }
-    
             // Add those event handler
             this.addPreferencesButtonsEvent();
         }
     }
 
     /**
-     * Add event handler to show preferences dialog (from hidden state) when "More info" button is clicked
+     * Show preferences dialog (from hidden state)
      */
-    private addMoreInfoButtonEvent(): void {
-        let cookieInfo = document.getElementsByClassName(styles.bannerButton)[2];
-        let modal: HTMLElement = <HTMLElement>document.getElementsByClassName(styles.cookieModal)[0];
-
-        function popup() {
-            if (modal) {
-                modal.style.display = 'block';
-            }
+    public showPreferencesDialog(): void {
+        let modal: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.cookieModal)[0];
+        if (modal) {
+            modal.style.display = 'block';
         }
+    }
 
-        if (cookieInfo) {
-            cookieInfo.addEventListener('click', popup);
-        
-            // Add this line in case some browsers in mobile do not like click event
-            // cookieInfo.addEventListener('touchstart', popup);
+    public hidePreferencesDialog(): void {
+        let cookieModal = document.getElementsByClassName(styles.cookieModal)[0];
+        let parent = cookieModal.parentNode;
+        if (parent) {
+            parent.removeChild(cookieModal);
         }
     }
 
@@ -154,20 +143,12 @@ export class PreferencesControl {
      * 2. Click any "accept/reject" button, "Save changes" and "Reset all" button will be enabled
      */
     private addPreferencesButtonsEvent(): void {
-        let cookieModal = document.getElementsByClassName(styles.cookieModal)[0];
         let closeModalIcon = document.getElementsByClassName(styles.closeModalIcon)[0];
 
         let cookieItemRadioBtn: Element[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
         let modalButtonSave: HTMLInputElement = <HTMLInputElement>document.getElementsByClassName(styles.modalButtonSave)[0];
         let modalButtonReset: HTMLInputElement = <HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0];
 
-        function close() {
-            let parent = cookieModal.parentNode;
-            if (parent) {
-                parent.removeChild(cookieModal);
-            }
-        }
-        
         function enableModalButtons() {
             if (modalButtonSave) {
                 modalButtonSave.disabled = false;
@@ -179,7 +160,7 @@ export class PreferencesControl {
         }
         
         if (closeModalIcon) {
-            closeModalIcon.addEventListener('click', close);
+            closeModalIcon.addEventListener('click', this.hidePreferencesDialog);
         }
         
         if (cookieItemRadioBtn && cookieItemRadioBtn.length) {
