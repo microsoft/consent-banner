@@ -205,6 +205,35 @@ export class ConsentControl {
     }
 
     /**
+     * Shows Preferences Dialog. Leaves banner state unchanged
+     * 
+     * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences see below
+     */
+    public showPreferences(cookieCategoriesPreferences: ICookieCategoriesPreferences): void {
+        let preferencesControl = new PreferencesControl(this.cookieCategories, 
+                                                        this.textResources, 
+                                                        cookieCategoriesPreferences, 
+                                                        this.containerElement, 
+                                                        false, 
+                                                        this.direction);
+
+        let modal: HTMLElement = <HTMLElement> document.getElementsByClassName(`${styles.cookieModal}`)[0];
+        modal.style.display = 'block';
+    }
+
+    /**
+     * Hides Preferences Dialog. 
+     * Removes all HTML elements of the Preferences Dialog from the DOM. Leaves banner state unchanged
+     */
+    public hidePreferences(): void {
+        let parent = document.querySelector('#' + this.containerElement);
+        if (parent) {
+            let cookieModal = document.getElementsByClassName(styles.cookieModal)[0];
+            parent.removeChild(cookieModal);
+        }
+    }
+
+    /**
      * Set the id of container that will be used for the banner
      * 
      * @param {string} containerElementOrId here the banner will be inserted
