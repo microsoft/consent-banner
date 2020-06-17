@@ -12,6 +12,7 @@ export class ConsentControl {
     cookieCategories: ICookieCategory[];
     textResources: ITextResources;
 
+    preferencesCtrl: PreferencesControl | null = null;
     private direction: string = 'ltr';
     private containerElement: string = '';
 
@@ -181,12 +182,24 @@ export class ConsentControl {
             insert.appendChild(banner);
         }
 
-        let preferencesControl = new PreferencesControl(this.cookieCategories, 
-                                                        this.textResources, 
-                                                        cookieCategoriesPreferences, 
-                                                        this.containerElement, 
-                                                        true, 
-                                                        this.direction);
+        if (!this.preferencesCtrl) {
+            this.preferencesCtrl = new PreferencesControl(this.cookieCategories, 
+                                                          this.textResources, 
+                                                          cookieCategoriesPreferences, 
+                                                          this.containerElement, 
+                                                          this.direction);
+            
+            this.preferencesCtrl.createPreferencesDialog();
+
+            // Add event handler to show preferences dialog (from hidden state) when "More info" button is clicked
+            let cookieInfo = document.getElementsByClassName(styles.bannerButton)[2];
+            if (cookieInfo) {
+                cookieInfo.addEventListener('click', this.preferencesCtrl.showPreferencesDialog);
+            
+                // Add this line in case some browsers in mobile do not like click event
+                // cookieInfo.addEventListener('touchstart', this.preferencesCtrl.showPreferencesDialog);
+            }
+        }
     }
 
     /**
@@ -197,11 +210,42 @@ export class ConsentControl {
         let parent = document.querySelector('#' + this.containerElement);
         if (parent) {
             let banner = document.getElementsByClassName(styles.bannerBody)[0];
-            let cookieModal = document.getElementsByClassName(styles.cookieModal)[0];
-
             parent.removeChild(banner);
-            parent.removeChild(cookieModal);
+
+            this.hidePreferences();
         }
+    }
+
+    /**
+     * Shows Preferences Dialog. Leaves banner state unchanged
+     * 
+     * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences see below
+     */
+    public showPreferences(cookieCategoriesPreferences: ICookieCategoriesPreferences): void {
+        if (this.preferencesCtrl) {
+            return;
+        }
+        this.preferencesCtrl = new PreferencesControl(this.cookieCategories, 
+                                                      this.textResources, 
+                                                      cookieCategoriesPreferences, 
+                                                      this.containerElement, 
+                                                      this.direction);
+
+        this.preferencesCtrl.createPreferencesDialog();
+        this.preferencesCtrl.showPreferencesDialog();
+    }
+
+    /**
+     * Hides Preferences Dialog. 
+     * Removes all HTML elements of the Preferences Dialog from the DOM. Leaves banner state unchanged
+     */
+    public hidePreferences(): void {
+        if (!this.preferencesCtrl) {
+            return;
+        }
+
+        this.preferencesCtrl.hidePreferencesDialog();
+        this.preferencesCtrl = null;
     }
 
     /**
