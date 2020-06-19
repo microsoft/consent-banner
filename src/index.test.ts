@@ -23,7 +23,6 @@ describe("Test constructor", () => {
         let textResources = {
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
@@ -49,13 +48,13 @@ describe("Test constructor", () => {
             {
                 id: "c0",
                 name: "1. Essential cookies",
-                descHtml: "We use this cookie, read more <a href='link'>here<a>.",
+                descHtml: "We use this cookie, read more <a href='link'>here</a>.",
                 isUnswitchable: true
             },
             {
                 id: "c1",
                 name: "2. Performance & analytics",
-                descHtml: "We use this cookie, read more <a href='link'>here<a>."
+                descHtml: "We use this cookie, read more <a href='link'>here</a>."
             },
             {
                 id: "c2",
@@ -69,9 +68,8 @@ describe("Test constructor", () => {
             }
         ]);
         expect(cc.textResources).toEqual({
-            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here<a>.",
+            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
             acceptAllLabel: "Accept all",
-            rejectAllLabel: "Reject all",
             moreInfoLabel: "More info",
             preferencesDialogCloseLabel: "Close",
             preferencesDialogTitle: "Manage cookie preferences",
@@ -87,7 +85,6 @@ describe("Test constructor", () => {
         let textResources = {
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
@@ -105,13 +102,13 @@ describe("Test constructor", () => {
             {
                 id: "c0",
                 name: "1. Essential cookies",
-                descHtml: "We use this cookie, read more <a href='link'>here<a>.",
+                descHtml: "We use this cookie, read more <a href='link'>here</a>.",
                 isUnswitchable: true
             },
             {
                 id: "c1",
                 name: "2. Performance & analytics",
-                descHtml: "We use this cookie, read more <a href='link'>here<a>."
+                descHtml: "We use this cookie, read more <a href='link'>here</a>."
             },
             {
                 id: "c2",
@@ -147,9 +144,8 @@ describe("Test constructor", () => {
         expect(cc.culture).toBe("en");
         expect(cc.cookieCategories).toEqual(cookieCategories);
         expect(cc.textResources).toEqual({
-            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here<a>.",
+            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
             acceptAllLabel: "Accept all",
-            rejectAllLabel: "Reject all",
             moreInfoLabel: "More info",
             preferencesDialogCloseLabel: "Close",
             preferencesDialogTitle: "Manage cookie preferences",
@@ -164,7 +160,6 @@ describe("Test constructor", () => {
     test("No cookieCategories, textResources without bannerMessageHtml", () => {
         let textResources = {
             acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
@@ -182,13 +177,13 @@ describe("Test constructor", () => {
             {
                 id: "c0",
                 name: "1. Essential cookies",
-                descHtml: "We use this cookie, read more <a href='link'>here<a>.",
+                descHtml: "We use this cookie, read more <a href='link'>here</a>.",
                 isUnswitchable: true
             },
             {
                 id: "c1",
                 name: "2. Performance & analytics",
-                descHtml: "We use this cookie, read more <a href='link'>here<a>."
+                descHtml: "We use this cookie, read more <a href='link'>here</a>."
             },
             {
                 id: "c2",
@@ -202,9 +197,8 @@ describe("Test constructor", () => {
             }
         ]);
         expect(cc.textResources).toEqual({
-            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here<a>.",
+            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
             acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
@@ -219,7 +213,6 @@ describe("Test constructor", () => {
     test("No cookieCategories, textResources without acceptAllLabel", () => {
         let textResources = {
             bannerMessageHtml: "This is banner message.",
-            rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
@@ -235,38 +228,6 @@ describe("Test constructor", () => {
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "Accept all",
-            rejectAllLabel: "This is reject all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        });
-    });
-
-    test("No cookieCategories, textResources without rejectAllLabel", () => {
-        let textResources = {
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        };
-
-        let cc = new ind.ConsentControl("en", undefined, textResources);
-
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            rejectAllLabel: "Reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
@@ -282,7 +243,6 @@ describe("Test constructor", () => {
         let textResources = {
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
             preferencesDialogDescHtml: "This is preferences dialog text",
@@ -297,7 +257,6 @@ describe("Test constructor", () => {
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
             moreInfoLabel: "More info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
@@ -313,7 +272,6 @@ describe("Test constructor", () => {
         let textResources = {
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogTitle: "This is preferences dialog title",
             preferencesDialogDescHtml: "This is preferences dialog text",
@@ -328,7 +286,6 @@ describe("Test constructor", () => {
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "Close",
             preferencesDialogTitle: "This is preferences dialog title",
@@ -344,7 +301,6 @@ describe("Test constructor", () => {
         let textResources = {
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogDescHtml: "This is preferences dialog text",
@@ -359,7 +315,6 @@ describe("Test constructor", () => {
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "Manage cookie preferences",
@@ -375,7 +330,6 @@ describe("Test constructor", () => {
         let textResources = {
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
@@ -390,7 +344,6 @@ describe("Test constructor", () => {
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
@@ -406,7 +359,6 @@ describe("Test constructor", () => {
         let textResources = {
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
@@ -421,7 +373,6 @@ describe("Test constructor", () => {
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
@@ -437,7 +388,6 @@ describe("Test constructor", () => {
         let textResources = {
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
@@ -452,7 +402,6 @@ describe("Test constructor", () => {
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
@@ -468,7 +417,6 @@ describe("Test constructor", () => {
         let textResources = {
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
@@ -483,7 +431,6 @@ describe("Test constructor", () => {
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
@@ -499,7 +446,6 @@ describe("Test constructor", () => {
         let textResources = {
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
@@ -514,7 +460,6 @@ describe("Test constructor", () => {
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
             acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
@@ -528,7 +473,6 @@ describe("Test constructor", () => {
 
     test("No cookieCategories, textResources without bannerMessageHtml, acceptAllLabel", () => {
         let textResources = {
-            rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
@@ -546,13 +490,13 @@ describe("Test constructor", () => {
             {
                 id: "c0",
                 name: "1. Essential cookies",
-                descHtml: "We use this cookie, read more <a href='link'>here<a>.",
+                descHtml: "We use this cookie, read more <a href='link'>here</a>.",
                 isUnswitchable: true
             },
             {
                 id: "c1",
                 name: "2. Performance & analytics",
-                descHtml: "We use this cookie, read more <a href='link'>here<a>."
+                descHtml: "We use this cookie, read more <a href='link'>here</a>."
             },
             {
                 id: "c2",
@@ -566,9 +510,8 @@ describe("Test constructor", () => {
             }
         ]);
         expect(cc.textResources).toEqual({
-            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here<a>.",
+            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
             acceptAllLabel: "Accept all",
-            rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
@@ -580,7 +523,7 @@ describe("Test constructor", () => {
         });
     });
 
-    test("No cookieCategories, textResources without bannerMessageHtml, rejectAllLabel", () => {
+    test("No cookieCategories, textResources without bannerMessageHtml, rejectLabel", () => {
         let textResources = {
             acceptAllLabel: "This is accept all",
             moreInfoLabel: "This is more info",
@@ -588,7 +531,6 @@ describe("Test constructor", () => {
             preferencesDialogTitle: "This is preferences dialog title",
             preferencesDialogDescHtml: "This is preferences dialog text",
             acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
             saveLabel: "This is save changes",
             resetLabel: "This is reset all"
         };
@@ -596,15 +538,14 @@ describe("Test constructor", () => {
         let cc = new ind.ConsentControl("en", undefined, textResources);
 
         expect(cc.textResources).toEqual({
-            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here<a>.",
+            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
             acceptAllLabel: "This is accept all",
-            rejectAllLabel: "Reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
             preferencesDialogDescHtml: "This is preferences dialog text",
             acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
+            rejectLabel: "Reject",
             saveLabel: "This is save changes",
             resetLabel: "This is reset all"
         });
@@ -862,7 +803,6 @@ describe("Test show and hide banner", () => {
 
             <div class="${styles.buttonGroup}">
                 <button type="button" class="${styles.bannerButton}">Accept all</button>
-                <button type="button" class="${styles.bannerButton}">Reject all</button>
                 <button type="button" class="${styles.bannerButton}">More info</button>
             </div>
         </div>
@@ -981,7 +921,7 @@ describe("Test show and hide banner", () => {
         expect(document.getElementsByClassName(styles.bannerInformBody).length).toBe(1);
 
         expect(document.getElementsByClassName(styles.buttonGroup).length).toBe(1);
-        expect(document.getElementsByClassName(styles.bannerButton).length).toBe(3);
+        expect(document.getElementsByClassName(styles.bannerButton).length).toBe(2);
     });
 
     test("Preferences dialog will be inserted when showBanner(...) is called", () => {
@@ -1005,7 +945,7 @@ describe("Test show and hide banner", () => {
         let cookieCategoriePreferences = { "c1": true, "c2": false, "c3": undefined };
         cc.showBanner(testId, cookieCategoriePreferences);
 
-        let cookieInfo: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[2];
+        let cookieInfo: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[1];
         cookieInfo.click();
 
         testShowingPreferences(cc, cookieCategoriePreferences, "block");
@@ -1098,7 +1038,6 @@ describe("Test show and hide preferences dialog", () => {
 
             <div class="${styles.buttonGroup}">
                 <button type="button" class="${styles.bannerButton}">Accept all</button>
-                <button type="button" class="${styles.bannerButton}">Reject all</button>
                 <button type="button" class="${styles.bannerButton}">More info</button>
             </div>
         </div>
@@ -1195,7 +1134,7 @@ describe("Test show and hide preferences dialog", () => {
         expect(document.getElementsByClassName(styles.bannerInformBody).length).toBe(1);
 
         expect(document.getElementsByClassName(styles.buttonGroup).length).toBe(1);
-        expect(document.getElementsByClassName(styles.bannerButton).length).toBe(3);
+        expect(document.getElementsByClassName(styles.bannerButton).length).toBe(2);
     }
 
     beforeEach(() => {

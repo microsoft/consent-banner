@@ -22,13 +22,13 @@ export class ConsentControl {
         {
             id: "c0",
             name: "1. Essential cookies",
-            descHtml: "We use this cookie, read more <a href='link'>here<a>.",
+            descHtml: "We use this cookie, read more <a href='link'>here</a>.",
             isUnswitchable: true        // optional, prevents toggling the category. True only for categories like Essential cookies.
         },
         {
             id: "c1",
             name: "2. Performance & analytics",
-            descHtml: "We use this cookie, read more <a href='link'>here<a>."
+            descHtml: "We use this cookie, read more <a href='link'>here</a>."
         },
         {
             id: "c2",
@@ -45,9 +45,8 @@ export class ConsentControl {
     // only the passed text resources should be replaced in the control.
     // If any string is not passed the control should keep the default value
     defaultTextResources: ITextResources = {
-        bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here<a>.",
+        bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
         acceptAllLabel: "Accept all",
-        rejectAllLabel: "Reject all",
         moreInfoLabel: "More info",
         preferencesDialogCloseLabel: "Close",
         preferencesDialogTitle: "Manage cookie preferences",
@@ -77,7 +76,7 @@ export class ConsentControl {
     }
 
     /**
-     * callback function, called on preferences changes (via "Accept All", "Reject All", or "Save changes"), 
+     * callback function, called on preferences changes (via "Accept All", or "Save changes"), 
      * must pass cookieCategoriesPreferences
      * 
      * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences preferences for each cookie categories
@@ -97,9 +96,6 @@ export class ConsentControl {
         }
         if (textResources.acceptAllLabel) {
             this.textResources.acceptAllLabel = textResources.acceptAllLabel;
-        }
-        if (textResources.rejectAllLabel) {
-            this.textResources.rejectAllLabel = textResources.rejectAllLabel;
         }
         if (textResources.moreInfoLabel) {
             this.textResources.moreInfoLabel = textResources.moreInfoLabel;
@@ -167,7 +163,6 @@ export class ConsentControl {
 
         <div class="${ styles.buttonGroup }">
             <button type="button" class="${ styles.bannerButton }">${ htmlTools.escapeHtml(this.textResources.acceptAllLabel) }</button>
-            <button type="button" class="${ styles.bannerButton }">${ htmlTools.escapeHtml(this.textResources.rejectAllLabel) }</button>
             <button type="button" class="${ styles.bannerButton }">${ htmlTools.escapeHtml(this.textResources.moreInfoLabel) }</button>
         </div>
         `;
@@ -192,7 +187,7 @@ export class ConsentControl {
             this.preferencesCtrl.createPreferencesDialog();
 
             // Add event handler to show preferences dialog (from hidden state) when "More info" button is clicked
-            let cookieInfo = document.getElementsByClassName(styles.bannerButton)[2];
+            let cookieInfo = document.getElementsByClassName(styles.bannerButton)[1];
             if (cookieInfo) {
                 cookieInfo.addEventListener('click', this.preferencesCtrl.showPreferencesDialog);
             
@@ -344,7 +339,6 @@ const banner =
 
         <div class="${styles.buttonGroup}">
             <button type="button" class="${styles.bannerButton}">Accept all</button>
-            <button type="button" class="${styles.bannerButton}">Reject all</button>
             <button type="button" class="${styles.bannerButton}">More info</button>
         </div>
     </div>
@@ -473,7 +467,7 @@ if (insert) {
     insert.innerHTML = banner;
 }
 
-let cookieInfo = document.getElementsByClassName(`${styles.bannerButton}`)[2];
+let cookieInfo = document.getElementsByClassName(`${styles.bannerButton}`)[1];
 let modal: HTMLElement = <HTMLElement> document.getElementsByClassName(`${styles.cookieModal}`)[0];
 let closeModalIcon = document.getElementsByClassName(`${styles.closeModalIcon}`)[0];
 
