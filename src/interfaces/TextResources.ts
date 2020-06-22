@@ -1,7 +1,6 @@
 export interface ITextResources {
     bannerMessageHtml?: string;
     acceptAllLabel?: string;
-    rejectAllLabel?: string;
     moreInfoLabel?: string;
     preferencesDialogCloseLabel?: string;
     preferencesDialogTitle?: string;

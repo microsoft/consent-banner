@@ -1,3 +1,6 @@
+$bannerBtnWidth: 120px;
+$bannerBtnHeight: 36px;
+
 @mixin bannerFont($weight, $size, $style: normal) {
   font : {
     family: Segoe UI, SegoeUI, Arial, sans-serif;
@@ -34,7 +37,7 @@
   
   width: 45%;   /* If "calc()" is not supported */
 
-  width: calc(85% - 400px);
+  width: calc(85% - (#{ $bannerBtnWidth } + 3 * 4px) * 2);
 }
 
 .infoIcon {
@@ -59,9 +62,6 @@
   line-height: 16px;
   color: #000000;
 
-  /* Edit this line in case the text-align in insertion point is different */
-  /* text-align: left; */
-
   /* Add styles to hyperlinks in case websites close the default styles for hyperlinks */
   & a {
     color: #0067B8;
@@ -80,8 +80,8 @@
   padding: 0;
   border: none;
 
-  width: 120px;
-  height: 36px;
+  width: $bannerBtnWidth;
+  height: $bannerBtnHeight;
   background-color: #EBEBEB;
   
   cursor: pointer;
@@ -162,9 +162,6 @@
     left: 36px;
     right: 36px;
   }
-
-  /* Edit this line in case the text-align in insertion point is different */
-  /* text-align: left; */
 }
 
 .modalTitle {
@@ -345,8 +342,7 @@ input[type="radio"].cookieItemRadioBtn {
   border: 1px solid #000000;
   box-sizing: border-box;
 
-  /* Add this line if you don't like default styles for radio input button */
-  /* appearance: none; */
+  appearance: none;
 
   /* Define our own radio input in case websites close the default styles for input type radio */
   @include defineRaioInput;
