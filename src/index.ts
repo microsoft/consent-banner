@@ -8,13 +8,17 @@ import { ITextResources } from './interfaces/TextResources';
 import { ICookieCategoriesPreferences } from './interfaces/CookieCategoriesPreferences';
 
 export class ConsentControl {
+    private containerElementOrId: string;   // here the banner will be inserted
     culture: string;
+
+    // callback function, called on preferences changes (via "Accept All", or "Save changes")
+    onPreferencesChanged: (cookieCategoriesPreferences: ICookieCategoriesPreferences) => void;
+    
     cookieCategories: ICookieCategory[];
     textResources: ITextResources;
 
     preferencesCtrl: PreferencesControl | null = null;
     private direction: string = 'ltr';
-    private containerElement: string = '';
 
     // All categories should be replaced with the passed ones in the control
     defaultCookieCategories: ICookieCategory[] =
@@ -57,8 +61,15 @@ export class ConsentControl {
         resetLabel: "Reset all"
     };
 
-    constructor(culture: string, cookieCategories?: ICookieCategory[], textResources?: ITextResources) {
+    constructor(containerElementOrId: string, 
+                culture: string, 
+                onPreferencesChanged: (cookieCategoriesPreferences: ICookieCategoriesPreferences) => void, 
+                cookieCategories?: ICookieCategory[], 
+                textResources?: ITextResources) {
+        
+        this.containerElementOrId = containerElementOrId;
         this.culture = culture;
+        this.onPreferencesChanged = onPreferencesChanged;
 
         if (cookieCategories) {
             this.cookieCategories = cookieCategories;
@@ -73,16 +84,6 @@ export class ConsentControl {
         }
 
         this.setDirection();
-    }
-
-    /**
-     * callback function, called on preferences changes (via "Accept All", or "Save changes"), 
-     * must pass cookieCategoriesPreferences
-     * 
-     * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences preferences for each cookie categories
-     */
-    public onPreferencesChanged(cookieCategoriesPreferences: ICookieCategoriesPreferences): void {
-        // TODO
     }
 
     /**
@@ -127,10 +128,9 @@ export class ConsentControl {
      * Insert all necessary HTML code and shows the banner. 
      * Until this method is called there should be no HTML elements of the Consent Control anywhere in the DOM
      * 
-     * @param {string} containerElementOrId here the banner will be inserted
-     * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences see below
+     * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences object that indicates cookie categories preferences
      */
-    public showBanner(containerElementOrId: string, cookieCategoriesPreferences: ICookieCategoriesPreferences): void {
+    public showBanner(cookieCategoriesPreferences: ICookieCategoriesPreferences): void {
         // Add <meta name="viewport" content="width=device-width, initial-scale=1.0">
         // for responsive web design
         if (!document.querySelector('meta[name="viewport"]')) {
@@ -140,10 +140,16 @@ export class ConsentControl {
             document.getElementsByTagName('head')[0].appendChild(meta);
         }
 
-        this.setContainerElementId(containerElementOrId);
-        
+        // Remove existing banner and preference dialog
+        if (document.getElementsByClassName(styles.bannerBody)) {
+            let length = document.getElementsByClassName(styles.bannerBody).length;
+            for (let i = 0; i < length; i++) {
+                this.hideBanner();
+            }
+        }
+
         let htmlTools = new HtmlTools();
-        let insert = document.querySelector('#' + this.containerElement);
+        let insert = document.querySelector('#' + this.containerElementOrId);
 
         let infoIcon = `
         <svg xmlns="http://www.w3.org/2000/svg" x='0px' y='0px' viewBox='0 0 44 44' width='24px' height='24px' fill='none' stroke='currentColor'>
@@ -181,19 +187,42 @@ export class ConsentControl {
             this.preferencesCtrl = new PreferencesControl(this.cookieCategories, 
                                                           this.textResources, 
                                                           cookieCategoriesPreferences, 
-                                                          this.containerElement, 
-                                                          this.direction);
+                                                          this.containerElementOrId, 
+                                                          this.direction, 
+                                                          () => this.nullPreferences());
             
             this.preferencesCtrl.createPreferencesDialog();
+            
+            // Add event handler to "Save changes" button event
+            this.preferencesCtrl.addSaveButtonEvent(() => this.onPreferencesChanged(cookieCategoriesPreferences));
 
             // Add event handler to show preferences dialog (from hidden state) when "More info" button is clicked
             let cookieInfo = document.getElementsByClassName(styles.bannerButton)[1];
             if (cookieInfo) {
-                cookieInfo.addEventListener('click', this.preferencesCtrl.showPreferencesDialog);
-            
-                // Add this line in case some browsers in mobile do not like click event
-                // cookieInfo.addEventListener('touchstart', this.preferencesCtrl.showPreferencesDialog);
+                cookieInfo.addEventListener('click', () => {
+                    this.showPreferences(cookieCategoriesPreferences);
+                    (<PreferencesControl> this.preferencesCtrl).showPreferencesDialog();
+                });
             }
+        }
+
+        let acceptAllBtn = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[0];
+        if (acceptAllBtn) {
+            acceptAllBtn.addEventListener('click', () => {
+                for (let cookieCategory of this.cookieCategories) {
+                    if (!cookieCategory.isUnswitchable) {
+                        cookieCategoriesPreferences[cookieCategory.id] = true;
+    
+                        // Set cookieCategoriesPreferences in preferencesCtrl
+                        if (this.preferencesCtrl) {
+                            let cookiePreferences = this.preferencesCtrl.cookieCategoriesPreferences;
+                            cookiePreferences[cookieCategory.id] = true;
+                        }
+                    }
+                }
+    
+                this.onPreferencesChanged(cookieCategoriesPreferences);
+            });
         }
     }
 
@@ -202,7 +231,7 @@ export class ConsentControl {
      * Removes all HTML elements of the Consent Control from the DOM
      */
     public hideBanner(): void {
-        let parent = document.querySelector('#' + this.containerElement);
+        let parent = document.querySelector('#' + this.containerElementOrId);
         if (parent) {
             let banner = document.getElementsByClassName(styles.bannerBody)[0];
             parent.removeChild(banner);
@@ -214,7 +243,7 @@ export class ConsentControl {
     /**
      * Shows Preferences Dialog. Leaves banner state unchanged
      * 
-     * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences see below
+     * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences object that indicates cookie categories preferences
      */
     public showPreferences(cookieCategoriesPreferences: ICookieCategoriesPreferences): void {
         if (this.preferencesCtrl) {
@@ -223,11 +252,15 @@ export class ConsentControl {
         this.preferencesCtrl = new PreferencesControl(this.cookieCategories, 
                                                       this.textResources, 
                                                       cookieCategoriesPreferences, 
-                                                      this.containerElement, 
-                                                      this.direction);
+                                                      this.containerElementOrId, 
+                                                      this.direction, 
+                                                      () => this.nullPreferences());
 
         this.preferencesCtrl.createPreferencesDialog();
         this.preferencesCtrl.showPreferencesDialog();
+
+        // Add event handler to "Save changes" button event
+        this.preferencesCtrl.addSaveButtonEvent(() => this.onPreferencesChanged(cookieCategoriesPreferences));
     }
 
     /**
@@ -243,13 +276,24 @@ export class ConsentControl {
         this.preferencesCtrl = null;
     }
 
+    private nullPreferences(): void {
+        this.preferencesCtrl = null;
+    }
+
     /**
      * Set the id of container that will be used for the banner
      * 
      * @param {string} containerElementOrId here the banner will be inserted
      */
-    public setContainerElementId(containerElementOrId: string): void {
-        this.containerElement = containerElementOrId;
+    public setContainerElementOrId(containerElementOrId: string): void {
+        this.containerElementOrId = containerElementOrId;
+    }
+
+    /**
+     * Return the id of container that is used for the banner
+     */
+    public getContainerElementOrId(): string {
+        return this.containerElementOrId;
     }
 
     /**
@@ -295,221 +339,5 @@ export class ConsentControl {
      */
     public getDirection(): string {
         return this.direction;
-    }
-}
-
-// Add <meta name="viewport" content="width=device-width, initial-scale=1.0">
-// for responsive web design
-if (!document.querySelector('meta[name="viewport"]')) {
-    let meta = document.createElement('meta');
-    meta.name = "viewport";
-    meta.content = "width=device-width, initial-scale=1.0";
-    document.getElementsByTagName('head')[0].appendChild(meta);
-}
-
-// Insert point for banner
-let insert = document.querySelector('#app');
-
-let infoIcon = `
-<svg xmlns="http://www.w3.org/2000/svg" x='0px' y='0px' viewBox='0 0 44 44' width='24px' height='24px' fill='none' stroke='currentColor'>
-  <circle cx='22' cy='22' r='20' stroke-width='2'></circle>
-  <line x1='22' x2='22' y1='18' y2='33' stroke-width='3'></line>
-  <line x1='22' x2='22' y1='12' y2='15' stroke-width='3'></line>
-</svg>
-`;
-
-let dir = 'ltr';
-if (document.dir) {
-    dir = document.dir;
-}
-else if (document.body.dir) {
-    dir = document.body.dir;
-}
-
-const banner = 
-`
-    <div class="${styles.bannerBody}" dir=${dir} role="alert">
-        <div class="${styles.bannerInform}">
-            <span class="${styles.infoIcon}" aria-label="Information message">${infoIcon}</span> <!--  used for icon  -->
-            <p class="${styles.bannerInformBody}">
-                We use optional cookies to provide a better experience, read more about them 
-                <a href="https://privacy.microsoft.com/en-us/privacystatement" target="_blank">here</a>.
-            </p>
-        </div>
-
-        <div class="${styles.buttonGroup}">
-            <button type="button" class="${styles.bannerButton}">Accept all</button>
-            <button type="button" class="${styles.bannerButton}">More info</button>
-        </div>
-    </div>
-
-    <!-- The Modal -->
-    <div class="${styles.cookieModal}" dir=${dir}>
-        <div role="presentation" tabindex="-1"></div>
-        <div role="dialog" aria-modal="true" aria-label="Flow scroll" class="${styles.modalContainer}" tabindex="-1">
-            <button aria-label="Close dialog" class="${styles.closeModalIcon}" tabindex="0">&#x2715;</button>
-            <div role="document" class="${styles.modalBody}">
-                <div>
-                    <h2 class="${styles.modalTitle}">Manage cookie preferences</h2>
-                </div>
-                
-                <form class="${styles.modalContent}">
-                    <p class="${styles.cookieStatement}">
-                        Most Microsoft sites use cookies, small text files placed on your device which web servers in 
-                        the domain that placed the cookie can retrieve later. We use cookies to store your preferences 
-                        and settings, help with sign-in, provide targeted ads, and analyze site operations. 
-                        For more information, see the 
-                        <a href="https://privacy.microsoft.com/en-us/privacystatement#maincookiessimilartechnologiesmodule" target="_blank">
-                            Cookies and similar technologies section of the Privacy Statement
-                        </a>.
-                    </p>
-
-                    <ol class="${styles.cookieOrderedList}">
-                        <li class="${styles.cookieListItem}">
-                            <h3 class="${styles.cookieListItemTitle}">1. Essential cookies</h3>
-                            <p class="${styles.cookieListItemDescription}">
-                                We use essential cookies to do things.
-                            </p>
-                        </li>
-                
-                        <li class="${styles.cookieListItem}">
-                            <div class="${styles.cookieListItemGroup}" role="radiogroup" aria-label="Performance and analytics cookies setting">
-                                <h3 class="${styles.cookieListItemTitle}">2. Performance & analytics</h3>
-                                <p class="${styles.cookieListItemDescription}">
-                                    We use performance & analytics cookies to track how things are working. Message text. This 
-                                    is where the message dialog text goes. The text can wrap and wrap and wrap and wrap.
-                                </p>
-                                <div class="${styles.cookieItemRadioBtnGroup}">
-                                    <label class="${styles.cookieItemRadioBtnCtrl}" role="radio">
-                                        <input type="radio" aria-label="Accept" class="${styles.cookieItemRadioBtn}" name="performanceCookies" value="accept">
-                                        <span class="${styles.cookieItemRadioBtnLabel}">Accept</span>
-                                    </label>
-                                    <label class="${styles.cookieItemRadioBtnCtrl}" role="radio">
-                                        <input type="radio" aria-label="Reject" class="${styles.cookieItemRadioBtn}" name="performanceCookies" value="reject">
-                                        <span class="${styles.cookieItemRadioBtnLabel}">Reject</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </li>
-
-                        <li class="${styles.cookieListItem}">
-                            <div class="${styles.cookieListItemGroup}" role="radiogroup" aria-label="Advertising/Marketing cookies setting">
-                                <h3 class="${styles.cookieListItemTitle}">3. Advertising/Marketing</h3>
-                                <p class="${styles.cookieListItemDescription}">
-                                    We use advertising/marketing cookies to provide our partners with data. Message text. This 
-                                    is where the message dialog text goes. The text can wrap and wrap and wrap and wrap.
-                                </p>
-                                <div class="${styles.cookieItemRadioBtnGroup}">
-                                    <label class="${styles.cookieItemRadioBtnCtrl}" role="radio">
-                                        <input type="radio" aria-label="Accept" class="${styles.cookieItemRadioBtn}" name="advertisingCookies" value="accept">
-                                        <span class="${styles.cookieItemRadioBtnLabel}">Accept</span>
-                                    </label>
-                                    <label class="${styles.cookieItemRadioBtnCtrl}" role="radio">
-                                        <input type="radio" aria-label="Reject" class="${styles.cookieItemRadioBtn}" name="advertisingCookies" value="reject">
-                                        <span class="${styles.cookieItemRadioBtnLabel}">Reject</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </li>
-
-                        <li class="${styles.cookieListItem}">
-                            <div class="${styles.cookieListItemGroup}" role="radiogroup" aria-label="Targeting/personalization cookies setting">
-                                <h3 class="${styles.cookieListItemTitle}">4. Targeting/personalization</h3>
-                                <p class="${styles.cookieListItemDescription}">
-                                    We use targeting/personalization cookies to enhance the quality of ads you see. Message text. 
-                                    This is where the message dialog text goes. The text can wrap and wrap and wrap and wrap.
-                                </p>
-                                <div class="${styles.cookieItemRadioBtnGroup}">
-                                    <label class="${styles.cookieItemRadioBtnCtrl}" role="radio">
-                                        <input type="radio" aria-label="Accept" class="${styles.cookieItemRadioBtn}" name="targetingCookies" value="accept">
-                                        <span class="${styles.cookieItemRadioBtnLabel}">Accept</span>
-                                    </label>
-                                    <label class="${styles.cookieItemRadioBtnCtrl}" role="radio">
-                                        <input type="radio" aria-label="Reject" class="${styles.cookieItemRadioBtn}" name="targetingCookies" value="reject">
-                                        <span class="${styles.cookieItemRadioBtnLabel}">Reject</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </li>
-
-                        <li class="${styles.cookieListItem}">
-                            <div class="${styles.cookieListItemGroup}" role="radiogroup" aria-label="Social media cookies setting">
-                                <h3 class="${styles.cookieListItemTitle}">5. Social media</h3>
-                                <p class="${styles.cookieListItemDescription}">
-                                    We use social media cookies to improve the experience you see. Message text. This is where 
-                                    the message dialog text goes. The text can wrap and wrap and wrap and wrap.
-                                </p>
-                                <div class="${styles.cookieItemRadioBtnGroup}">
-                                    <label class="${styles.cookieItemRadioBtnCtrl}" role="radio">
-                                        <input type="radio" aria-label="Accept" class="${styles.cookieItemRadioBtn}" name="socialMediaCookies" value="accept">
-                                        <span class="${styles.cookieItemRadioBtnLabel}">Accept</span>
-                                    </label>
-                                    <label class="${styles.cookieItemRadioBtnCtrl}" role="radio">
-                                        <input type="radio" aria-label="Reject" class="${styles.cookieItemRadioBtn}" name="socialMediaCookies" value="reject">
-                                        <span class="${styles.cookieItemRadioBtnLabel}">Reject</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </li>
-                    </ol>
-                </form>
-                
-                <div class="${styles.modalButtonGroup}">
-                    <button type="button" aria-label="Save changes" class="${styles.modalButtonSave}" disabled>Save changes</button>
-                    <button type="button" aria-label="Reset all" class="${styles.modalButtonReset}" disabled>Reset all</button>
-                </div>
-            </div>
-        </div>
-    </div>
-`;
-
-if (insert) {
-    insert.innerHTML = banner;
-}
-
-let cookieInfo = document.getElementsByClassName(`${styles.bannerButton}`)[1];
-let modal: HTMLElement = <HTMLElement> document.getElementsByClassName(`${styles.cookieModal}`)[0];
-let closeModalIcon = document.getElementsByClassName(`${styles.closeModalIcon}`)[0];
-
-let cookieItemRadioBtn: Element[] = [].slice.call(document.getElementsByClassName(`${ styles.cookieItemRadioBtn }`));
-let modalButtonSave: HTMLInputElement = <HTMLInputElement> document.getElementsByClassName(`${ styles.modalButtonSave }`)[0];
-let modalButtonReset: HTMLInputElement = <HTMLInputElement> document.getElementsByClassName(`${ styles.modalButtonReset }`)[0];
-
-function popup() {
-    if (modal) {
-        modal.style.display = 'block';
-    }
-}
-
-function close() {
-    if (modal) {
-        modal.style.display = 'none';
-    }
-}
-
-function enableModalButtons() {
-    if (modalButtonSave) {
-        modalButtonSave.disabled = false;
-    }
-
-    if (modalButtonReset) {
-        modalButtonReset.disabled = false;
-    }
-}
-
-if (cookieInfo) {
-    cookieInfo.addEventListener('click', popup);
-
-    // Add this line in case some browsers in mobile do not like click event 
-    // cookieInfo.addEventListener('touchstart', popup);
-}
-
-if (closeModalIcon) {
-    closeModalIcon.addEventListener('click', close);
-}
-
-if (cookieItemRadioBtn && cookieItemRadioBtn.length) {
-    for (let radio of cookieItemRadioBtn) {
-        radio.addEventListener('click', enableModalButtons);
     }
 }

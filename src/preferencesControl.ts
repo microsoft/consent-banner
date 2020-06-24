@@ -6,24 +6,29 @@ import { ITextResources } from './interfaces/TextResources';
 import { ICookieCategoriesPreferences } from './interfaces/CookieCategoriesPreferences';
 
 export class PreferencesControl {
-    cookieCategoriesPreferences: ICookieCategoriesPreferences;
     cookieCategories: ICookieCategory[];
     textResources: ITextResources;
+    cookieCategoriesPreferences: ICookieCategoriesPreferences;
 
-    private containerElement: string = '';
+    private oldCookieCategoriesPreferences: ICookieCategoriesPreferences;
+    private containerElementOrId: string = '';
     private direction: string = 'ltr';
+    private nullItself: () => void;
 
     constructor(cookieCategories: ICookieCategory[], 
                 textResources: ITextResources, 
                 cookieCategoriesPreferences: ICookieCategoriesPreferences, 
                 containerElement: string, 
-                direction: string) {
+                direction: string,
+                nullItself: () => void) {
 
         this.cookieCategories = cookieCategories;
         this.textResources = textResources;
         this.cookieCategoriesPreferences = cookieCategoriesPreferences;
-        this.containerElement = containerElement;
+        this.oldCookieCategoriesPreferences = { ...cookieCategoriesPreferences };
+        this.containerElementOrId = containerElement;
         this.direction = direction;
+        this.nullItself = nullItself;
     }
 
     /**
@@ -33,7 +38,7 @@ export class PreferencesControl {
      */
     public createPreferencesDialog(): void {
         let htmlTools = new HtmlTools();
-        let insert = document.querySelector('#' + this.containerElement);
+        let insert = document.querySelector('#' + this.containerElementOrId);
 
         let cookieModalInnerHtml = `
         <div role="presentation" tabindex="-1"></div>
@@ -83,7 +88,7 @@ export class PreferencesControl {
                     cookieOrderedList.innerHTML += item;
                 }
                 else {
-                    let nameAttribute: string = cookieCategory.id + 'Cookies';
+                    let nameAttribute: string = cookieCategory.id;
                     let acceptValue = this.cookieCategoriesPreferences[cookieCategory.id] === true ? "checked" : "";
                     let rejectValue = this.cookieCategoriesPreferences[cookieCategory.id] === false ? "checked" : "";
 
@@ -129,11 +134,15 @@ export class PreferencesControl {
         }
     }
 
+    /**
+     * Hides Preferences Dialog. Removes all HTML elements of the Preferences Dialog from the DOM.
+     */
     public hidePreferencesDialog(): void {
         let cookieModal = document.getElementsByClassName(styles.cookieModal)[0];
-        let parent = cookieModal.parentNode;
+        let parent = document.querySelector('#' + this.containerElementOrId);
         if (parent) {
             parent.removeChild(cookieModal);
+            this.nullItself();
         }
     }
 
@@ -141,6 +150,8 @@ export class PreferencesControl {
      * Add event handlers for handling button events
      * 1. Click "X" button, preference dialog will be removed from the DOM
      * 2. Click any "accept/reject" button, "Save changes" and "Reset all" button will be enabled
+     * 3. Click any "accept/reject" button, cookieCategoriesPreferences will be set
+     * 4. Click "Reset all" button, cookieCategoriesPreferences will be reset
      */
     private addPreferencesButtonsEvent(): void {
         let closeModalIcon = document.getElementsByClassName(styles.closeModalIcon)[0];
@@ -149,23 +160,101 @@ export class PreferencesControl {
         let modalButtonSave: HTMLInputElement = <HTMLInputElement>document.getElementsByClassName(styles.modalButtonSave)[0];
         let modalButtonReset: HTMLInputElement = <HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0];
 
-        function enableModalButtons() {
-            if (modalButtonSave) {
-                modalButtonSave.disabled = false;
-            }
-        
-            if (modalButtonReset) {
-                modalButtonReset.disabled = false;
-            }
-        }
-        
         if (closeModalIcon) {
-            closeModalIcon.addEventListener('click', this.hidePreferencesDialog);
+            closeModalIcon.addEventListener('click', () => this.hidePreferencesDialog());
         }
         
         if (cookieItemRadioBtn && cookieItemRadioBtn.length) {
             for (let radio of cookieItemRadioBtn) {
-                radio.addEventListener('click', enableModalButtons);
+                radio.addEventListener('click', () => {
+                    // Enable "Save changes" and "Reset all" buttons
+                    if (modalButtonSave) {
+                        modalButtonSave.disabled = false;
+                    }
+                    if (modalButtonReset) {
+                        modalButtonReset.disabled = false;
+                    }
+
+                    // Change cookieCategoriesPreferences
+                    let categId = radio.getAttribute('name');
+                    if (categId) {
+                        let categValue = radio.getAttribute('value');
+
+                        if (categValue === 'accept') {
+                            this.cookieCategoriesPreferences[categId] = true;
+                        }
+                        else {   // categValue === 'reject'
+                            this.cookieCategoriesPreferences[categId] = false;
+                        }
+                    }
+                });
+            }
+        }
+
+        if (modalButtonReset) {
+            modalButtonReset.addEventListener('click', () => {
+                for (let cookieCategory of this.cookieCategories) {
+                    if (!cookieCategory.isUnswitchable) {
+                        this.cookieCategoriesPreferences[cookieCategory.id] = this.oldCookieCategoriesPreferences[cookieCategory.id];
+                    }
+                }
+    
+                // Reset UI
+                this.setRadioBtnState();
+            });
+        }
+    }
+    
+    /**
+     * Add event handlers for handling "Save changes" button event.
+     * When "Save changes" button is clicked, "fn" will be executed.
+     * 
+     * @param fn function that needs to be executed
+     */
+    public addSaveButtonEvent(fn: () => void): void {
+        let modalButtonSave: HTMLInputElement = <HTMLInputElement>document.getElementsByClassName(styles.modalButtonSave)[0];
+        if (modalButtonSave) {
+            modalButtonSave.addEventListener('click', () => fn());
+        }
+    }
+
+    /**
+     * Set radio buttons checked/unchecked in Preferences Dialog
+     */
+    public setRadioBtnState(): void {
+        let i = 0;
+        for (let cookieCategory of this.cookieCategories) {
+            if (cookieCategory.isUnswitchable) {
+                continue;
+            }
+
+            let categId = cookieCategory.id;
+            if (this.cookieCategoriesPreferences[categId] === true) {
+                let acceptRadio: HTMLInputElement = <HTMLInputElement> document.getElementsByClassName(styles.cookieItemRadioBtn)[i];
+                acceptRadio.checked = true;
+                i++;
+
+                let rejectRadio: HTMLInputElement = <HTMLInputElement> document.getElementsByClassName(styles.cookieItemRadioBtn)[i];
+                rejectRadio.checked = false;
+                i++;
+            }
+            else if (this.cookieCategoriesPreferences[categId] === false) {
+                let acceptRadio: HTMLInputElement = <HTMLInputElement> document.getElementsByClassName(styles.cookieItemRadioBtn)[i];
+                acceptRadio.checked = false;
+                i++;
+
+                let rejectRadio: HTMLInputElement = <HTMLInputElement> document.getElementsByClassName(styles.cookieItemRadioBtn)[i];
+                rejectRadio.checked = true;
+                i++;
+            }
+            else {   // cookieCategoriesPreferences[categId] === undefined
+                let acceptRadio: HTMLInputElement = <HTMLInputElement> document.getElementsByClassName(styles.cookieItemRadioBtn)[i];
+                acceptRadio.checked = false;
+                i++;
+
+                let rejectRadio: HTMLInputElement = <HTMLInputElement> document.getElementsByClassName(styles.cookieItemRadioBtn)[i];
+                rejectRadio.checked = false;
+                i++;
             }
         }
     }
