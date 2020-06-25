@@ -1005,7 +1005,7 @@ describe("Test show and hide banner", () => {
         }
     });
     
-    test("Banner will be inserted when showBanner(...) is called", () => {
+    test("Pass string in constructor, and banner will be inserted when showBanner(...) is called", () => {
         let callBack = function() { return; };
         let cc = new ind.ConsentControl(testId, "en", callBack);
         cc.showBanner({ "c1": true, "c2": false,"c3": undefined });
@@ -1022,7 +1022,28 @@ describe("Test show and hide banner", () => {
         expect(document.getElementsByClassName(styles.bannerButton).length).toBe(2);
     });
 
-    test("Preferences dialog will be inserted when showBanner(...) is called", () => {
+    test("Pass HTMLElement in constructor, and banner will be inserted when showBanner(...) is called", () => {
+        let callBack = function() { return; };
+        let insert = document.getElementById(testId);
+        
+        if (insert) {
+            let cc = new ind.ConsentControl(insert, "en", callBack);
+            cc.showBanner({ "c1": true, "c2": false,"c3": undefined });
+            
+            let bannerBody = document.getElementsByClassName(styles.bannerBody);
+            expect(bannerBody).toBeTruthy();
+            expect(bannerBody[0].getAttribute("dir")).toBe(cc.getDirection());
+    
+            expect(document.getElementsByClassName(styles.bannerInform).length).toBe(1);
+            expect(document.getElementsByClassName(styles.infoIcon).length).toBe(1);
+            expect(document.getElementsByClassName(styles.bannerInformBody).length).toBe(1);
+    
+            expect(document.getElementsByClassName(styles.buttonGroup).length).toBe(1);
+            expect(document.getElementsByClassName(styles.bannerButton).length).toBe(2);
+        }
+    });
+
+    test("Pass string in constructor, and preferences dialog will be inserted when showBanner(...) is called", () => {
         let callBack = function() { return; };
         let cc = new ind.ConsentControl(testId, "en", callBack);
         
@@ -1030,6 +1051,20 @@ describe("Test show and hide banner", () => {
         cc.showBanner(cookieCategoriePreferences);
 
         testShowingPreferences(cc, cookieCategoriePreferences, "");
+    });
+
+    test("Pass HTMLElement in constructor, and preferences dialog will be inserted when showBanner(...) is called", () => {
+        let callBack = function() { return; };
+        let insert = document.getElementById(testId);
+
+        if (insert) {
+            let cc = new ind.ConsentControl(insert, "en", callBack);
+            
+            let cookieCategoriePreferences = { "c1": true, "c2": undefined, "c3": false };
+            cc.showBanner(cookieCategoriePreferences);
+    
+            testShowingPreferences(cc, cookieCategoriePreferences, "");
+        }
     });
 
     test("If switchable id is not in cookieCategoriePreferences, the category in preferences dialog will not be set", () => {
@@ -1148,7 +1183,7 @@ describe("Test show and hide banner", () => {
         cc.preferencesCtrl = new PreferencesControl(cc.cookieCategories, 
                                                     cc.textResources, 
                                                     cookieCategoriePreferences, 
-                                                    testId, 
+                                                    insert, 
                                                     "ltr", 
                                                     () => {});
 
@@ -1363,7 +1398,7 @@ describe("Test show and hide preferences dialog", () => {
         cc.preferencesCtrl = new PreferencesControl(cc.cookieCategories, 
                                                     cc.textResources, 
                                                     cookieCategoriePreferences, 
-                                                    testId, 
+                                                    insert, 
                                                     "ltr", 
                                                     () => {});
         

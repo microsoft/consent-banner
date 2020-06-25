@@ -11,24 +11,24 @@ export class PreferencesControl {
     cookieCategoriesPreferences: ICookieCategoriesPreferences;
 
     private oldCookieCategoriesPreferences: ICookieCategoriesPreferences;
-    private containerElementOrId: string = '';
+    private containerElement: HTMLElement | null;
     private direction: string = 'ltr';
-    private nullItself: () => void;
+    private onPreferencesClosed: () => void;
 
     constructor(cookieCategories: ICookieCategory[], 
                 textResources: ITextResources, 
                 cookieCategoriesPreferences: ICookieCategoriesPreferences, 
-                containerElement: string, 
+                containerElement: HTMLElement | null, 
                 direction: string,
-                nullItself: () => void) {
+                onPreferencesClosed: () => void) {
 
         this.cookieCategories = cookieCategories;
         this.textResources = textResources;
         this.cookieCategoriesPreferences = cookieCategoriesPreferences;
         this.oldCookieCategoriesPreferences = { ...cookieCategoriesPreferences };
-        this.containerElementOrId = containerElement;
+        this.containerElement = containerElement;
         this.direction = direction;
-        this.nullItself = nullItself;
+        this.onPreferencesClosed = onPreferencesClosed;
     }
 
     /**
@@ -38,7 +38,6 @@ export class PreferencesControl {
      */
     public createPreferencesDialog(): void {
         let htmlTools = new HtmlTools();
-        let insert = document.querySelector('#' + this.containerElementOrId);
 
         let cookieModalInnerHtml = `
         <div role="presentation" tabindex="-1"></div>
@@ -71,8 +70,8 @@ export class PreferencesControl {
         cookieModal.setAttribute('dir', this.direction);
         cookieModal.innerHTML = cookieModalInnerHtml;
 
-        if (insert) {
-            insert.appendChild(cookieModal);
+        if (this.containerElement) {
+            this.containerElement.appendChild(cookieModal);
             
             // Insert cookie category 
             for (let cookieCategory of this.cookieCategories) {
@@ -139,10 +138,9 @@ export class PreferencesControl {
      */
     public hidePreferencesDialog(): void {
         let cookieModal = document.getElementsByClassName(styles.cookieModal)[0];
-        let parent = document.querySelector('#' + this.containerElementOrId);
-        if (parent) {
-            parent.removeChild(cookieModal);
-            this.nullItself();
+        if (this.containerElement) {
+            this.containerElement.removeChild(cookieModal);
+            this.onPreferencesClosed();
         }
     }
 

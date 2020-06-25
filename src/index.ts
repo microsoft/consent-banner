@@ -8,7 +8,7 @@ import { ITextResources } from './interfaces/TextResources';
 import { ICookieCategoriesPreferences } from './interfaces/CookieCategoriesPreferences';
 
 export class ConsentControl {
-    private containerElementOrId: string;   // here the banner will be inserted
+    private containerElement: HTMLElement | null = null;   // here the banner will be inserted
     culture: string;
 
     // callback function, called on preferences changes (via "Accept All", or "Save changes")
@@ -61,13 +61,14 @@ export class ConsentControl {
         resetLabel: "Reset all"
     };
 
-    constructor(containerElementOrId: string, 
+    constructor(containerElementOrId: string | HTMLElement, 
                 culture: string, 
                 onPreferencesChanged: (cookieCategoriesPreferences: ICookieCategoriesPreferences) => void, 
                 cookieCategories?: ICookieCategory[], 
                 textResources?: ITextResources) {
         
-        this.containerElementOrId = containerElementOrId;
+        this.setContainerElement(containerElementOrId);
+
         this.culture = culture;
         this.onPreferencesChanged = onPreferencesChanged;
 
@@ -149,8 +150,6 @@ export class ConsentControl {
         }
 
         let htmlTools = new HtmlTools();
-        let insert = document.querySelector('#' + this.containerElementOrId);
-
         let infoIcon = `
         <svg xmlns="http://www.w3.org/2000/svg" x='0px' y='0px' viewBox='0 0 44 44' width='24px' height='24px' fill='none' stroke='currentColor'>
           <circle cx='22' cy='22' r='20' stroke-width='2'></circle>
@@ -179,17 +178,17 @@ export class ConsentControl {
         banner.setAttribute('role', 'alert');
         banner.innerHTML = bannerInnerHtml;
 
-        if (insert) {
-            insert.appendChild(banner);
+        if (this.containerElement) {
+            this.containerElement.appendChild(banner);
         }
 
         if (!this.preferencesCtrl) {
             this.preferencesCtrl = new PreferencesControl(this.cookieCategories, 
                                                           this.textResources, 
                                                           cookieCategoriesPreferences, 
-                                                          this.containerElementOrId, 
+                                                          this.containerElement, 
                                                           this.direction, 
-                                                          () => this.nullPreferences());
+                                                          () => this.onPreferencesClosed());
             
             this.preferencesCtrl.createPreferencesDialog();
             
@@ -231,10 +230,9 @@ export class ConsentControl {
      * Removes all HTML elements of the Consent Control from the DOM
      */
     public hideBanner(): void {
-        let parent = document.querySelector('#' + this.containerElementOrId);
-        if (parent) {
+        if (this.containerElement) {
             let banner = document.getElementsByClassName(styles.bannerBody)[0];
-            parent.removeChild(banner);
+            this.containerElement.removeChild(banner);
 
             this.hidePreferences();
         }
@@ -252,9 +250,9 @@ export class ConsentControl {
         this.preferencesCtrl = new PreferencesControl(this.cookieCategories, 
                                                       this.textResources, 
                                                       cookieCategoriesPreferences, 
-                                                      this.containerElementOrId, 
+                                                      this.containerElement, 
                                                       this.direction, 
-                                                      () => this.nullPreferences());
+                                                      () => this.onPreferencesClosed());
 
         this.preferencesCtrl.createPreferencesDialog();
         this.preferencesCtrl.showPreferencesDialog();
@@ -273,10 +271,10 @@ export class ConsentControl {
         }
 
         this.preferencesCtrl.hidePreferencesDialog();
-        this.preferencesCtrl = null;
+        this.onPreferencesClosed();
     }
 
-    private nullPreferences(): void {
+    private onPreferencesClosed(): void {
         this.preferencesCtrl = null;
     }
 
@@ -285,15 +283,20 @@ export class ConsentControl {
      * 
      * @param {string} containerElementOrId here the banner will be inserted
      */
-    public setContainerElementOrId(containerElementOrId: string): void {
-        this.containerElementOrId = containerElementOrId;
+    public setContainerElement(containerElementOrId: string | HTMLElement): void {
+        if (containerElementOrId instanceof Element) {
+            this.containerElement = containerElementOrId;
+        }
+        else {
+            this.containerElement = document.querySelector('#' + containerElementOrId);
+        }
     }
 
     /**
      * Return the id of container that is used for the banner
      */
-    public getContainerElementOrId(): string {
-        return this.containerElementOrId;
+    public getContainerElement(): HTMLElement | null {
+        return this.containerElement;
     }
 
     /**
