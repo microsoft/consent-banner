@@ -142,14 +142,8 @@ export class ConsentControl {
         }
 
         // Remove existing banner and preference dialog
-        if (document.getElementsByClassName(styles.bannerBody)) {
-            let length = document.getElementsByClassName(styles.bannerBody).length;
-            for (let i = 0; i < length; i++) {
-                this.hideBanner();
-            }
-        }
+        this.hideBanner();
 
-        let htmlTools = new HtmlTools();
         let infoIcon = `
         <svg xmlns="http://www.w3.org/2000/svg" x='0px' y='0px' viewBox='0 0 44 44' width='24px' height='24px' fill='none' stroke='currentColor'>
           <circle cx='22' cy='22' r='20' stroke-width='2'></circle>
@@ -167,8 +161,8 @@ export class ConsentControl {
         </div>
 
         <div class="${ styles.buttonGroup }">
-            <button type="button" class="${ styles.bannerButton }">${ htmlTools.escapeHtml(this.textResources.acceptAllLabel) }</button>
-            <button type="button" class="${ styles.bannerButton }">${ htmlTools.escapeHtml(this.textResources.moreInfoLabel) }</button>
+            <button type="button" class="${ styles.bannerButton }">${ HtmlTools.escapeHtml(this.textResources.acceptAllLabel) }</button>
+            <button type="button" class="${ styles.bannerButton }">${ HtmlTools.escapeHtml(this.textResources.moreInfoLabel) }</button>
         </div>
         `;
 
@@ -178,51 +172,14 @@ export class ConsentControl {
         banner.setAttribute('role', 'alert');
         banner.innerHTML = bannerInnerHtml;
 
-        if (this.containerElement) {
-            this.containerElement.appendChild(banner);
-        }
+        this.containerElement?.appendChild(banner);
 
         if (!this.preferencesCtrl) {
-            this.preferencesCtrl = new PreferencesControl(this.cookieCategories, 
-                                                          this.textResources, 
-                                                          cookieCategoriesPreferences, 
-                                                          this.containerElement, 
-                                                          this.direction, 
-                                                          () => this.onPreferencesClosed());
-            
-            this.preferencesCtrl.createPreferencesDialog();
-            
-            // Add event handler to "Save changes" button event
-            this.preferencesCtrl.addSaveButtonEvent(() => this.onPreferencesChanged(cookieCategoriesPreferences));
-
-            // Add event handler to show preferences dialog (from hidden state) when "More info" button is clicked
-            let cookieInfo = document.getElementsByClassName(styles.bannerButton)[1];
-            if (cookieInfo) {
-                cookieInfo.addEventListener('click', () => {
-                    this.showPreferences(cookieCategoriesPreferences);
-                    (<PreferencesControl> this.preferencesCtrl).showPreferencesDialog();
-                });
-            }
+            this.initPreferencesCtrl(cookieCategoriesPreferences, 'showBanner');
         }
 
         let acceptAllBtn = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[0];
-        if (acceptAllBtn) {
-            acceptAllBtn.addEventListener('click', () => {
-                for (let cookieCategory of this.cookieCategories) {
-                    if (!cookieCategory.isUnswitchable) {
-                        cookieCategoriesPreferences[cookieCategory.id] = true;
-    
-                        // Set cookieCategoriesPreferences in preferencesCtrl
-                        if (this.preferencesCtrl) {
-                            let cookiePreferences = this.preferencesCtrl.cookieCategoriesPreferences;
-                            cookiePreferences[cookieCategory.id] = true;
-                        }
-                    }
-                }
-    
-                this.onPreferencesChanged(cookieCategoriesPreferences);
-            });
-        }
+        acceptAllBtn?.addEventListener('click', () => this.onAcceptAllClicked(cookieCategoriesPreferences));
     }
 
     /**
@@ -230,10 +187,11 @@ export class ConsentControl {
      * Removes all HTML elements of the Consent Control from the DOM
      */
     public hideBanner(): void {
-        if (this.containerElement) {
-            let banner = document.getElementsByClassName(styles.bannerBody)[0];
-            this.containerElement.removeChild(banner);
-
+        if (document.getElementsByClassName(styles.bannerBody)) {
+            let bannerArray = [].slice.call(document.getElementsByClassName(styles.bannerBody));
+            for (let singleBanner of bannerArray) {
+                this.containerElement?.removeChild(singleBanner);
+            }
             this.hidePreferences();
         }
     }
@@ -245,20 +203,11 @@ export class ConsentControl {
      */
     public showPreferences(cookieCategoriesPreferences: ICookieCategoriesPreferences): void {
         if (this.preferencesCtrl) {
+            this.preferencesCtrl.showPreferencesDialog();
             return;
         }
-        this.preferencesCtrl = new PreferencesControl(this.cookieCategories, 
-                                                      this.textResources, 
-                                                      cookieCategoriesPreferences, 
-                                                      this.containerElement, 
-                                                      this.direction, 
-                                                      () => this.onPreferencesClosed());
 
-        this.preferencesCtrl.createPreferencesDialog();
-        this.preferencesCtrl.showPreferencesDialog();
-
-        // Add event handler to "Save changes" button event
-        this.preferencesCtrl.addSaveButtonEvent(() => this.onPreferencesChanged(cookieCategoriesPreferences));
+        this.initPreferencesCtrl(cookieCategoriesPreferences, 'showPreferences');
     }
 
     /**
@@ -271,29 +220,85 @@ export class ConsentControl {
         }
 
         this.preferencesCtrl.hidePreferencesDialog();
-        this.onPreferencesClosed();
     }
 
+    /**
+     * The method is used to initialize the preferences dialog.
+     * If it is called by showBanner(...) method, it will add event handler to "More info" button.
+     * If it is called by showPreferences(...) method, it will set "display: block" in preferences dialog to show the dialog
+     * 
+     * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences object that indicates cookie categories preferences 
+     * @param {string} caller the function that called initPreferencesCtrl
+     */
+    private initPreferencesCtrl(cookieCategoriesPreferences: ICookieCategoriesPreferences, caller: string): void {
+        
+        this.preferencesCtrl = new PreferencesControl(this.cookieCategories, 
+                                                      this.textResources, 
+                                                      cookieCategoriesPreferences, 
+                                                      <HTMLElement> this.containerElement, 
+                                                      this.direction, 
+                                                      () => this.onPreferencesClosed());
+        
+        this.preferencesCtrl.createPreferencesDialog();
+
+        // Add event handler to "Save changes" button event
+        this.preferencesCtrl.addSaveButtonEvent(() => this.onPreferencesChanged(cookieCategoriesPreferences));
+
+        if (caller === 'showBanner') {
+            // Add event handler to show preferences dialog (from hidden state) when "More info" button is clicked
+            let cookieInfo = document.getElementsByClassName(styles.bannerButton)[1];
+            cookieInfo?.addEventListener('click', () => this.showPreferences(cookieCategoriesPreferences));
+        }
+        else {     // caller === 'showPreferences'
+            this.preferencesCtrl.showPreferencesDialog();
+        }
+    }
+
+    /**
+     * Function that will be called when "Accept all" button is clicked
+     * 
+     * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences object that indicates cookie categories preferences
+     */
+    private onAcceptAllClicked(cookieCategoriesPreferences: ICookieCategoriesPreferences): void {
+        for (let cookieCategory of this.cookieCategories) {
+            if (!cookieCategory.isUnswitchable) {
+                cookieCategoriesPreferences[cookieCategory.id] = true;
+            }
+        }
+
+        this.onPreferencesChanged(cookieCategoriesPreferences);
+    }
+
+    /**
+     * Function that is used to set preferencesCtrl property to null
+     */
     private onPreferencesClosed(): void {
         this.preferencesCtrl = null;
     }
 
     /**
-     * Set the id of container that will be used for the banner
+     * Set the container that will be used for the banner
      * 
-     * @param {string} containerElementOrId here the banner will be inserted
+     * @param {string | HTMLElement} containerElementOrId here the banner will be inserted
      */
     public setContainerElement(containerElementOrId: string | HTMLElement): void {
         if (containerElementOrId instanceof Element) {
             this.containerElement = containerElementOrId;
         }
-        else {
+        else if (containerElementOrId && containerElementOrId.length > 0) {   // containerElementOrId: string
             this.containerElement = document.querySelector('#' + containerElementOrId);
+        }
+        else {
+            this.containerElement = null;
+        }
+
+        if (!this.containerElement) {
+            throw new Error("Container not found error");
         }
     }
 
     /**
-     * Return the id of container that is used for the banner
+     * Return the container that is used for the banner
      */
     public getContainerElement(): HTMLElement | null {
         return this.containerElement;

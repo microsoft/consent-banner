@@ -11,14 +11,14 @@ export class PreferencesControl {
     cookieCategoriesPreferences: ICookieCategoriesPreferences;
 
     private oldCookieCategoriesPreferences: ICookieCategoriesPreferences;
-    private containerElement: HTMLElement | null;
+    private containerElement: HTMLElement;
     private direction: string = 'ltr';
     private onPreferencesClosed: () => void;
 
     constructor(cookieCategories: ICookieCategory[], 
                 textResources: ITextResources, 
                 cookieCategoriesPreferences: ICookieCategoriesPreferences, 
-                containerElement: HTMLElement | null, 
+                containerElement: HTMLElement, 
                 direction: string,
                 onPreferencesClosed: () => void) {
 
@@ -37,15 +37,13 @@ export class PreferencesControl {
      * @param {boolean} banner true for banner, false for preferences dialog. 
      */
     public createPreferencesDialog(): void {
-        let htmlTools = new HtmlTools();
-
         let cookieModalInnerHtml = `
         <div role="presentation" tabindex="-1"></div>
-        <div role="dialog" aria-modal="true" aria-label="${ htmlTools.escapeHtml(this.textResources.preferencesDialogTitle) }" class="${ styles.modalContainer }" tabindex="-1">
-            <button aria-label="${ htmlTools.escapeHtml(this.textResources.preferencesDialogCloseLabel) }" class="${ styles.closeModalIcon }" tabindex="0">&#x2715;</button>
+        <div role="dialog" aria-modal="true" aria-label="${ HtmlTools.escapeHtml(this.textResources.preferencesDialogTitle) }" class="${ styles.modalContainer }" tabindex="-1">
+            <button aria-label="${ HtmlTools.escapeHtml(this.textResources.preferencesDialogCloseLabel) }" class="${ styles.closeModalIcon }" tabindex="0">&#x2715;</button>
             <div role="document" class="${ styles.modalBody }">
                 <div>
-                    <h2 class="${styles.modalTitle}">${ htmlTools.escapeHtml(this.textResources.preferencesDialogTitle) }</h2>
+                    <h2 class="${styles.modalTitle}">${ HtmlTools.escapeHtml(this.textResources.preferencesDialogTitle) }</h2>
                 </div>
                 
                 <form class="${ styles.modalContent }">
@@ -58,8 +56,8 @@ export class PreferencesControl {
                 </form>
                 
                 <div class="${ styles.modalButtonGroup }">
-                    <button type="button" aria-label="${ htmlTools.escapeHtml(this.textResources.saveLabel) }" class="${ styles.modalButtonSave }" disabled>${ htmlTools.escapeHtml(this.textResources.saveLabel) }</button>
-                    <button type="button" aria-label="${ htmlTools.escapeHtml(this.textResources.resetLabel) }" class="${ styles.modalButtonReset }" disabled>${ htmlTools.escapeHtml(this.textResources.resetLabel) }</button>
+                    <button type="button" aria-label="${ HtmlTools.escapeHtml(this.textResources.saveLabel) }" class="${ styles.modalButtonSave }" disabled>${ HtmlTools.escapeHtml(this.textResources.saveLabel) }</button>
+                    <button type="button" aria-label="${ HtmlTools.escapeHtml(this.textResources.resetLabel) }" class="${ styles.modalButtonReset }" disabled>${ HtmlTools.escapeHtml(this.textResources.resetLabel) }</button>
                 </div>
             </div>
         </div>
@@ -70,57 +68,55 @@ export class PreferencesControl {
         cookieModal.setAttribute('dir', this.direction);
         cookieModal.innerHTML = cookieModalInnerHtml;
 
-        if (this.containerElement) {
-            this.containerElement.appendChild(cookieModal);
-            
-            // Insert cookie category 
-            for (let cookieCategory of this.cookieCategories) {
-                if (cookieCategory.isUnswitchable) {
-                    let item = `
-                    <li class="${ styles.cookieListItem }">
-                        <h3 class="${ styles.cookieListItemTitle }">${ htmlTools.escapeHtml(cookieCategory.name) }</h3>
-                        <p class="${ styles.cookieListItemDescription }">${ cookieCategory.descHtml }</p>
-                    </li>
-                    `;
+        this.containerElement.appendChild(cookieModal);
+        
+        // Insert cookie category 
+        for (let cookieCategory of this.cookieCategories) {
+            if (cookieCategory.isUnswitchable) {
+                let item = `
+                <li class="${ styles.cookieListItem }">
+                    <h3 class="${ styles.cookieListItemTitle }">${ HtmlTools.escapeHtml(cookieCategory.name) }</h3>
+                    <p class="${ styles.cookieListItemDescription }">${ cookieCategory.descHtml }</p>
+                </li>
+                `;
 
-                    let cookieOrderedList = document.getElementsByClassName(styles.cookieOrderedList)[0];
-                    cookieOrderedList.innerHTML += item;
-                }
-                else {
-                    let nameAttribute: string = cookieCategory.id;
-                    let acceptValue = this.cookieCategoriesPreferences[cookieCategory.id] === true ? "checked" : "";
-                    let rejectValue = this.cookieCategoriesPreferences[cookieCategory.id] === false ? "checked" : "";
-
-                    let acceptRadio = `<input type="radio" aria-label="${ htmlTools.escapeHtml(this.textResources.acceptLabel) }" class="${styles.cookieItemRadioBtn}" name="${nameAttribute}" value="accept" ${acceptValue}>`;
-                    let rejectRadio = `<input type="radio" aria-label="${ htmlTools.escapeHtml(this.textResources.rejectLabel) }" class="${styles.cookieItemRadioBtn}" name="${nameAttribute}" value="reject" ${rejectValue}>`;
-
-                    let item = `
-                    <li class="${ styles.cookieListItem }">
-                        <div class="${ styles.cookieListItemGroup}" role="radiogroup" aria-label="${ htmlTools.escapeHtml(cookieCategory.name) }">
-                            <h3 class="${ styles.cookieListItemTitle }">${ htmlTools.escapeHtml(cookieCategory.name) }</h3>
-                            <p class="${ styles.cookieListItemDescription}">${cookieCategory.descHtml}</p>
-                            <div class="${ styles.cookieItemRadioBtnGroup}">
-                                <label class="${ styles.cookieItemRadioBtnCtrl}" role="radio">
-                                    ${ acceptRadio}
-                                    <span class="${ styles.cookieItemRadioBtnLabel}">${ htmlTools.escapeHtml(this.textResources.acceptLabel) }</span>
-                                </label>
-                                <label class="${ styles.cookieItemRadioBtnCtrl}" role="radio">
-                                    ${ rejectRadio}
-                                    <span class="${ styles.cookieItemRadioBtnLabel}">${ htmlTools.escapeHtml(this.textResources.rejectLabel) }</span>
-                                </label>
-                            </div>
-                        </div>
-                    </li>
-                    `;
-
-                    let cookieOrderedList = document.getElementsByClassName(styles.cookieOrderedList)[0];
-                    cookieOrderedList.innerHTML += item;
-                }
+                let cookieOrderedList = document.getElementsByClassName(styles.cookieOrderedList)[0];
+                cookieOrderedList.innerHTML += item;
             }
-            
-            // Add those event handler
-            this.addPreferencesButtonsEvent();
+            else {
+                let nameAttribute: string = cookieCategory.id;
+                let acceptValue = this.cookieCategoriesPreferences[cookieCategory.id] === true ? "checked" : "";
+                let rejectValue = this.cookieCategoriesPreferences[cookieCategory.id] === false ? "checked" : "";
+
+                let acceptRadio = `<input type="radio" aria-label="${ HtmlTools.escapeHtml(this.textResources.acceptLabel) }" class="${styles.cookieItemRadioBtn}" name="${nameAttribute}" value="accept" ${acceptValue}>`;
+                let rejectRadio = `<input type="radio" aria-label="${ HtmlTools.escapeHtml(this.textResources.rejectLabel) }" class="${styles.cookieItemRadioBtn}" name="${nameAttribute}" value="reject" ${rejectValue}>`;
+
+                let item = `
+                <li class="${ styles.cookieListItem }">
+                    <div class="${ styles.cookieListItemGroup}" role="radiogroup" aria-label="${ HtmlTools.escapeHtml(cookieCategory.name) }">
+                        <h3 class="${ styles.cookieListItemTitle }">${ HtmlTools.escapeHtml(cookieCategory.name) }</h3>
+                        <p class="${ styles.cookieListItemDescription}">${cookieCategory.descHtml}</p>
+                        <div class="${ styles.cookieItemRadioBtnGroup}">
+                            <label class="${ styles.cookieItemRadioBtnCtrl}" role="radio">
+                                ${ acceptRadio}
+                                <span class="${ styles.cookieItemRadioBtnLabel}">${ HtmlTools.escapeHtml(this.textResources.acceptLabel) }</span>
+                            </label>
+                            <label class="${ styles.cookieItemRadioBtnCtrl}" role="radio">
+                                ${ rejectRadio}
+                                <span class="${ styles.cookieItemRadioBtnLabel}">${ HtmlTools.escapeHtml(this.textResources.rejectLabel) }</span>
+                            </label>
+                        </div>
+                    </div>
+                </li>
+                `;
+
+                let cookieOrderedList = document.getElementsByClassName(styles.cookieOrderedList)[0];
+                cookieOrderedList.innerHTML += item;
+            }
         }
+        
+        // Add those event handler
+        this.addPreferencesButtonsEvent();
     }
 
     /**
@@ -138,10 +134,8 @@ export class PreferencesControl {
      */
     public hidePreferencesDialog(): void {
         let cookieModal = document.getElementsByClassName(styles.cookieModal)[0];
-        if (this.containerElement) {
-            this.containerElement.removeChild(cookieModal);
-            this.onPreferencesClosed();
-        }
+        this.containerElement.removeChild(cookieModal);
+        this.onPreferencesClosed();
     }
 
     /**
@@ -158,9 +152,7 @@ export class PreferencesControl {
         let modalButtonSave: HTMLInputElement = <HTMLInputElement>document.getElementsByClassName(styles.modalButtonSave)[0];
         let modalButtonReset: HTMLInputElement = <HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0];
 
-        if (closeModalIcon) {
-            closeModalIcon.addEventListener('click', () => this.hidePreferencesDialog());
-        }
+        closeModalIcon?.addEventListener('click', () => this.hidePreferencesDialog());
         
         if (cookieItemRadioBtn && cookieItemRadioBtn.length) {
             for (let radio of cookieItemRadioBtn) {
@@ -189,18 +181,16 @@ export class PreferencesControl {
             }
         }
 
-        if (modalButtonReset) {
-            modalButtonReset.addEventListener('click', () => {
-                for (let cookieCategory of this.cookieCategories) {
-                    if (!cookieCategory.isUnswitchable) {
-                        this.cookieCategoriesPreferences[cookieCategory.id] = this.oldCookieCategoriesPreferences[cookieCategory.id];
-                    }
+        modalButtonReset?.addEventListener('click', () => {
+            for (let cookieCategory of this.cookieCategories) {
+                if (!cookieCategory.isUnswitchable) {
+                    this.cookieCategoriesPreferences[cookieCategory.id] = this.oldCookieCategoriesPreferences[cookieCategory.id];
                 }
-    
-                // Reset UI
-                this.setRadioBtnState();
-            });
-        }
+            }
+
+            // Reset UI
+            this.setRadioBtnState();
+        });
     }
     
     /**
@@ -211,9 +201,7 @@ export class PreferencesControl {
      */
     public addSaveButtonEvent(fn: () => void): void {
         let modalButtonSave: HTMLInputElement = <HTMLInputElement>document.getElementsByClassName(styles.modalButtonSave)[0];
-        if (modalButtonSave) {
-            modalButtonSave.addEventListener('click', () => fn());
-        }
+        modalButtonSave?.addEventListener('click', () => fn());
     }
 
     /**

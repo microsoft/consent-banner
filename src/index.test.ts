@@ -1025,7 +1025,7 @@ describe("Test show and hide banner", () => {
     test("Pass HTMLElement in constructor, and banner will be inserted when showBanner(...) is called", () => {
         let callBack = function() { return; };
         let insert = document.getElementById(testId);
-        
+
         if (insert) {
             let cc = new ind.ConsentControl(insert, "en", callBack);
             cc.showBanner({ "c1": true, "c2": false,"c3": undefined });
@@ -1065,6 +1065,28 @@ describe("Test show and hide banner", () => {
     
             testShowingPreferences(cc, cookieCategoriePreferences, "");
         }
+    });
+
+    test("Call showBanner(...) many times, only keep last one", () => {
+        let callBack = function() { return; };
+        let cc = new ind.ConsentControl(testId, "en", callBack);
+
+        cc.showBanner({ "c1": true, "c2": false,"c3": undefined });
+        cc.showBanner({ "c1": false, "c2": true,"c3": undefined });
+        cc.showBanner({ "c1": true, "c2": false,"c3": false });
+        
+        let bannerBody = document.getElementsByClassName(styles.bannerBody);
+        expect(bannerBody.length).toBe(1);
+        expect(bannerBody[0].getAttribute("dir")).toBe(cc.getDirection());
+
+        expect(document.getElementsByClassName(styles.bannerInform).length).toBe(1);
+        expect(document.getElementsByClassName(styles.infoIcon).length).toBe(1);
+        expect(document.getElementsByClassName(styles.bannerInformBody).length).toBe(1);
+
+        expect(document.getElementsByClassName(styles.buttonGroup).length).toBe(1);
+        expect(document.getElementsByClassName(styles.bannerButton).length).toBe(2);
+        
+        testShowingPreferences(cc, { "c1": true, "c2": false,"c3": false }, "");
     });
 
     test("If switchable id is not in cookieCategoriePreferences, the category in preferences dialog will not be set", () => {
@@ -1118,6 +1140,7 @@ describe("Test show and hide banner", () => {
         let closeModalIcon: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.closeModalIcon)[0];
         closeModalIcon.click();
         
+        expect(cc.preferencesCtrl).toBeNull();
         testRemovingPreferences();
     });
 
@@ -1185,10 +1208,11 @@ describe("Test show and hide banner", () => {
                                                     cookieCategoriePreferences, 
                                                     insert, 
                                                     "ltr", 
-                                                    () => {});
+                                                    () => { cc.preferencesCtrl = null; });
 
         cc.hideBanner();
 
+        expect(cc.preferencesCtrl).toBeNull();
         testRemovingPreferences();
     });
 });
@@ -1325,7 +1349,7 @@ describe("Test show and hide preferences dialog", () => {
         }
     });
     
-    test("Preferences dialog will be inserted when showPreferences(...) is called", () => {
+    test("Pass string in constructor, and preferences dialog will be inserted when showPreferences(...) is called", () => {
         let callBack = function() { return; };
         let cc = new ind.ConsentControl(testId, "en", callBack);
 
@@ -1334,6 +1358,21 @@ describe("Test show and hide preferences dialog", () => {
 
         testBannerState();
         testShowingPreferences(cc, cookieCategoriePreferences, "block");
+    });
+
+    test("Pass HTMLElement in constructor, and preferences dialog will be inserted when showPreferences(...) is called", () => {
+        let callBack = function() { return; };
+        let insert = document.getElementById(testId);
+
+        if (insert) {
+            let cc = new ind.ConsentControl(insert, "en", callBack);
+    
+            let cookieCategoriePreferences = { "c1": true, "c2": undefined, "c3": false };
+            cc.showPreferences(cookieCategoriePreferences);
+    
+            testBannerState();
+            testShowingPreferences(cc, cookieCategoriePreferences, "block");
+        }
     });
 
     test("If switchable id is not in cookieCategoriePreferences, the category in preferences dialog will not be set when showPreferences(...) is called", () => {
@@ -1378,6 +1417,7 @@ describe("Test show and hide preferences dialog", () => {
         closeModalIcon.click();
         
         testBannerState();
+        expect(cc.preferencesCtrl).toBeNull();
         testRemovingPreferences();
     });
 
@@ -1400,11 +1440,12 @@ describe("Test show and hide preferences dialog", () => {
                                                     cookieCategoriePreferences, 
                                                     insert, 
                                                     "ltr", 
-                                                    () => {});
+                                                    () => { cc.preferencesCtrl = null; });
         
         cc.hidePreferences();
 
         testBannerState();
+        expect(cc.preferencesCtrl).toBeNull();
         testRemovingPreferences();
     });
 });
@@ -1535,7 +1576,7 @@ describe("Test radio buttons and 'Reset all' button", () => {
         expect(cookieItemRadioBtn[5].checked).toBeFalsy();
     });
 
-    test("Initialize cookieCategoriePreferences with unswitchable id, call showPreferences(...) and then click radio buttons. All cookieCategoriePreferences will be reset to initial state when 'Reset all' is clicked", () => {
+    test("Call showPreferences(...) with unswitchable id and click radio buttons. All cookiePreferences will be reset to initial state when 'Reset all' is clicked", () => {
         let callBack = function() { return; };
         let cc = new ind.ConsentControl(testId, "en", callBack);
 
@@ -1762,5 +1803,89 @@ describe("Test 'Accept all' button", () => {
                 }
             }
         }
+    });
+});
+
+describe("Test containerElement", () => {
+    let testId: string = "app";
+    let testId2: string = "app2";
+
+    beforeEach(() => {
+        let newDiv = document.createElement("div");
+        newDiv.setAttribute("id", testId);
+        document.body.appendChild(newDiv);
+
+        let newDiv2 = document.createElement("div");
+        newDiv2.setAttribute("id", testId2);
+        document.body.appendChild(newDiv2);
+    });
+
+    afterEach(() => {
+        let child = document.getElementById(testId);
+        if (child) {
+            let parent = child.parentNode;
+
+            if (parent) {
+                parent.removeChild(child);
+            }
+            else {
+                throw new Error("Parent not found error");
+            }
+        }
+
+        let child2 = document.getElementById(testId2);
+        if (child2) {
+            let parent2 = child2.parentNode;
+
+            if (parent2) {
+                parent2.removeChild(child2);
+            }
+            else {
+                throw new Error("Parent not found error");
+            }
+        }
+    });
+
+    test("Use setContainerElement(containerElement: string) to change container", () => {
+        let callBack = function() { return; };
+        let cc = new ind.ConsentControl(testId, "en", callBack);
+
+        cc.setContainerElement(testId2);
+
+        expect(cc.getContainerElement()).toBeTruthy();
+        expect(cc.getContainerElement()?.nodeName).toBe("DIV");
+        expect(cc.getContainerElement()?.getAttribute("id")).toBe(testId2);
+    });
+
+    test("Use setContainerElement(containerElement: HTMLElement) to change container", () => {
+        let callBack = function() { return; };
+        let cc = new ind.ConsentControl(testId, "en", callBack);
+
+        let container = document.getElementById(testId2);
+        if (container) {
+            cc.setContainerElement(container);
+    
+            expect(cc.getContainerElement()).toBeTruthy();
+            expect(cc.getContainerElement()?.nodeName).toBe("DIV");
+            expect(cc.getContainerElement()?.getAttribute("id")).toBe(testId2);
+        }
+        else {
+            throw new Error("Container not found error");
+        }
+    });
+
+    test("Use invalid id in setContainerElement(containerElement: string) to change container", () => {
+        let callBack = function() { return; };
+        let cc = new ind.ConsentControl(testId, "en", callBack);
+
+        expect(() => cc.setContainerElement("testId")).toThrow('Container not found error');
+    });
+
+    test("Use empty element in setContainerElement(containerElement) to change container", () => {
+        let callBack = function() { return; };
+        let cc = new ind.ConsentControl(testId, "en", callBack);
+
+        expect(() => cc.setContainerElement("")).toThrow('Container not found error');
+        expect(() => cc.setContainerElement(<HTMLElement> document.getElementById("test"))).toThrow('Container not found error');
     });
 });

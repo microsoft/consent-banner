@@ -1,5 +1,5 @@
 export class HtmlTools {
-    public escapeHtml(s: string | undefined): string {
+    public static escapeHtml(s: string | undefined): string {
         if (s) {
             return s.replace(/&/g, "&amp;")
                     .replace(/</g, "&lt;")
