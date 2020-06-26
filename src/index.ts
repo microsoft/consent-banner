@@ -175,7 +175,11 @@ export class ConsentControl {
         this.containerElement?.appendChild(banner);
 
         if (!this.preferencesCtrl) {
-            this.initPreferencesCtrl(cookieCategoriesPreferences, 'showBanner');
+            this.initPreferencesCtrl(cookieCategoriesPreferences);
+
+            // Add event handler to show preferences dialog (from hidden state) when "More info" button is clicked
+            let cookieInfo = document.getElementsByClassName(styles.bannerButton)[1];
+            cookieInfo?.addEventListener('click', () => this.showPreferences(cookieCategoriesPreferences));
         }
 
         let acceptAllBtn = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[0];
@@ -202,12 +206,11 @@ export class ConsentControl {
      * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences object that indicates cookie categories preferences
      */
     public showPreferences(cookieCategoriesPreferences: ICookieCategoriesPreferences): void {
-        if (this.preferencesCtrl) {
-            this.preferencesCtrl.showPreferencesDialog();
-            return;
+        if (!this.preferencesCtrl) {
+            this.initPreferencesCtrl(cookieCategoriesPreferences);
         }
 
-        this.initPreferencesCtrl(cookieCategoriesPreferences, 'showPreferences');
+        this.preferencesCtrl?.showPreferencesDialog();
     }
 
     /**
@@ -224,13 +227,10 @@ export class ConsentControl {
 
     /**
      * The method is used to initialize the preferences dialog.
-     * If it is called by showBanner(...) method, it will add event handler to "More info" button.
-     * If it is called by showPreferences(...) method, it will set "display: block" in preferences dialog to show the dialog
      * 
-     * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences object that indicates cookie categories preferences 
-     * @param {string} caller the function that called initPreferencesCtrl
+     * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences object that indicates cookie categories preferences
      */
-    private initPreferencesCtrl(cookieCategoriesPreferences: ICookieCategoriesPreferences, caller: string): void {
+    private initPreferencesCtrl(cookieCategoriesPreferences: ICookieCategoriesPreferences): void {
         
         this.preferencesCtrl = new PreferencesControl(this.cookieCategories, 
                                                       this.textResources, 
@@ -243,15 +243,6 @@ export class ConsentControl {
 
         // Add event handler to "Save changes" button event
         this.preferencesCtrl.addSaveButtonEvent(() => this.onPreferencesChanged(cookieCategoriesPreferences));
-
-        if (caller === 'showBanner') {
-            // Add event handler to show preferences dialog (from hidden state) when "More info" button is clicked
-            let cookieInfo = document.getElementsByClassName(styles.bannerButton)[1];
-            cookieInfo?.addEventListener('click', () => this.showPreferences(cookieCategoriesPreferences));
-        }
-        else {     // caller === 'showPreferences'
-            this.preferencesCtrl.showPreferencesDialog();
-        }
     }
 
     /**
