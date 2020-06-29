@@ -1473,7 +1473,7 @@ describe("Test radio buttons and 'Reset all' button", () => {
         }
     });
     
-    test("Click 'More info' button and then click radio buttons. All cookieCategoriePreferences will be reset to initial state when 'Reset all' is clicked", () => {
+    test("Click 'More info' button and then click radio buttons. All cookieCategoriePreferences will be reset to undefined when 'Reset all' is clicked", () => {
         let callBack = function() { return; };
         let cc = new ind.ConsentControl(testId, "en", callBack);
         
@@ -1512,21 +1512,25 @@ describe("Test radio buttons and 'Reset all' button", () => {
         resetAllBtn.click();
 
         if (cc.preferencesCtrl) {
+            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c1"]).toBeUndefined();
+            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c2"]).toBeUndefined();
+            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c3"]).toBeUndefined();
+
             expect(cc.preferencesCtrl.cookieCategoriesPreferences).toEqual(cookieCategoriePreferences);
         }
         else {
             throw new Error("Preference dialog not found error");
         }
 
-        expect(cookieItemRadioBtn[0].checked).toBeTruthy();
+        expect(cookieItemRadioBtn[0].checked).toBeFalsy();
         expect(cookieItemRadioBtn[1].checked).toBeFalsy();
         expect(cookieItemRadioBtn[2].checked).toBeFalsy();
         expect(cookieItemRadioBtn[3].checked).toBeFalsy();
         expect(cookieItemRadioBtn[4].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[5].checked).toBeTruthy();
+        expect(cookieItemRadioBtn[5].checked).toBeFalsy();
     });
 
-    test("Call showPreferences(...) and then click radio buttons. All cookieCategoriePreferences will be reset to initial state when 'Reset all' is clicked", () => {
+    test("Call showPreferences(...) and then click radio buttons. All cookieCategoriePreferences will be reset to undefined when 'Reset all' is clicked", () => {
         let callBack = function() { return; };
         let cc = new ind.ConsentControl(testId, "en", callBack);
 
@@ -1562,21 +1566,25 @@ describe("Test radio buttons and 'Reset all' button", () => {
         resetAllBtn.click();
 
         if (cc.preferencesCtrl) {
+            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c1"]).toBeUndefined();
+            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c2"]).toBeUndefined();
+            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c3"]).toBeUndefined();
+
             expect(cc.preferencesCtrl.cookieCategoriesPreferences).toEqual(cookieCategoriePreferences);
         }
         else {
             throw new Error("Preference dialog not found error");
         }
 
-        expect(cookieItemRadioBtn[0].checked).toBeTruthy();
+        expect(cookieItemRadioBtn[0].checked).toBeFalsy();
         expect(cookieItemRadioBtn[1].checked).toBeFalsy();
         expect(cookieItemRadioBtn[2].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[3].checked).toBeTruthy();
+        expect(cookieItemRadioBtn[3].checked).toBeFalsy();
         expect(cookieItemRadioBtn[4].checked).toBeFalsy();
         expect(cookieItemRadioBtn[5].checked).toBeFalsy();
     });
 
-    test("Call showPreferences(...) with unswitchable id and click radio buttons. All cookiePreferences will be reset to initial state when 'Reset all' is clicked", () => {
+    test("Call showPreferences(...) with unswitchable id and click radio buttons. All cookiePreferences will be reset to undefined when 'Reset all' is clicked", () => {
         let callBack = function() { return; };
         let cc = new ind.ConsentControl(testId, "en", callBack);
 
@@ -1612,16 +1620,21 @@ describe("Test radio buttons and 'Reset all' button", () => {
         resetAllBtn.click();
 
         if (cc.preferencesCtrl) {
+            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c0"]).toBeTruthy();
+            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c1"]).toBeUndefined();
+            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c2"]).toBeUndefined();
+            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c3"]).toBeUndefined();
+            
             expect(cc.preferencesCtrl.cookieCategoriesPreferences).toEqual(cookieCategoriePreferences);
         }
         else {
             throw new Error("Preference dialog not found error");
         }
 
-        expect(cookieItemRadioBtn[0].checked).toBeTruthy();
+        expect(cookieItemRadioBtn[0].checked).toBeFalsy();
         expect(cookieItemRadioBtn[1].checked).toBeFalsy();
         expect(cookieItemRadioBtn[2].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[3].checked).toBeTruthy();
+        expect(cookieItemRadioBtn[3].checked).toBeFalsy();
         expect(cookieItemRadioBtn[4].checked).toBeFalsy();
         expect(cookieItemRadioBtn[5].checked).toBeFalsy();
     });
