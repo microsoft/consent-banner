@@ -10,7 +10,6 @@ export class PreferencesControl {
     textResources: ITextResources;
     cookieCategoriesPreferences: ICookieCategoriesPreferences;
 
-    private oldCookieCategoriesPreferences: ICookieCategoriesPreferences;
     private containerElement: HTMLElement;
     private direction: string = 'ltr';
     private onPreferencesClosed: () => void;
@@ -25,7 +24,6 @@ export class PreferencesControl {
         this.cookieCategories = cookieCategories;
         this.textResources = textResources;
         this.cookieCategoriesPreferences = cookieCategoriesPreferences;
-        this.oldCookieCategoriesPreferences = { ...cookieCategoriesPreferences };
         this.containerElement = containerElement;
         this.direction = direction;
         this.onPreferencesClosed = onPreferencesClosed;
@@ -70,6 +68,8 @@ export class PreferencesControl {
 
         this.containerElement.appendChild(cookieModal);
         
+        let enabledResetAll = false;
+
         // Insert cookie category 
         for (let cookieCategory of this.cookieCategories) {
             if (cookieCategory.isUnswitchable) {
@@ -84,6 +84,10 @@ export class PreferencesControl {
                 cookieOrderedList.innerHTML += item;
             }
             else {
+                if (this.cookieCategoriesPreferences[cookieCategory.id] !== undefined) {
+                    enabledResetAll = true;
+                }
+
                 let nameAttribute: string = cookieCategory.id;
                 let acceptValue = this.cookieCategoriesPreferences[cookieCategory.id] === true ? "checked" : "";
                 let rejectValue = this.cookieCategoriesPreferences[cookieCategory.id] === false ? "checked" : "";
@@ -112,6 +116,13 @@ export class PreferencesControl {
 
                 let cookieOrderedList = document.getElementsByClassName(styles.cookieOrderedList)[0];
                 cookieOrderedList.innerHTML += item;
+            }
+        }
+
+        if (enabledResetAll) {
+            let modalButtonReset: HTMLInputElement = <HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0];
+            if (modalButtonReset) {
+                modalButtonReset.disabled = false;
             }
         }
         
@@ -157,24 +168,27 @@ export class PreferencesControl {
         if (cookieItemRadioBtn && cookieItemRadioBtn.length) {
             for (let radio of cookieItemRadioBtn) {
                 radio.addEventListener('click', () => {
-                    // Enable "Save changes" and "Reset all" buttons
-                    if (modalButtonSave) {
-                        modalButtonSave.disabled = false;
-                    }
-                    if (modalButtonReset) {
-                        modalButtonReset.disabled = false;
-                    }
-
-                    // Change cookieCategoriesPreferences
                     let categId = radio.getAttribute('name');
                     if (categId) {
-                        let categValue = radio.getAttribute('value');
+                        let oldCategValue = this.cookieCategoriesPreferences[categId];
 
+                        // Change cookieCategoriesPreferences
+                        let categValue = radio.getAttribute('value');
                         if (categValue === 'accept') {
                             this.cookieCategoriesPreferences[categId] = true;
                         }
                         else {   // categValue === 'reject'
                             this.cookieCategoriesPreferences[categId] = false;
+                        }
+    
+                        // Enable "Save changes" and "Reset all" buttons
+                        if (oldCategValue !== this.cookieCategoriesPreferences[categId]) {
+                            if (modalButtonSave) {
+                                modalButtonSave.disabled = false;
+                            }
+                        }
+                        if (modalButtonReset) {
+                            modalButtonReset.disabled = false;
                         }
                     }
                 });
@@ -182,9 +196,13 @@ export class PreferencesControl {
         }
 
         modalButtonReset?.addEventListener('click', () => {
+            if (modalButtonSave) {
+                modalButtonSave.disabled = false;
+            }
+
             for (let cookieCategory of this.cookieCategories) {
                 if (!cookieCategory.isUnswitchable) {
-                    this.cookieCategoriesPreferences[cookieCategory.id] = this.oldCookieCategoriesPreferences[cookieCategory.id];
+                    this.cookieCategoriesPreferences[cookieCategory.id] = undefined;
                 }
             }
 
