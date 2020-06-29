@@ -140,6 +140,7 @@ $bannerBtnHeight: 36px;
 
 .closeModalIcon {
   float: right;
+  margin: 2px;
   padding: 12px;
   border: none;
 
@@ -153,7 +154,7 @@ $bannerBtnHeight: 36px;
   color: #666666;
   background-color: #ffffff;
 
-  @include rtlDesign(0, 12px, left);
+  @include rtlDesign(2px, 12px, left);
 }
 
 .modalBody {
