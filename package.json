@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack -d --mode development",
-    "build-prod": "webpack -p --mode production",
+    "build-prod": "webpack -p --mode production --config ./webpack.production.config.js",
     "start": "webpack-dev-server --open",
     "test": "jest --watchAll",
     "test-coverage": "jest --coverage",

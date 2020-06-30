@@ -180,3 +180,4 @@ cc.hidePreferences();
 
 1. Change the width of buttons in banner: Change `$bannerBtnWidth` in `styles.scss`
 
+2. `webpack.config.js` file is for development purpose, and `webpack.production.config.js` is for production. The only difference between `webpack.config.js` and `webpack.production.config.js` is `localIdentName` in `use/options/modules` under `module/rules`. 
