@@ -102,7 +102,7 @@ cc.showBanner(cookieCategoriePreferences);
 
 ## Developer Guide
 
-`ConsentControl` consists of 2 main elements: **Banner** and **Preferences Dialog**. Use `containerElementOrId`, `culture`, `onPreferencesChanged`, `cookieCategories`, `textResources` to create an instance.
+`ConsentControl` consists of 2 main elements: **Banner** and **Preferences Dialog**. Use `containerElementOrId`, `culture`, `onPreferencesChanged`, `cookieCategories`, `textResources` to create an instance. `culture` will be used to determine the direction of the banner and preferences dialog.
 
 ```JavaScript
 var cc = new ConsentControl(
@@ -113,6 +113,27 @@ var cc = new ConsentControl(
     textResources?: ITextResources          // optional, see ITextResources in Data types
 );
 ```
+
+1. `setTextResources(textResources: ITextResources)` can be used to set the texts.
+
+2. `setContainerElement(containerElementOrId: string | HTMLElement)` can be used to set the container element for the banner and preferences dialog. 
+
+If you pass `HTMLElement`, it will be used as the container. If you pass `string`, the method will use it as the `id` to find the container element.
+
+If the container can not be found, it will throw an error. `new Error("Container not found error")`
+
+```JavaScript
+cc.setContainerElement("app");
+
+let container = document.getElementById('app');
+cc.setContainerElement(container);
+```
+
+3. `getContainerElement()` will return the current container element.
+
+4. You can set the direction manually by using `setDirection(dir?: string)`. `dir` can be `"ltr"` or `"rtl"`. If `dir` is not passed, it will determine the direction by `dir` attribute in `html`, `body` or `culture`.
+
+5. `getDirection()` will return the current direction.
 
 ### Data types
 
@@ -159,7 +180,7 @@ Methods related to **banner**: `showBanner(cookieCategoriesPreferences: ICookieC
 Methods related to **Preferences Dialog**: `showPreferences(cookieCategoriesPreferences: ICookieCategoriesPreferences)` and `hidePreferences()`
 
 ```JavaScript
-// Insert all necessary HTML code and shows the banner. Until this method is called there should be no HTML elements of the Consent Control anywhere in the DOM
+// Insert all necessary HTML code and shows the banner. Until this method is called there should be no HTML elements of the Consent Control anywhere in the DOM. Only one banner will be created. If call it many times, it will only display the last one and remove all previous banners.
 cc.showBanner(
     cookieCategoriesPreferences: ICookieCategoriesPreferences      // see ICookieCategoriesPreferences in Data types
 );
@@ -167,7 +188,7 @@ cc.showBanner(
 // Hides the banner and the Preferences Dialog. Removes all HTML elements of the Consent Control from the DOM
 cc.hideBanner();
 
-// Shows Preferences Dialog. Leaves banner state unchanged
+// Shows Preferences Dialog. Leaves banner state unchanged. If there is a preferences dialog, it will show the dialog instead of creating a new one.
 cc.showPreferences(
     cookieCategoriesPreferences: ICookieCategoriesPreferences      // see ICookieCategoriesPreferences in Data types
 );
