@@ -3,6 +3,7 @@
 coverage/
 dist/*
 !dist/index.html
+!dist/consent-banner.d.ts
 node_modules/
 *.log
 

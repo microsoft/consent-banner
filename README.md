@@ -52,7 +52,6 @@ This is part of your `html` page.
 If you want to insert a banner into the `<div id="app"></div>`, you can use the following example.
 
 ```TypeScript
-import { ConsentControl } from './consent-banner.js';
 
 let cookieCategories: ICookieCategory[] = 
 [
