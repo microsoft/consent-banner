@@ -1,12 +1,18 @@
 {
   "name": "consent-banner",
   "version": "2.0.0",
-  "description": "",
+  "description": "The library which will generate a banner at the specified position for asking the cookie preferences.",
   "main": "index.js",
-  "keywords": [],
+  "types": "dist/consent-banner.d.ts",
+  "keywords": [
+    "cookie preferences",
+    "banner"
+  ],
   "author": "Microsoft",
   "license": "MIT",
+  "files": [ "dist/consent-banner.js" ],
   "scripts": {
+    "prepare": "npm run build-prod",
     "build": "webpack -d --mode development",
     "build-prod": "webpack -p --mode production --config ./webpack.production.config.js",
     "start": "webpack-dev-server --open",
