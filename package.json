@@ -10,7 +10,7 @@
   ],
   "author": "Microsoft",
   "license": "MIT",
-  "files": [ "dist/consent-banner.js" ],
+  "files": [ "dist/consent-banner.js", "dist/consent-banner.d.ts" ],
   "scripts": {
     "prepare": "npm run build-prod",
     "build": "webpack -d --mode development",
