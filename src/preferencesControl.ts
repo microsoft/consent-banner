@@ -62,6 +62,7 @@ export class PreferencesControl {
         `;
 
         const cookieModal = document.createElement('div');
+        cookieModal.setAttribute('id','wcpCookiePreferenceCtrl');
         cookieModal.setAttribute('class', styles.cookieModal);
         cookieModal.setAttribute('dir', this.direction);
         cookieModal.innerHTML = cookieModalInnerHtml;

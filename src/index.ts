@@ -167,6 +167,7 @@ export class ConsentControl {
         `;
 
         const banner = document.createElement('div');
+        banner.setAttribute('id','wcpConsentBannerCtrl');
         banner.setAttribute('class', styles.bannerBody);
         banner.setAttribute('dir', this.direction);
         banner.setAttribute('role', 'alert');
