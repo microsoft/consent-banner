@@ -24,6 +24,11 @@ $bannerBtnHeight: 36px;
   z-index: 9999;          /* on top of the page */
   width: 100%;
   background-color: #F2F2F2;
+  text-align: left;
+
+  @at-root div[dir="rtl"]#{ & } {
+    text-align: right;
+  }
 }
 
 .bannerInform {
@@ -121,6 +126,11 @@ $bannerBtnHeight: 36px;
   height: 100%;
   background-color: rgba(255, 255, 255, 0.6);
   overflow: auto;
+  text-align: left;
+
+  @at-root div[dir="rtl"]#{ & } {
+    text-align: right;
+  }
 }
 
 .modalContainer {
