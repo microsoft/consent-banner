@@ -1,795 +1,24 @@
-import * as ind from "./index";
+import { ConsentControl } from "./index";
 import * as styles from "./styles.scss";
 import { PreferencesControl } from './preferencesControl';
 
 import { ICookieCategoriesPreferences } from "./interfaces/CookieCategoriesPreferences";
 
-describe("Test constructor", () => {
-    let testId: string = "app";
-
-    beforeEach(() => {
-        let newDiv = document.createElement("div");
-        newDiv.setAttribute("id", testId);
-        document.body.appendChild(newDiv);
-    });
-
-    afterEach(() => {
-        let child = document.getElementById(testId);
-        if (child) {
-            let parent = child.parentNode;
-
-            if (parent) {
-                parent.removeChild(child);
-            }
-            else {
-                throw new Error("Parent not found error");
-            }
-        }
-    });
-
-    test("CookieCategories and textResources full provided", () => {
-        let cookieCategories = [
-            {
-                id: "cookie1",
-                name: "Test cookie1",
-                descHtml: "This is for test cookie1"
-            },
-            {
-                id: "cookie2",
-                name: "Test cookie2",
-                descHtml: "This is for test cookie2 with 4th property",
-                isUnswitchable: true
-            }
-        ];
-
-        let textResources = {
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        };
-
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack, cookieCategories, textResources);
-
-        expect(cc.culture).toBe("en");
-        expect(cc.cookieCategories).toEqual(cookieCategories);
-        expect(cc.textResources).toEqual(textResources);
-    });
-
-    test("No cookieCategories, no textResources", () => {
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
-
-        expect(cc.culture).toBe("en");
-        expect(cc.cookieCategories).toEqual([
-            {
-                id: "c0",
-                name: "1. Essential cookies",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>.",
-                isUnswitchable: true
-            },
-            {
-                id: "c1",
-                name: "2. Performance & analytics",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>."
-            },
-            {
-                id: "c2",
-                name: "3. Advertising/Marketing",
-                descHtml: "Blah"
-            },
-            {
-                id: "c3",
-                name: "4. Targeting/personalization",
-                descHtml: "Blah"
-            }
-        ]);
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
-            acceptAllLabel: "Accept all",
-            moreInfoLabel: "More info",
-            preferencesDialogCloseLabel: "Close",
-            preferencesDialogTitle: "Manage cookie preferences",
-            preferencesDialogDescHtml: "Most Microsoft sites...",
-            acceptLabel: "Accept",
-            rejectLabel: "Reject",
-            saveLabel: "Save changes",
-            resetLabel: "Reset all"
-        });
-    });
-
-    test("No cookieCategories, textResources full provided", () => {
-        let textResources = {
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        };
-
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack, undefined, textResources);
-
-        expect(cc.culture).toBe("en");
-        expect(cc.cookieCategories).toEqual([
-            {
-                id: "c0",
-                name: "1. Essential cookies",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>.",
-                isUnswitchable: true
-            },
-            {
-                id: "c1",
-                name: "2. Performance & analytics",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>."
-            },
-            {
-                id: "c2",
-                name: "3. Advertising/Marketing",
-                descHtml: "Blah"
-            },
-            {
-                id: "c3",
-                name: "4. Targeting/personalization",
-                descHtml: "Blah"
-            }
-        ]);
-        expect(cc.textResources).toEqual(textResources);
-    });
-
-    test("CookieCategories provided, no textResources", () => {
-        let cookieCategories = [
-            {
-                id: "cookie1",
-                name: "Test cookie1",
-                descHtml: "This is for test cookie1"
-            },
-            {
-                id: "cookie2",
-                name: "Test cookie2",
-                descHtml: "This is for test cookie2 with 4th property",
-                isUnswitchable: true
-            }
-        ];
-
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack, cookieCategories);
-
-        expect(cc.culture).toBe("en");
-        expect(cc.cookieCategories).toEqual(cookieCategories);
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
-            acceptAllLabel: "Accept all",
-            moreInfoLabel: "More info",
-            preferencesDialogCloseLabel: "Close",
-            preferencesDialogTitle: "Manage cookie preferences",
-            preferencesDialogDescHtml: "Most Microsoft sites...",
-            acceptLabel: "Accept",
-            rejectLabel: "Reject",
-            saveLabel: "Save changes",
-            resetLabel: "Reset all"
-        });
-    });
-
-    test("No cookieCategories, textResources without bannerMessageHtml", () => {
-        let textResources = {
-            acceptAllLabel: "This is accept all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        };
-
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack, undefined, textResources);
-
-        expect(cc.culture).toBe("en");
-        expect(cc.cookieCategories).toEqual([
-            {
-                id: "c0",
-                name: "1. Essential cookies",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>.",
-                isUnswitchable: true
-            },
-            {
-                id: "c1",
-                name: "2. Performance & analytics",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>."
-            },
-            {
-                id: "c2",
-                name: "3. Advertising/Marketing",
-                descHtml: "Blah"
-            },
-            {
-                id: "c3",
-                name: "4. Targeting/personalization",
-                descHtml: "Blah"
-            }
-        ]);
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
-            acceptAllLabel: "This is accept all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        });
-    });
-
-    test("No cookieCategories, textResources without acceptAllLabel", () => {
-        let textResources = {
-            bannerMessageHtml: "This is banner message.",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        };
-
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack, undefined, textResources);
-
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "Accept all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        });
-    });
-
-    test("No cookieCategories, textResources without moreInfoLabel", () => {
-        let textResources = {
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        };
-
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack, undefined, textResources);
-
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            moreInfoLabel: "More info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        });
-    });
-
-    test("No cookieCategories, textResources without preferencesDialogCloseLabel", () => {
-        let textResources = {
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        };
-
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack, undefined, textResources);
-
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        });
-    });
-
-    test("No cookieCategories, textResources without preferencesDialogTitle", () => {
-        let textResources = {
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        };
-
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack, undefined, textResources);
-
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "Manage cookie preferences",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        });
-    });
-
-    test("No cookieCategories, textResources without preferencesDialogDescHtml", () => {
-        let textResources = {
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        };
-
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack, undefined, textResources);
-
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "Most Microsoft sites...",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        });
-    });
-
-    test("No cookieCategories, textResources without acceptLabel", () => {
-        let textResources = {
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        };
-
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack, undefined, textResources);
-
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "Accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        });
-    });
-
-    test("No cookieCategories, textResources without rejectLabel", () => {
-        let textResources = {
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        };
-
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack, undefined, textResources);
-
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "Reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        });
-    });
-
-    test("No cookieCategories, textResources without saveLabel", () => {
-        let textResources = {
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            resetLabel: "This is reset all"
-        };
-
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack, undefined, textResources);
-
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "Save changes",
-            resetLabel: "This is reset all"
-        });
-    });
-
-    test("No cookieCategories, textResources without resetLabel", () => {
-        let textResources = {
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-        };
-
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack, undefined, textResources);
-
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "Reset all"
-        });
-    });
-
-    test("No cookieCategories, textResources without bannerMessageHtml, acceptAllLabel", () => {
-        let textResources = {
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        };
-
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack, undefined, textResources);
-
-        expect(cc.culture).toBe("en");
-        expect(cc.cookieCategories).toEqual([
-            {
-                id: "c0",
-                name: "1. Essential cookies",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>.",
-                isUnswitchable: true
-            },
-            {
-                id: "c1",
-                name: "2. Performance & analytics",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>."
-            },
-            {
-                id: "c2",
-                name: "3. Advertising/Marketing",
-                descHtml: "Blah"
-            },
-            {
-                id: "c3",
-                name: "4. Targeting/personalization",
-                descHtml: "Blah"
-            }
-        ]);
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
-            acceptAllLabel: "Accept all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        });
-    });
-
-    test("No cookieCategories, textResources without bannerMessageHtml, rejectLabel", () => {
-        let textResources = {
-            acceptAllLabel: "This is accept all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        };
-
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack, undefined, textResources);
-
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
-            acceptAllLabel: "This is accept all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "Reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        });
-    });
-});
-
-describe("Test language direction", () => {
-    let testId: string = "app";
-
-    beforeEach(() => {
-        let newDiv = document.createElement("div");
-        newDiv.setAttribute("id", testId);
-        document.body.appendChild(newDiv);
-    });
-
-    afterEach(() => {
-        let child = document.getElementById(testId);
-        if (child) {
-            let parent = child.parentNode;
-
-            if (parent) {
-                parent.removeChild(child);
-            }
-            else {
-                throw new Error("Parent not found error");
-            }
-        }
-    });
-
-    test("Language is ms (ltr). No cookieCategories, no textResources", () => {
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "ms", callBack);
-        expect(cc.getDirection()).toBe("ltr");
-    });
-
-    test("Language is ms (ltr). Set direction to rtl. No cookieCategories, no textResources", () => {
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "ms", callBack);
-        cc.setDirection("rtl");
-        expect(cc.getDirection()).toBe("rtl");
-    });
-
-    test("Language is ar (rtl). No cookieCategories, no textResources", () => {
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "ar", callBack);
-        expect(cc.getDirection()).toBe("rtl");
-    });
-
-    test("Language is he (rtl). No cookieCategories, no textResources", () => {
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "he", callBack);
-        expect(cc.getDirection()).toBe("rtl");
-    });
-
-    test("Language is ps (rtl). No cookieCategories, no textResources", () => {
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "ps", callBack);
-        expect(cc.getDirection()).toBe("rtl");
-    });
-
-    test("Language is ur (rtl). No cookieCategories, no textResources", () => {
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "ur", callBack);
-        expect(cc.getDirection()).toBe("rtl");
-    });
-
-    test("Language is fa (rtl). No cookieCategories, no textResources", () => {
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "fa", callBack);
-        expect(cc.getDirection()).toBe("rtl");
-    });
-    
-    test("Language is pa (rtl). No cookieCategories, no textResources", () => {
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "pa", callBack);
-        expect(cc.getDirection()).toBe("rtl");
-    });
-    
-    test("Language is sd (rtl). No cookieCategories, no textResources", () => {
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "sd", callBack);
-        expect(cc.getDirection()).toBe("rtl");
-    });
-
-    test("Language is tk (rtl). No cookieCategories, no textResources", () => {
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "tk", callBack);
-        expect(cc.getDirection()).toBe("rtl");
-    });
-
-    test("Language is ug (rtl). No cookieCategories, no textResources", () => {
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "ug", callBack);
-        expect(cc.getDirection()).toBe("rtl");
-    });
-
-    test("Language is yi (rtl). No cookieCategories, no textResources", () => {
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "yi", callBack);
-        expect(cc.getDirection()).toBe("rtl");
-    });
-
-    test("Language is syr (rtl). No cookieCategories, no textResources", () => {
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "syr", callBack);
-        expect(cc.getDirection()).toBe("rtl");
-    });
-
-    test("Language is ks-arab (rtl). No cookieCategories, no textResources", () => {
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "ks-arab", callBack);
-        expect(cc.getDirection()).toBe("rtl");
-    });
-
-    test("Language is en-US (ltr). No cookieCategories, no textResources", () => {
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en-US", callBack);
-        expect(cc.getDirection()).toBe("ltr");
-    });
-
-    test("Language is ar-SA (rtl). No cookieCategories, no textResources", () => {
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "ar-SA", callBack);
-        expect(cc.getDirection()).toBe("rtl");
-    });
-});
-
-describe("Test html and body direction", () => {
-    let testId: string = "app";
-
-    let htmlDir: string | null;
-    let bodyDir: string | null;
-
-    beforeAll(() => {
-        htmlDir = document.getElementsByTagName("html")[0].getAttribute("dir");
-        bodyDir = document.getElementsByTagName("body")[0].getAttribute("dir");
-    });
-
-    beforeEach(() => {
-        let newDiv = document.createElement("div");
-        newDiv.setAttribute("id", testId);
-        document.body.appendChild(newDiv);
-    });
-
-    afterEach(() => {
-        if (htmlDir) {
-            document.getElementsByTagName("html")[0].setAttribute("dir", htmlDir);
-        }
-        else {
-            document.getElementsByTagName("html")[0].removeAttribute("dir");
-        }
-
-        if (bodyDir) {
-            document.getElementsByTagName("body")[0].setAttribute("dir", bodyDir);
-        }
-        else {
-            document.getElementsByTagName("body")[0].removeAttribute("dir");
-        }
-
-        let child = document.getElementById(testId);
-        if (child) {
-            let parent = child.parentNode;
-
-            if (parent) {
-                parent.removeChild(child);
-            }
-            else {
-                throw new Error("Parent not found error");
-            }
-        }
-    });
-
-    test("Language is en (ltr). Html dir is rtl. No cookieCategories, no textResources", () => {
-        document.getElementsByTagName("html")[0].setAttribute("dir", "rtl");
-
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
-        expect(cc.getDirection()).toBe("rtl");
-    });
-
-    test("Language is ar (rtl). Html dir is ltr. No cookieCategories, no textResources", () => {
-        document.getElementsByTagName("html")[0].setAttribute("dir", "ltr");
-
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "ar", callBack);
-        expect(cc.getDirection()).toBe("ltr");
-    });
-
-    test("Language is en (ltr). Body dir is rtl. No cookieCategories, no textResources", () => {
-        document.getElementsByTagName("body")[0].setAttribute("dir", "rtl");
-
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
-        expect(cc.getDirection()).toBe("rtl");
-    });
-
-    test("Language is ar (rtl). Body dir is ltr. No cookieCategories, no textResources", () => {
-        document.getElementsByTagName("body")[0].setAttribute("dir", "ltr");
-
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "ar", callBack);
-        expect(cc.getDirection()).toBe("ltr");
-    });
-});
-
-function testShowingPreferences(cc: ind.ConsentControl, cookieCategoriePreferences: ICookieCategoriesPreferences, display: string): void {
+function testShowingBanner(dir: string): void {
+    let bannerBody = document.getElementsByClassName(styles.bannerBody);
+    expect(bannerBody).toBeTruthy();
+    expect(bannerBody.length).toBe(1);
+    expect(bannerBody[0].getAttribute("dir")).toBe(dir);
+
+    expect(document.getElementsByClassName(styles.bannerInform).length).toBe(1);
+    expect(document.getElementsByClassName(styles.infoIcon).length).toBe(1);
+    expect(document.getElementsByClassName(styles.bannerInformBody).length).toBe(1);
+
+    expect(document.getElementsByClassName(styles.buttonGroup).length).toBe(1);
+    expect(document.getElementsByClassName(styles.bannerButton).length).toBe(2);
+}
+
+function testShowingPreferences(cc: ConsentControl, cookieCategoriePreferences: ICookieCategoriesPreferences, display: string): void {
     expect(document.getElementsByClassName(styles.cookieModal)).toBeTruthy();
 
     let cookieModal: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.cookieModal)[0];
@@ -841,23 +70,17 @@ function testShowingPreferences(cc: ind.ConsentControl, cookieCategoriePreferenc
     expect(document.getElementsByClassName(styles.modalButtonReset).length).toBe(1);
 }
 
-function testModalButton(functionName: string, testId: string, i: number): void {
-    let callBack = function() { return; };
-    let cc = new ind.ConsentControl(testId, "en", callBack);
-    let cookieCategoriePreferences = { "c1": true, "c2": false, "c3": undefined };
-
-    if (functionName === "showBanner") {
-        cc.showBanner(cookieCategoriePreferences);
-    }
-    else {   // showPreferences
-        cc.showPreferences(cookieCategoriePreferences);
-    }
-
+function testModalSaveButton(i: number, defined: number[]): void {
     let cookieItemRadioBtn: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.cookieItemRadioBtn)[i];
     cookieItemRadioBtn.click();
 
-    expect(document.getElementsByClassName(styles.modalButtonSave)[0].getAttribute("disabled")).toBeFalsy();
-    expect(document.getElementsByClassName(styles.modalButtonReset)[0].getAttribute("disabled")).toBeFalsy();
+    if (defined.includes(i)) {
+        expect((<HTMLInputElement> document.getElementsByClassName(styles.modalButtonSave)[0]).disabled).toBeTruthy();
+    }
+    else {
+        expect((<HTMLInputElement> document.getElementsByClassName(styles.modalButtonSave)[0]).disabled).toBeFalsy();
+    }
+    expect((<HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0]).disabled).toBeFalsy();
 }
 
 function testRemovingPreferences(): void {
@@ -985,6 +208,18 @@ describe("Test show and hide banner", () => {
         </div>
     `;
 
+    function testRemovingBanner(): void {
+        let bannerBody = document.getElementsByClassName(styles.bannerBody);
+        expect(bannerBody.length).toBe(0);
+        
+        expect(document.getElementsByClassName(styles.bannerInform).length).toBe(0);
+        expect(document.getElementsByClassName(styles.infoIcon).length).toBe(0);
+        expect(document.getElementsByClassName(styles.bannerInformBody).length).toBe(0);
+
+        expect(document.getElementsByClassName(styles.buttonGroup).length).toBe(0);
+        expect(document.getElementsByClassName(styles.bannerButton).length).toBe(0);
+    }
+
     beforeEach(() => {
         let newDiv = document.createElement("div");
         newDiv.setAttribute("id", testId);
@@ -1007,45 +242,27 @@ describe("Test show and hide banner", () => {
     
     test("Pass string in constructor, and banner will be inserted when showBanner(...) is called", () => {
         let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
+        let cc = new ConsentControl(testId, "en", callBack);
         cc.showBanner({ "c1": true, "c2": false,"c3": undefined });
-        
-        let bannerBody = document.getElementsByClassName(styles.bannerBody);
-        expect(bannerBody).toBeTruthy();
-        expect(bannerBody[0].getAttribute("dir")).toBe(cc.getDirection());
 
-        expect(document.getElementsByClassName(styles.bannerInform).length).toBe(1);
-        expect(document.getElementsByClassName(styles.infoIcon).length).toBe(1);
-        expect(document.getElementsByClassName(styles.bannerInformBody).length).toBe(1);
-
-        expect(document.getElementsByClassName(styles.buttonGroup).length).toBe(1);
-        expect(document.getElementsByClassName(styles.bannerButton).length).toBe(2);
+        testShowingBanner(cc.getDirection());
     });
 
     test("Pass HTMLElement in constructor, and banner will be inserted when showBanner(...) is called", () => {
-        let callBack = function() { return; };
         let insert = document.getElementById(testId);
 
         if (insert) {
-            let cc = new ind.ConsentControl(insert, "en", callBack);
+            let callBack = function() { return; };
+            let cc = new ConsentControl(insert, "en", callBack);
             cc.showBanner({ "c1": true, "c2": false,"c3": undefined });
             
-            let bannerBody = document.getElementsByClassName(styles.bannerBody);
-            expect(bannerBody).toBeTruthy();
-            expect(bannerBody[0].getAttribute("dir")).toBe(cc.getDirection());
-    
-            expect(document.getElementsByClassName(styles.bannerInform).length).toBe(1);
-            expect(document.getElementsByClassName(styles.infoIcon).length).toBe(1);
-            expect(document.getElementsByClassName(styles.bannerInformBody).length).toBe(1);
-    
-            expect(document.getElementsByClassName(styles.buttonGroup).length).toBe(1);
-            expect(document.getElementsByClassName(styles.bannerButton).length).toBe(2);
+            testShowingBanner(cc.getDirection());
         }
     });
 
     test("Pass string in constructor, and preferences dialog will be inserted when showBanner(...) is called", () => {
         let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
+        let cc = new ConsentControl(testId, "en", callBack);
         
         let cookieCategoriePreferences = { "c1": true, "c2": undefined, "c3": false };
         cc.showBanner(cookieCategoriePreferences);
@@ -1058,7 +275,7 @@ describe("Test show and hide banner", () => {
         let insert = document.getElementById(testId);
 
         if (insert) {
-            let cc = new ind.ConsentControl(insert, "en", callBack);
+            let cc = new ConsentControl(insert, "en", callBack);
             
             let cookieCategoriePreferences = { "c1": true, "c2": undefined, "c3": false };
             cc.showBanner(cookieCategoriePreferences);
@@ -1069,29 +286,19 @@ describe("Test show and hide banner", () => {
 
     test("Call showBanner(...) many times, only keep last one", () => {
         let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
+        let cc = new ConsentControl(testId, "en", callBack);
 
         cc.showBanner({ "c1": true, "c2": false,"c3": undefined });
         cc.showBanner({ "c1": false, "c2": true,"c3": undefined });
         cc.showBanner({ "c1": true, "c2": false,"c3": false });
         
-        let bannerBody = document.getElementsByClassName(styles.bannerBody);
-        expect(bannerBody.length).toBe(1);
-        expect(bannerBody[0].getAttribute("dir")).toBe(cc.getDirection());
-
-        expect(document.getElementsByClassName(styles.bannerInform).length).toBe(1);
-        expect(document.getElementsByClassName(styles.infoIcon).length).toBe(1);
-        expect(document.getElementsByClassName(styles.bannerInformBody).length).toBe(1);
-
-        expect(document.getElementsByClassName(styles.buttonGroup).length).toBe(1);
-        expect(document.getElementsByClassName(styles.bannerButton).length).toBe(2);
-        
+        testShowingBanner(cc.getDirection());
         testShowingPreferences(cc, { "c1": true, "c2": false,"c3": false }, "");
     });
 
     test("If switchable id is not in cookieCategoriePreferences, the category in preferences dialog will not be set", () => {
         let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
+        let cc = new ConsentControl(testId, "en", callBack);
 
         let cookieCategoriePreferences = { "c2": true, "c3": undefined };
         cc.showBanner(cookieCategoriePreferences);
@@ -1101,7 +308,7 @@ describe("Test show and hide banner", () => {
 
     test("Preferences dialog will appear when 'More info' button is clicked", () => {
         let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
+        let cc = new ConsentControl(testId, "en", callBack);
 
         let cookieCategoriePreferences = { "c1": true, "c2": false, "c3": undefined };
         cc.showBanner(cookieCategoriePreferences);
@@ -1114,7 +321,7 @@ describe("Test show and hide banner", () => {
 
     test("'Reset all' and 'Save changes' will be enabled when any radio buttons are clicked", () => {
         let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
+        let cc = new ConsentControl(testId, "en", callBack);
 
         cc.showBanner({ "c1": true, "c2": false,"c3": undefined });
 
@@ -1123,7 +330,15 @@ describe("Test show and hide banner", () => {
             let container = document.getElementById(testId);
             if (container) {
                 container.innerHTML = "";
-                testModalButton("showBanner", testId, i);
+                
+                let otherCallBack = function() { return; };
+                let otherCc = new ConsentControl(testId, "en", otherCallBack);
+
+                let cookieCategoriePreferences = { "c1": true, "c2": false, "c3": undefined };
+                let cookiePreferencesBtnArray = [0, 3];
+                
+                otherCc.showBanner(cookieCategoriePreferences);
+                testModalSaveButton(i, cookiePreferencesBtnArray);
             }
             else {
                 throw new Error("Container not found error");
@@ -1131,9 +346,62 @@ describe("Test show and hide banner", () => {
         }
     });
 
+    test("'Reset all' will be enabled when any cookieCategoriesPreferences is defined", () => {
+        let callBack = function() { return; };
+
+        let cc = new ConsentControl(testId, "en", callBack);
+        let cookieCategoriesPreferences: ICookieCategoriesPreferences = { };
+        cc.showBanner(cookieCategoriesPreferences);
+        expect((<HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0]).disabled).toBeTruthy();
+
+        cc.hideBanner();
+
+        cc = new ConsentControl(testId, "en", callBack);
+        cookieCategoriesPreferences = { "c1": true };
+        cc.showBanner(cookieCategoriesPreferences);
+        expect((<HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0]).disabled).toBeFalsy();
+
+        cc.hideBanner();
+
+        cc = new ConsentControl(testId, "en", callBack);
+        cookieCategoriesPreferences = { "c1": false };
+        cc.showBanner(cookieCategoriesPreferences);
+        expect((<HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0]).disabled).toBeFalsy();
+
+        cc.hideBanner();
+
+        cc = new ConsentControl(testId, "en", callBack);
+        cookieCategoriesPreferences = { "c2": true };
+        cc.showBanner(cookieCategoriesPreferences);
+        expect((<HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0]).disabled).toBeFalsy();
+
+        cc.hideBanner();
+
+        cc = new ConsentControl(testId, "en", callBack);
+        cookieCategoriesPreferences = { "c2": false };
+        cc.showBanner(cookieCategoriesPreferences);
+        expect((<HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0]).disabled).toBeFalsy();
+
+        cc.hideBanner();
+
+        cc = new ConsentControl(testId, "en", callBack);
+        cookieCategoriesPreferences = { "c3": true };
+        cc.showBanner(cookieCategoriesPreferences);
+        expect((<HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0]).disabled).toBeFalsy();
+
+        cc.hideBanner();
+
+        cc = new ConsentControl(testId, "en", callBack);
+        cookieCategoriesPreferences = { "c3": false };
+        cc.showBanner(cookieCategoriesPreferences);
+        expect((<HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0]).disabled).toBeFalsy();
+
+        cc.hideBanner();
+    });
+
     test("Preferences dialog will be removed from DOM when 'X' button is clicked", () => {
         let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
+        let cc = new ConsentControl(testId, "en", callBack);
 
         cc.showBanner({ "c1": true, "c2": false,"c3": undefined });
 
@@ -1148,7 +416,7 @@ describe("Test show and hide banner", () => {
         let callBack = function() { return; };
         let cookieCategoriePreferences = { "c1": true, "c2": false,"c3": undefined };
         
-        let cc = new ind.ConsentControl(testId, "en", callBack);
+        let cc = new ConsentControl(testId, "en", callBack);
         cc.showBanner(cookieCategoriePreferences);
 
         let closeModalIcon: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.closeModalIcon)[0];
@@ -1166,7 +434,7 @@ describe("Test show and hide banner", () => {
 
     test("Banner will be removed from DOM when hideBanner() is called", () => {
         let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
+        let cc = new ConsentControl(testId, "en", callBack);
 
         let insert = document.getElementById(testId);
         if (insert) {
@@ -1177,21 +445,13 @@ describe("Test show and hide banner", () => {
         }
 
         cc.hideBanner();
-
-        let bannerBody = document.getElementsByClassName(styles.bannerBody);
-        expect(bannerBody.length).toBe(0);
         
-        expect(document.getElementsByClassName(styles.bannerInform).length).toBe(0);
-        expect(document.getElementsByClassName(styles.infoIcon).length).toBe(0);
-        expect(document.getElementsByClassName(styles.bannerInformBody).length).toBe(0);
-
-        expect(document.getElementsByClassName(styles.buttonGroup).length).toBe(0);
-        expect(document.getElementsByClassName(styles.bannerButton).length).toBe(0);
+        testRemovingBanner()
     });
 
     test("Preferences dialog will be removed from DOM when hideBanner() is called", () => {
         let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
+        let cc = new ConsentControl(testId, "en", callBack);
 
         let insert = document.getElementById(testId);
         if (insert) {
@@ -1314,19 +574,6 @@ describe("Test show and hide preferences dialog", () => {
         </div>
     `;
 
-    function testBannerState(): void {
-        let bannerBody = document.getElementsByClassName(styles.bannerBody);
-        expect(bannerBody).toBeTruthy();
-        expect(bannerBody[0].getAttribute("dir")).toBe("ltr");
-
-        expect(document.getElementsByClassName(styles.bannerInform).length).toBe(1);
-        expect(document.getElementsByClassName(styles.infoIcon).length).toBe(1);
-        expect(document.getElementsByClassName(styles.bannerInformBody).length).toBe(1);
-
-        expect(document.getElementsByClassName(styles.buttonGroup).length).toBe(1);
-        expect(document.getElementsByClassName(styles.bannerButton).length).toBe(2);
-    }
-
     beforeEach(() => {
         let newDiv = document.createElement("div");
         newDiv.setAttribute("id", testId);
@@ -1351,12 +598,12 @@ describe("Test show and hide preferences dialog", () => {
     
     test("Pass string in constructor, and preferences dialog will be inserted when showPreferences(...) is called", () => {
         let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
+        let cc = new ConsentControl(testId, "en", callBack);
 
         let cookieCategoriePreferences = { "c1": true, "c2": undefined, "c3": false };
         cc.showPreferences(cookieCategoriePreferences);
 
-        testBannerState();
+        testShowingBanner("ltr");
         testShowingPreferences(cc, cookieCategoriePreferences, "block");
     });
 
@@ -1365,30 +612,30 @@ describe("Test show and hide preferences dialog", () => {
         let insert = document.getElementById(testId);
 
         if (insert) {
-            let cc = new ind.ConsentControl(insert, "en", callBack);
+            let cc = new ConsentControl(insert, "en", callBack);
     
             let cookieCategoriePreferences = { "c1": true, "c2": undefined, "c3": false };
             cc.showPreferences(cookieCategoriePreferences);
     
-            testBannerState();
+            testShowingBanner("ltr");
             testShowingPreferences(cc, cookieCategoriePreferences, "block");
         }
     });
 
     test("If switchable id is not in cookieCategoriePreferences, the category in preferences dialog will not be set when showPreferences(...) is called", () => {
         let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
+        let cc = new ConsentControl(testId, "en", callBack);
         
         let cookieCategoriePreferences = { "c1": true, "c3": undefined };
         cc.showPreferences(cookieCategoriePreferences);
 
-        testBannerState();
+        testShowingBanner("ltr");
         testShowingPreferences(cc, cookieCategoriePreferences, "block");
     });
 
     test("'Reset all' and 'Save changes' will be enabled when any radio buttons are clicked", () => {
         let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
+        let cc = new ConsentControl(testId, "en", callBack);
 
         let cookieCategoriePreferences = { "c1": true, "c2": false, "c3": undefined };
         cc.showPreferences(cookieCategoriePreferences);
@@ -1398,7 +645,15 @@ describe("Test show and hide preferences dialog", () => {
             let container = document.getElementById(testId);
             if (container) {
                 container.innerHTML = "";
-                testModalButton("showPreferences", testId, i);
+
+                let otherCallBack = function() { return; };
+                let otherCc = new ConsentControl(testId, "en", otherCallBack);
+
+                let cookieCategoriePreferences = { "c1": true, "c2": false, "c3": undefined };
+                let cookiePreferencesBtnArray = [0, 3];
+                
+                otherCc.showPreferences(cookieCategoriePreferences);
+                testModalSaveButton(i, cookiePreferencesBtnArray);
             }
             else {
                 throw new Error("Container not found error");
@@ -1406,9 +661,62 @@ describe("Test show and hide preferences dialog", () => {
         }
     });
 
+    test("'Reset all' will be enabled when any cookieCategoriesPreferences is defined", () => {
+        let callBack = function() { return; };
+
+        let cc = new ConsentControl(testId, "en", callBack);
+        let cookieCategoriesPreferences: ICookieCategoriesPreferences = { };
+        cc.showPreferences(cookieCategoriesPreferences);
+        expect((<HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0]).disabled).toBeTruthy();
+
+        cc.hidePreferences();
+
+        cc = new ConsentControl(testId, "en", callBack);
+        cookieCategoriesPreferences = { "c1": true };
+        cc.showPreferences(cookieCategoriesPreferences);
+        expect((<HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0]).disabled).toBeFalsy();
+
+        cc.hidePreferences();
+
+        cc = new ConsentControl(testId, "en", callBack);
+        cookieCategoriesPreferences = { "c1": false };
+        cc.showPreferences(cookieCategoriesPreferences);
+        expect((<HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0]).disabled).toBeFalsy();
+
+        cc.hidePreferences();
+
+        cc = new ConsentControl(testId, "en", callBack);
+        cookieCategoriesPreferences = { "c2": true };
+        cc.showPreferences(cookieCategoriesPreferences);
+        expect((<HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0]).disabled).toBeFalsy();
+
+        cc.hidePreferences();
+
+        cc = new ConsentControl(testId, "en", callBack);
+        cookieCategoriesPreferences = { "c2": false };
+        cc.showPreferences(cookieCategoriesPreferences);
+        expect((<HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0]).disabled).toBeFalsy();
+
+        cc.hidePreferences();
+
+        cc = new ConsentControl(testId, "en", callBack);
+        cookieCategoriesPreferences = { "c3": true };
+        cc.showPreferences(cookieCategoriesPreferences);
+        expect((<HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0]).disabled).toBeFalsy();
+
+        cc.hidePreferences();
+
+        cc = new ConsentControl(testId, "en", callBack);
+        cookieCategoriesPreferences = { "c3": false };
+        cc.showPreferences(cookieCategoriesPreferences);
+        expect((<HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0]).disabled).toBeFalsy();
+
+        cc.hidePreferences();
+    });
+
     test("Preferences dialog will be removed from DOM when 'X' button is clicked", () => {
         let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
+        let cc = new ConsentControl(testId, "en", callBack);
 
         let cookieCategoriePreferences = { "c1": true, "c2": false, "c3": undefined };
         cc.showPreferences(cookieCategoriePreferences);
@@ -1416,14 +724,14 @@ describe("Test show and hide preferences dialog", () => {
         let closeModalIcon: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.closeModalIcon)[0];
         closeModalIcon.click();
         
-        testBannerState();
+        testShowingBanner("ltr");
         expect(cc.preferencesCtrl).toBeNull();
         testRemovingPreferences();
     });
 
     test("Preferences dialog will be removed from DOM when hidePreferences() is called", () => {
         let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
+        let cc = new ConsentControl(testId, "en", callBack);
 
         let insert = document.getElementById(testId);
         if (insert) {
@@ -1444,378 +752,9 @@ describe("Test show and hide preferences dialog", () => {
         
         cc.hidePreferences();
 
-        testBannerState();
+        testShowingBanner("ltr");
         expect(cc.preferencesCtrl).toBeNull();
         testRemovingPreferences();
-    });
-});
-
-describe("Test radio buttons and 'Reset all' button", () => {
-    let testId: string = "app";
-
-    beforeEach(() => {
-        let newDiv = document.createElement("div");
-        newDiv.setAttribute("id", testId);
-        document.body.appendChild(newDiv);
-    });
-
-    afterEach(() => {
-        let child = document.getElementById(testId);
-        if (child) {
-            let parent = child.parentNode;
-
-            if (parent) {
-                parent.removeChild(child);
-            }
-            else {
-                throw new Error("Parent not found error");
-            }
-        }
-    });
-    
-    test("Click 'More info' button and then click radio buttons. All cookieCategoriePreferences will be reset to undefined when 'Reset all' is clicked", () => {
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
-        
-        let cookieCategoriePreferences = { "c1": true, "c2": undefined, "c3": false };
-        cc.showBanner(cookieCategoriePreferences);
-
-        let cookieInfo = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[1];
-        cookieInfo.click();
-
-        expect(cc.preferencesCtrl).toBeTruthy();
-        let cookieModal: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.cookieModal)[0];
-        expect(cookieModal.style.display).toBe("block");
-
-        let cookieItemRadioBtn: HTMLInputElement[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
-        cookieItemRadioBtn[1].click();
-        cookieItemRadioBtn[2].click();
-        cookieItemRadioBtn[4].click();
-
-        expect(cookieItemRadioBtn[0].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[1].checked).toBeTruthy();
-        expect(cookieItemRadioBtn[2].checked).toBeTruthy();
-        expect(cookieItemRadioBtn[3].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[4].checked).toBeTruthy();
-        expect(cookieItemRadioBtn[5].checked).toBeFalsy();
-
-        if (cc.preferencesCtrl) {
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c1"]).toBeFalsy();
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c2"]).toBeTruthy();
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c3"]).toBeTruthy();
-        }
-        else {
-            throw new Error("Preference dialog not found error");
-        }
-
-        let resetAllBtn = <HTMLElement> document.getElementsByClassName(styles.modalButtonReset)[0];
-        resetAllBtn.click();
-
-        if (cc.preferencesCtrl) {
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c1"]).toBeUndefined();
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c2"]).toBeUndefined();
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c3"]).toBeUndefined();
-
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences).toEqual(cookieCategoriePreferences);
-        }
-        else {
-            throw new Error("Preference dialog not found error");
-        }
-
-        expect(cookieItemRadioBtn[0].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[1].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[2].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[3].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[4].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[5].checked).toBeFalsy();
-    });
-
-    test("Call showPreferences(...) and then click radio buttons. All cookieCategoriePreferences will be reset to undefined when 'Reset all' is clicked", () => {
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
-
-        let cookieCategoriePreferences = { "c1": true, "c2": false, "c3": undefined };
-        cc.showPreferences(cookieCategoriePreferences);
-
-        expect(cc.preferencesCtrl).toBeTruthy();
-        let cookieModal: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.cookieModal)[0];
-        expect(cookieModal.style.display).toBe("block");
-
-        let cookieItemRadioBtn: HTMLInputElement[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
-        cookieItemRadioBtn[1].click();
-        cookieItemRadioBtn[2].click();
-        cookieItemRadioBtn[4].click();
-
-        expect(cookieItemRadioBtn[0].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[1].checked).toBeTruthy();
-        expect(cookieItemRadioBtn[2].checked).toBeTruthy();
-        expect(cookieItemRadioBtn[3].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[4].checked).toBeTruthy();
-        expect(cookieItemRadioBtn[5].checked).toBeFalsy();
-
-        if (cc.preferencesCtrl) {
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c1"]).toBeFalsy();
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c2"]).toBeTruthy();
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c3"]).toBeTruthy();
-        }
-        else {
-            throw new Error("Preference dialog not found error");
-        }
-
-        let resetAllBtn = <HTMLElement> document.getElementsByClassName(styles.modalButtonReset)[0];
-        resetAllBtn.click();
-
-        if (cc.preferencesCtrl) {
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c1"]).toBeUndefined();
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c2"]).toBeUndefined();
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c3"]).toBeUndefined();
-
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences).toEqual(cookieCategoriePreferences);
-        }
-        else {
-            throw new Error("Preference dialog not found error");
-        }
-
-        expect(cookieItemRadioBtn[0].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[1].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[2].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[3].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[4].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[5].checked).toBeFalsy();
-    });
-
-    test("Call showPreferences(...) with unswitchable id and click radio buttons. All cookiePreferences will be reset to undefined when 'Reset all' is clicked", () => {
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
-
-        let cookieCategoriePreferences = { "c0": true, "c1": true, "c2": false, "c3": undefined };
-        cc.showPreferences(cookieCategoriePreferences);
-
-        expect(cc.preferencesCtrl).toBeTruthy();
-        let cookieModal: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.cookieModal)[0];
-        expect(cookieModal.style.display).toBe("block");
-
-        let cookieItemRadioBtn: HTMLInputElement[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
-        cookieItemRadioBtn[1].click();
-        cookieItemRadioBtn[2].click();
-        cookieItemRadioBtn[4].click();
-
-        expect(cookieItemRadioBtn[0].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[1].checked).toBeTruthy();
-        expect(cookieItemRadioBtn[2].checked).toBeTruthy();
-        expect(cookieItemRadioBtn[3].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[4].checked).toBeTruthy();
-        expect(cookieItemRadioBtn[5].checked).toBeFalsy();
-
-        if (cc.preferencesCtrl) {
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c1"]).toBeFalsy();
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c2"]).toBeTruthy();
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c3"]).toBeTruthy();
-        }
-        else {
-            throw new Error("Preference dialog not found error");
-        }
-
-        let resetAllBtn = <HTMLElement> document.getElementsByClassName(styles.modalButtonReset)[0];
-        resetAllBtn.click();
-
-        if (cc.preferencesCtrl) {
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c0"]).toBeTruthy();
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c1"]).toBeUndefined();
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c2"]).toBeUndefined();
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c3"]).toBeUndefined();
-            
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences).toEqual(cookieCategoriePreferences);
-        }
-        else {
-            throw new Error("Preference dialog not found error");
-        }
-
-        expect(cookieItemRadioBtn[0].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[1].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[2].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[3].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[4].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[5].checked).toBeFalsy();
-    });
-
-    test("Click 'More info' button and then click radio buttons. cookieCategoriePreferences will be set", () => {
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
-        
-        let cookieCategoriePreferences = { "c1": true, "c2": undefined, "c3": false };
-        cc.showBanner(cookieCategoriePreferences);
-
-        let cookieInfo = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[1];
-        cookieInfo.click();
-
-        expect(cc.preferencesCtrl).toBeTruthy();
-        let cookieModal: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.cookieModal)[0];
-        expect(cookieModal.style.display).toBe("block");
-
-        let cookieItemRadioBtn: HTMLInputElement[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
-        cookieItemRadioBtn[0].click();
-        cookieItemRadioBtn[3].click();
-        cookieItemRadioBtn[5].click();
-
-        expect(cookieItemRadioBtn[0].checked).toBeTruthy();
-        expect(cookieItemRadioBtn[1].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[2].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[3].checked).toBeTruthy();
-        expect(cookieItemRadioBtn[4].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[5].checked).toBeTruthy();
-
-        if (cc.preferencesCtrl) {
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c1"]).toBeTruthy();
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c2"]).toBeFalsy();
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c3"]).toBeFalsy();
-        }
-        else {
-            throw new Error("Preference dialog not found error");
-        }
-        
-        cookieItemRadioBtn[1].click();
-        cookieItemRadioBtn[2].click();
-        cookieItemRadioBtn[4].click();
-
-        expect(cookieItemRadioBtn[0].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[1].checked).toBeTruthy();
-        expect(cookieItemRadioBtn[2].checked).toBeTruthy();
-        expect(cookieItemRadioBtn[3].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[4].checked).toBeTruthy();
-        expect(cookieItemRadioBtn[5].checked).toBeFalsy();
-
-        if (cc.preferencesCtrl) {
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c1"]).toBeFalsy();
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c2"]).toBeTruthy();
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c3"]).toBeTruthy();
-        }
-        else {
-            throw new Error("Preference dialog not found error");
-        }
-    });
-
-    test("Call showPreferences(...) and then click radio buttons. cookieCategoriePreferences will be set", () => {
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
-
-        let cookieCategoriePreferences = { "c1": true, "c2": false, "c3": undefined };
-        cc.showPreferences(cookieCategoriePreferences);
-
-        expect(cc.preferencesCtrl).toBeTruthy();
-        let cookieModal: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.cookieModal)[0];
-        expect(cookieModal.style.display).toBe("block");
-
-        let cookieItemRadioBtn: HTMLInputElement[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
-        cookieItemRadioBtn[0].click();
-        cookieItemRadioBtn[3].click();
-        cookieItemRadioBtn[5].click();
-
-        expect(cookieItemRadioBtn[0].checked).toBeTruthy();
-        expect(cookieItemRadioBtn[1].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[2].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[3].checked).toBeTruthy();
-        expect(cookieItemRadioBtn[4].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[5].checked).toBeTruthy();
-
-        if (cc.preferencesCtrl) {
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c1"]).toBeTruthy();
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c2"]).toBeFalsy();
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c3"]).toBeFalsy();
-        }
-        else {
-            throw new Error("Preference dialog not found error");
-        }
-
-        cookieItemRadioBtn[1].click();
-        cookieItemRadioBtn[2].click();
-        cookieItemRadioBtn[4].click();
-
-        expect(cookieItemRadioBtn[0].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[1].checked).toBeTruthy();
-        expect(cookieItemRadioBtn[2].checked).toBeTruthy();
-        expect(cookieItemRadioBtn[3].checked).toBeFalsy();
-        expect(cookieItemRadioBtn[4].checked).toBeTruthy();
-        expect(cookieItemRadioBtn[5].checked).toBeFalsy();
-
-        if (cc.preferencesCtrl) {
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c1"]).toBeFalsy();
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c2"]).toBeTruthy();
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences["c3"]).toBeTruthy();
-        }
-        else {
-            throw new Error("Preference dialog not found error");
-        }
-    });
-});
-
-describe("Test 'Accept all' button", () => {
-    let testId: string = "app";
-
-    beforeEach(() => {
-        let newDiv = document.createElement("div");
-        newDiv.setAttribute("id", testId);
-        document.body.appendChild(newDiv);
-    });
-
-    afterEach(() => {
-        let child = document.getElementById(testId);
-        if (child) {
-            let parent = child.parentNode;
-
-            if (parent) {
-                parent.removeChild(child);
-            }
-            else {
-                throw new Error("Parent not found error");
-            }
-        }
-    });
-    
-    test("Click 'Accept all' button and all cookieCategoriePreferences will be set to 'true'", () => {
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
-        
-        let cookieCategoriePreferences = { "c2": undefined, "c3": false };
-        cc.showBanner(cookieCategoriePreferences);
-
-        let acceptAllBtn = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[0];
-        acceptAllBtn.click();
-
-        for (let cookieCategory of cc.cookieCategories) {
-            if (!cookieCategory.isUnswitchable) {
-                if (cc.preferencesCtrl) {
-                    let id = cookieCategory.id;
-                    expect(cc.preferencesCtrl.cookieCategoriesPreferences[id]).toBeTruthy();
-                }
-                else {
-                    throw new Error("Preference dialog not found error");
-                }
-            }
-        }
-    });
-
-    test("Initialize cookieCategoriesPreferences with unswitchable id and click 'Accept all' button. All cookieCategoriePreferences will be set to 'true'", () => {
-        let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
-        
-        let cookieCategoriePreferences = { "c0": true, "c2": undefined, "c3": false };
-        cc.showBanner(cookieCategoriePreferences);
-
-        let acceptAllBtn = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[0];
-        acceptAllBtn.click();
-
-        for (let cookieCategory of cc.cookieCategories) {
-            if (!cookieCategory.isUnswitchable) {
-                if (cc.preferencesCtrl) {
-                    let id = cookieCategory.id;
-                    expect(cc.preferencesCtrl.cookieCategoriesPreferences[id]).toBeTruthy();
-                }
-                else {
-                    throw new Error("Preference dialog not found error");
-                }
-            }
-        }
     });
 });
 
@@ -1842,7 +781,7 @@ describe("Test containerElement", () => {
                 parent.removeChild(child);
             }
             else {
-                throw new Error("Parent not found error");
+                throw new Error("Parent 1 not found error");
             }
         }
 
@@ -1854,14 +793,14 @@ describe("Test containerElement", () => {
                 parent2.removeChild(child2);
             }
             else {
-                throw new Error("Parent not found error");
+                throw new Error("Parent 2 not found error");
             }
         }
     });
 
     test("Use setContainerElement(containerElement: string) to change container", () => {
         let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
+        let cc = new ConsentControl(testId, "en", callBack);
 
         cc.setContainerElement(testId2);
 
@@ -1872,7 +811,7 @@ describe("Test containerElement", () => {
 
     test("Use setContainerElement(containerElement: HTMLElement) to change container", () => {
         let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
+        let cc = new ConsentControl(testId, "en", callBack);
 
         let container = document.getElementById(testId2);
         if (container) {
@@ -1889,14 +828,14 @@ describe("Test containerElement", () => {
 
     test("Use invalid id in setContainerElement(containerElement: string) to change container", () => {
         let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
+        let cc = new ConsentControl(testId, "en", callBack);
 
         expect(() => cc.setContainerElement("testId")).toThrow('Container not found error');
     });
 
     test("Use empty element in setContainerElement(containerElement) to change container", () => {
         let callBack = function() { return; };
-        let cc = new ind.ConsentControl(testId, "en", callBack);
+        let cc = new ConsentControl(testId, "en", callBack);
 
         expect(() => cc.setContainerElement("")).toThrow('Container not found error');
         expect(() => cc.setContainerElement(<HTMLElement> document.getElementById("test"))).toThrow('Container not found error');

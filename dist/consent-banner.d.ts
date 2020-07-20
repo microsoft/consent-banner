@@ -1,6 +1,24 @@
-declare interface ICookieCategory { }
-declare interface ITextResources { }
-declare interface ICookieCategoriesPreferences { }
+declare interface ICookieCategory {
+    id: string;
+    name: string;
+    descHtml: string;
+    isUnswitchable?: boolean;
+}
+declare interface ITextResources {
+    bannerMessageHtml?: string;
+    acceptAllLabel?: string;
+    moreInfoLabel?: string;
+    preferencesDialogCloseLabel?: string;
+    preferencesDialogTitle?: string;
+    preferencesDialogDescHtml?: string;
+    acceptLabel?: string;
+    rejectLabel?: string;
+    saveLabel?: string;
+    resetLabel?: string;
+}
+declare interface ICookieCategoriesPreferences {
+    [key: string]: boolean | undefined;
+}
 
 declare class PreferencesControl { }
 
