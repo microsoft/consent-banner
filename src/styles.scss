@@ -1,0 +1,536 @@
+$bannerBtnWidth: 150px;
+$bannerBtnHeight: 36px;
+
+@mixin bannerFont($weight, $size, $style: normal) {
+  font : {
+    family: Segoe UI, SegoeUI, Arial, sans-serif;
+    style: $style;
+    weight: $weight;
+    size: $size;
+  }
+}
+
+// For right-to-left direction
+@mixin rtlDesign($margin, $padding, $float: none) {
+  div[dir="rtl"] & {
+    margin: $margin;
+    padding: $padding;
+    float: $float;
+  }
+}
+
+.bannerBody {
+  position: relative;
+  z-index: 9999;          /* on top of the page */
+  width: 100%;
+  background-color: #F2F2F2;
+  text-align: left;
+
+  @at-root div[dir="rtl"]#{ & } {
+    text-align: right;
+  }
+}
+
+.bannerInform {
+  display: inline-table;
+  margin : {
+    left: 5%;
+    right: 5%;
+    top: 8px;
+    bottom: 8px;
+  }
+  
+  width: 45%;   /* If "calc()" is not supported */
+
+  width: calc(85% - (#{ $bannerBtnWidth } + 3 * 4px) * 2);
+}
+
+.infoIcon {
+  display: table-cell;
+  padding: 12px;
+  width: 24px;
+  height: 24px;
+
+  @include bannerFont(normal, 24px);
+  
+  /* identical to box height */
+  line-height: 24px;
+
+  color: #000000;
+}
+
+.bannerInformBody {
+  display: table-cell;
+  vertical-align: middle;
+  
+  @include bannerFont(normal, 13px);
+  line-height: 16px;
+  color: #000000;
+
+  /* Add styles to hyperlinks in case websites close the default styles for hyperlinks */
+  & a {
+    color: #0067B8;
+    text-decoration: underline;
+  }
+}
+
+.buttonGroup {
+  display: inline-block;
+  position: relative;
+  bottom: 4px;
+}
+
+.bannerButton {
+  margin: 4px;
+  padding: 0;
+  border: none;
+
+  width: $bannerBtnWidth;
+  height: $bannerBtnHeight;
+  background-color: #EBEBEB;
+  
+  cursor: pointer;
+  @include bannerFont(normal, 15px);
+  line-height: 20px;
+  text-align: center;
+
+  color: #000000;
+  
+  &:hover {
+    color: #000000;
+    background-color: #DBDBDB;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+  }
+
+  &:focus {
+    background-color: #DBDBDB;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    
+    border: 2px solid #000000;
+    box-sizing: border-box;
+  }
+
+  &:disabled {
+    color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+}
+
+.cookieModal {
+  display: none;
+  position: fixed;
+  z-index: 9999;   /* on top of the page */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.6);
+  overflow: auto;
+  text-align: left;
+
+  @at-root div[dir="rtl"]#{ & } {
+    text-align: right;
+  }
+}
+
+.modalContainer {
+  position: relative;
+  top: 8%;
+  margin : {
+    bottom: 40px;
+    left: auto;
+    right: auto;
+  }
+  
+  background-color: #ffffff;
+  box-sizing: border-box;
+  border: 1px solid #0067B8;
+  width: 640px;
+}
+
+.closeModalIcon {
+  float: right;
+  margin: 2px;
+  padding: 12px;
+  border: none;
+
+  cursor: pointer;
+  @include bannerFont(normal, 13px);
+  line-height: 13px;
+
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #666666;
+  background-color: #ffffff;
+
+  @include rtlDesign(2px, 12px, left);
+}
+
+.modalBody {
+  margin : {
+    top: 36px;
+    left: 36px;
+    right: 36px;
+  }
+}
+
+.modalTitle {
+  margin : {
+    bottom: 12px;
+  }
+
+  @include bannerFont(600, 20px);
+  line-height: 24px;
+  text-transform: none;
+  color: #000000;
+}
+
+.modalContent {
+  height: 446px;
+  overflow: auto;
+}
+
+.cookieStatement {
+  margin : {
+    top: 0;
+  }
+
+  @include bannerFont(normal, 15px);
+  line-height: 20px;
+  color: #000000;
+
+  /* Add styles to hyperlinks in case websites close the default styles for hyperlinks */
+  & a {
+    color: #0067B8;
+    text-decoration: underline;
+  }
+}
+
+ol.cookieOrderedList {
+  margin : {
+    top: 36px;
+    bottom: 0;
+  }
+  padding: 0;
+
+  /* Close the default styles which adds decimal numbers in front of list items */
+  list-style: none;
+}
+
+li.cookieListItem {
+  margin : {
+    top: 20px;
+  }
+
+  @include bannerFont(600, 18px);
+  line-height: 24px;
+  color: #000000;
+
+  /* Close the default styles which adds decimal numbers in front of list items */
+  list-style: none;
+}
+
+.cookieListItemGroup {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.cookieListItemTitle {
+  margin: 0;
+  padding: 0;
+  border-bottom: none;
+
+  @include bannerFont(600, 18px);
+  line-height: 24px;
+  text-transform: none;
+  color: #000000;
+}
+
+.cookieListItemDescription {
+  display: inline-block;
+  margin : {
+    top: 0;
+    bottom: 16px;
+  }
+
+  @include bannerFont(normal, 15px);
+  line-height: 20px;
+  color: #000000;
+}
+
+.cookieItemRadioBtnGroup {
+  display: block;
+}
+
+.cookieItemRadioBtnCtrl {
+  display: inline-block;
+  margin : {
+    bottom: 16px;
+  }
+}
+
+@mixin defineRaioInput {
+  border-radius: 50%;
+  outline: none;
+
+  &:checked::after {
+    display: block;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    border-radius: 50%;
+    height: 10px;
+    width: 10px;
+    content: "";
+    background-color: #000000;
+  }
+
+  &:hover {
+    border: 1px solid #0067B8;
+    
+    &:after {
+      display: block;
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      border-radius: 50%;
+      height: 10px;
+      width: 10px;
+      content: "";
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+  }
+
+  &:focus {
+    border: 1px solid #0067B8;
+    
+    &:after {
+      display: block;
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      border-radius: 50%;
+      height: 10px;
+      width: 10px;
+      content: "";
+      background-color: #000000;
+    }
+  }
+
+  &:disabled {
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+
+    &:after {
+      display: block;
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      border-radius: 50%;
+      height: 10px;
+      width: 10px;
+      content: "";
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+input[type="radio"].cookieItemRadioBtn {
+  display: inline-block;
+  position: relative;   /* Adjust the position */
+  margin : {
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+  width: 20px;
+  height: 20px;
+
+  cursor: pointer;
+  border: 1px solid #000000;
+  box-sizing: border-box;
+
+  appearance: none;
+
+  /* Define our own radio input in case websites close the default styles for input type radio */
+  @include defineRaioInput;
+}
+
+.cookieItemRadioBtnLabel {
+  display: block;
+  float: right;
+  position: relative;   /* Adjust the position */
+  margin : {
+    left: 8px;
+    right: 34px;
+  }
+  width: 80%;   /* If "calc()" is not supported */
+
+  width: calc(100% - 62px);
+
+  @include bannerFont(normal, 15px);
+  line-height: 20px;
+  /* identical to box height, or 133% */
+
+  text-transform: none;
+  color: #000000;
+
+  @include rtlDesign(0 8px 0 34px, 0, left);
+}
+
+.modalButtonGroup {
+  margin : {
+    top: 20px;
+    bottom: 48px;
+  }
+}
+
+.modalButtonReset {
+  padding: 0;
+  border: none;
+
+  width: 278px;
+  height: 36px;
+  
+  cursor: pointer;
+  @include bannerFont(normal, 15px);
+
+  line-height: 20px;
+  /* identical to box height, or 133% */
+  text-align: center;
+
+  color: #000000;
+  background-color: #EBEBEB;
+
+  &:hover {
+    color: #000000;
+    background-color: #DBDBDB;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+  }
+
+  &:focus {
+    background-color: #DBDBDB;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    
+    border: 2px solid #000000;
+    box-sizing: border-box;
+  }
+
+  &:disabled {
+    color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+}
+
+.modalButtonSave {
+  float: right;
+  margin : {
+    left: 10px;
+  }
+  padding: 0;
+  border: none;
+
+  width: 278px;
+  height: 36px;
+
+  cursor: pointer;
+  @include bannerFont(normal, 15px);
+
+  line-height: 20px;
+  /* identical to box height, or 133% */
+  text-align: center;
+  
+  color: #FFFFFF;
+  background-color: #0067B8;
+
+  &:hover {
+    color: #FFFFFF;
+    background-color: #0067B8;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+  }
+
+  &:focus {
+    background-color: #0067B8;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    
+    border: 2px solid #000000;
+    box-sizing: border-box;
+  }
+
+  &:disabled {
+    color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 120, 215, 0.2);
+  }
+
+  @include rtlDesign(0 10px 0 0, 0, left);
+}
+
+@media only screen and (max-width: 800px) {
+  /* For mobile phones: */
+  
+  .buttonGroup, .bannerInform {
+    margin : {
+      top: 8px;
+      bottom: 8px;
+      left: 3.75%;
+      right: 3.75%;
+    }
+
+    width: 92.5%;
+  }
+
+  .bannerButton {
+    margin : {
+      bottom: 8px;
+      left: 0;
+      right: 0;
+    }
+
+    width: 100%;
+  }
+
+  .cookieModal {
+    overflow: hidden;
+  }
+
+  .modalContainer {
+    top: 1.8%;
+    
+    width: 93.33%;
+    height: 96.4%;
+  }
+
+  .modalBody {
+    margin : {
+      top: 24px;
+      left: 24px;
+      right: 24px;
+    }
+
+    height: 100%;
+  }
+
+  .modalContent {
+    height: 62%;   /* If "calc()" is not supported */
+   
+    height: calc(100% - 225px);
+  }
+
+  .modalButtonReset {
+    width: 100%;
+  }
+
+  .modalButtonSave {
+    margin : {
+      bottom: 12px;
+      left: 0;
+    }
+
+    width: 100%;
+
+    @include rtlDesign(0 0 12px 0, 0);
+  }
+}
