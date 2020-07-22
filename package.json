@@ -11,6 +11,10 @@
   "author": "Microsoft",
   "license": "MIT",
   "files": [ "dist/consent-banner.js", "dist/consent-banner.d.ts" ],
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/microsoft/consent-banner"
+  },
   "scripts": {
     "prepare": "npm run build-prod",
     "build": "webpack -d --mode development",
