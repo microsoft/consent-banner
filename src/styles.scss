@@ -119,7 +119,7 @@ $bannerBtnHeight: 36px;
 .cookieModal {
   display: none;
   position: fixed;
-  z-index: 9999;   /* on top of the page */
+  z-index: 10000;   /* on top of the page */
   top: 0;
   left: 0;
   width: 100%;
