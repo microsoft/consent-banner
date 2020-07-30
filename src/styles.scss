@@ -1,6 +1,135 @@
 $bannerBtnWidth: 150px;
 $bannerBtnHeight: 36px;
 
+//// Light
+$banner-background-color: #F2F2F2;
+$cookieModal-background-color: rgba(255, 255, 255, 0.6);
+$preferences-background-color: #ffffff;
+$border-color: #0067B8;
+$close-button-color: #666666;
+
+$hyperlink-font-color: #0067B8;
+$text-color: #000000;
+
+$secondary-button-color: #EBEBEB;
+$secondary-button-hover-color: #DBDBDB;
+$secondary-button-disabled-opacity: 1;
+$secondary-button-disabled-color: rgba(0, 0, 0, 0.2);
+$secondary-button-border: none;
+$secondary-button-hover-border: none;
+$secondary-button-disabled-border: none;
+$secondary-button-focus-border-color: #000000;
+$secondary-button-text-color: #000000;
+$secondary-button-disabled-text-color: rgba(0, 0, 0, 0.2);
+$secondary-button-hover-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+
+$primary-button-color: #0067B8;
+$primary-button-hover-color: #0067B8;
+$primary-button-disabled-opacity: 1;
+$primary-button-disabled-color: rgba(0, 120, 215, 0.2);
+$primary-button-border: none;
+$primary-button-hover-border: none;
+$primary-button-disabled-border: none;
+$primary-button-focus-border-color: #000000;
+$primary-button-text-color: #FFFFFF;
+$primary-button-disabled-text-color: rgba(0, 0, 0, 0.2);
+$primary-button-hover-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+
+$radio-button-border-color: #000000;
+$radio-button-background-color: #000000;
+$radio-button-hover-border-color: #0067B8;
+$radio-button-hover-background-color: rgba(0, 0, 0, 0.8);
+$radio-button-disabled-color: rgba(0, 0, 0, 0.2);
+$radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
+
+/***********************************   start    ***********************************/
+
+//// Dark
+// $banner-background-color: #242424;
+// $cookieModal-background-color: rgba(23, 23, 23, 0.6);
+// $preferences-background-color: #171717;
+// $border-color: #4db2ff;
+// $close-button-color: #e3e3e3;
+
+// $hyperlink-font-color: #4db2ff;
+// $text-color: #e3e3e3;
+
+// $secondary-button-color: #171717;
+// $secondary-button-hover-color: #2e2e2e;
+// $secondary-button-disabled-opacity: 0.5;
+// $secondary-button-disabled-color: #2e2e2e;
+// $secondary-button-border: 1px solid #c7c7c7;
+// $secondary-button-hover-border: 1px solid #c7c7c7;
+// $secondary-button-disabled-border: 1px solid #242424;
+// $secondary-button-focus-border-color: #c7c7c7;
+// $secondary-button-text-color: #e3e3e3;
+// $secondary-button-disabled-text-color: #e3e3e3;
+// $secondary-button-hover-shadow: none;
+
+// $primary-button-color: #4db2ff;
+// $primary-button-hover-color: #0091ff;
+// $primary-button-disabled-opacity: 0.5;
+// $primary-button-disabled-color: #4db2ff;
+// $primary-button-border: 1px solid #4db2ff;
+// $primary-button-hover-border: 1px solid rgba(0, 0, 0, 0);
+// $primary-button-disabled-border: 1px solid rgba(255, 255, 255, 0);
+// $primary-button-focus-border-color: #4db2ff;
+// $primary-button-text-color: black;
+// $primary-button-disabled-text-color: black;
+// $primary-button-hover-shadow: none;
+
+// $radio-button-border-color: #e3e3e3;
+// $radio-button-background-color: #e3e3e3;
+// $radio-button-hover-border-color: #4db2ff;
+// $radio-button-hover-background-color: rgba(227, 227, 227, 0.8);
+// $radio-button-disabled-color: rgba(227, 227, 227, 0.2);
+// $radio-button-disabled-border-color: rgba(227, 227, 227, 0.2);
+
+///////////////////////////////////
+
+//// high-contrast
+// $banner-background-color: black;
+// $cookieModal-background-color: rgba(0, 0, 0, 0.6);
+// $preferences-background-color: black;
+// $border-color: yellow;
+// $close-button-color: #e3e3e3;
+
+// $hyperlink-font-color: yellow;
+// $text-color: white;
+
+// $secondary-button-color: black;
+// $secondary-button-hover-color: black;
+// $secondary-button-disabled-opacity: 0.5;
+// $secondary-button-disabled-color: black;
+// $secondary-button-border: 1px solid white;
+// $secondary-button-hover-border: 1px solid yellow;
+// $secondary-button-disabled-border: 1px solid black;
+// $secondary-button-focus-border-color: white;
+// $secondary-button-text-color: white;
+// $secondary-button-disabled-text-color: white;
+// $secondary-button-hover-shadow: none;
+
+// $primary-button-color: yellow;
+// $primary-button-hover-color: #ffff33;
+// $primary-button-disabled-opacity: 0.5;
+// $primary-button-disabled-color: yellow;
+// $primary-button-border: 1px solid yellow;
+// $primary-button-hover-border: 1px solid yellow;
+// $primary-button-disabled-border: 1px solid white;
+// $primary-button-focus-border-color: yellow;
+// $primary-button-text-color: black;
+// $primary-button-disabled-text-color: black;
+// $primary-button-hover-shadow: none;
+
+// $radio-button-border-color: white;
+// $radio-button-background-color: white;
+// $radio-button-hover-border-color: yellow;
+// $radio-button-hover-background-color: rgba(255, 255, 255, 0.8);
+// $radio-button-disabled-color: rgba(255, 255, 255, 0.2);
+// $radio-button-disabled-border-color: rgba(255, 255, 255, 0.2);
+
+/***********************************   End    ***********************************/
+
 @mixin bannerFont($weight, $size, $style: normal) {
   font : {
     family: Segoe UI, SegoeUI, Arial, sans-serif;
@@ -23,7 +152,7 @@ $bannerBtnHeight: 36px;
   position: relative;
   z-index: 9999;          /* on top of the page */
   width: 100%;
-  background-color: #F2F2F2;
+  background-color: $banner-background-color;
   text-align: left;
 
   @at-root div[dir="rtl"]#{ & } {
@@ -56,7 +185,7 @@ $bannerBtnHeight: 36px;
   /* identical to box height */
   line-height: 24px;
 
-  color: #000000;
+  color: $text-color;
 }
 
 .bannerInformBody {
@@ -65,11 +194,11 @@ $bannerBtnHeight: 36px;
   
   @include bannerFont(normal, 13px);
   line-height: 16px;
-  color: #000000;
+  color: $text-color;
 
   /* Add styles to hyperlinks in case websites close the default styles for hyperlinks */
   & a {
-    color: #0067B8;
+    color: $hyperlink-font-color;
     text-decoration: underline;
   }
 }
@@ -83,36 +212,40 @@ $bannerBtnHeight: 36px;
 .bannerButton {
   margin: 4px;
   padding: 0;
-  border: none;
+  border: $secondary-button-border;
 
   width: $bannerBtnWidth;
   height: $bannerBtnHeight;
-  background-color: #EBEBEB;
+  background-color: $secondary-button-color;
   
   cursor: pointer;
   @include bannerFont(normal, 15px);
   line-height: 20px;
   text-align: center;
 
-  color: #000000;
+  color: $secondary-button-text-color;
   
   &:hover {
-    color: #000000;
-    background-color: #DBDBDB;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    color: $secondary-button-text-color;
+    background-color: $secondary-button-hover-color;
+    box-shadow: $secondary-button-hover-shadow;
+    border: $secondary-button-hover-border;
   }
 
   &:focus {
-    background-color: #DBDBDB;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    background-color: $secondary-button-hover-color;
+    box-shadow: $secondary-button-hover-shadow;
     
-    border: 2px solid #000000;
+    border: 2px solid $secondary-button-focus-border-color;
     box-sizing: border-box;
   }
 
   &:disabled {
-    color: rgba(0, 0, 0, 0.2);
-    background-color: rgba(0, 0, 0, 0.2);
+    opacity: $secondary-button-disabled-opacity;
+    color: $secondary-button-disabled-text-color;
+    background-color: $secondary-button-disabled-color;
+    cursor: not-allowed;
+    border: $secondary-button-disabled-border;
   }
 }
 
@@ -124,7 +257,7 @@ $bannerBtnHeight: 36px;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: $cookieModal-background-color;
   overflow: auto;
   text-align: left;
 
@@ -142,9 +275,9 @@ $bannerBtnHeight: 36px;
     right: auto;
   }
   
-  background-color: #ffffff;
+  background-color: $preferences-background-color;
   box-sizing: border-box;
-  border: 1px solid #0067B8;
+  border: 1px solid $border-color;
   width: 640px;
 }
 
@@ -161,8 +294,8 @@ $bannerBtnHeight: 36px;
   display: flex;
   align-items: center;
   text-align: center;
-  color: #666666;
-  background-color: #ffffff;
+  color: $close-button-color;
+  background-color: $preferences-background-color;
 
   @include rtlDesign(2px, 12px, left);
 }
@@ -183,7 +316,7 @@ $bannerBtnHeight: 36px;
   @include bannerFont(600, 20px);
   line-height: 24px;
   text-transform: none;
-  color: #000000;
+  color: $text-color;
 }
 
 .modalContent {
@@ -198,11 +331,11 @@ $bannerBtnHeight: 36px;
 
   @include bannerFont(normal, 15px);
   line-height: 20px;
-  color: #000000;
+  color: $text-color;
 
   /* Add styles to hyperlinks in case websites close the default styles for hyperlinks */
   & a {
-    color: #0067B8;
+    color: $hyperlink-font-color;
     text-decoration: underline;
   }
 }
@@ -225,7 +358,7 @@ li.cookieListItem {
 
   @include bannerFont(600, 18px);
   line-height: 24px;
-  color: #000000;
+  color: $text-color;
 
   /* Close the default styles which adds decimal numbers in front of list items */
   list-style: none;
@@ -245,7 +378,7 @@ li.cookieListItem {
   @include bannerFont(600, 18px);
   line-height: 24px;
   text-transform: none;
-  color: #000000;
+  color: $text-color;
 }
 
 .cookieListItemDescription {
@@ -257,7 +390,7 @@ li.cookieListItem {
 
   @include bannerFont(normal, 15px);
   line-height: 20px;
-  color: #000000;
+  color: $text-color;
 }
 
 .cookieItemRadioBtnGroup {
@@ -284,11 +417,11 @@ li.cookieListItem {
     height: 10px;
     width: 10px;
     content: "";
-    background-color: #000000;
+    background-color: $radio-button-background-color;
   }
 
   &:hover {
-    border: 1px solid #0067B8;
+    border: 1px solid $radio-button-hover-border-color;
     
     &:after {
       display: block;
@@ -299,12 +432,12 @@ li.cookieListItem {
       height: 10px;
       width: 10px;
       content: "";
-      background-color: rgba(0, 0, 0, 0.8);
+      background-color: $radio-button-hover-background-color;
     }
   }
 
   &:focus {
-    border: 1px solid #0067B8;
+    border: 1px solid $radio-button-hover-border-color;
     
     &:after {
       display: block;
@@ -315,25 +448,14 @@ li.cookieListItem {
       height: 10px;
       width: 10px;
       content: "";
-      background-color: #000000;
+      background-color: $radio-button-background-color;
     }
   }
 
   &:disabled {
-    background-color: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-
-    &:after {
-      display: block;
-      position: absolute;
-      top: 4px;
-      left: 4px;
-      border-radius: 50%;
-      height: 10px;
-      width: 10px;
-      content: "";
-      background-color: rgba(0, 0, 0, 0.2);
-    }
+    background-color: $radio-button-disabled-color;
+    border: 1px solid $radio-button-disabled-border-color;
+    cursor: not-allowed;
   }
 }
 
@@ -350,7 +472,7 @@ input[type="radio"].cookieItemRadioBtn {
   height: 20px;
 
   cursor: pointer;
-  border: 1px solid #000000;
+  border: 1px solid $radio-button-border-color;
   box-sizing: border-box;
 
   appearance: none;
@@ -376,7 +498,7 @@ input[type="radio"].cookieItemRadioBtn {
   /* identical to box height, or 133% */
 
   text-transform: none;
-  color: #000000;
+  color: $text-color;
 
   @include rtlDesign(0 8px 0 34px, 0, left);
 }
@@ -390,7 +512,7 @@ input[type="radio"].cookieItemRadioBtn {
 
 .modalButtonReset {
   padding: 0;
-  border: none;
+  border: $secondary-button-border;
 
   width: 278px;
   height: 36px;
@@ -402,26 +524,30 @@ input[type="radio"].cookieItemRadioBtn {
   /* identical to box height, or 133% */
   text-align: center;
 
-  color: #000000;
-  background-color: #EBEBEB;
+  color: $secondary-button-text-color;
+  background-color: $secondary-button-color;
 
   &:hover {
-    color: #000000;
-    background-color: #DBDBDB;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    color: $secondary-button-text-color;
+    background-color: $secondary-button-hover-color;
+    box-shadow: $secondary-button-hover-shadow;
+    border: $secondary-button-hover-border;
   }
 
   &:focus {
-    background-color: #DBDBDB;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    background-color: $secondary-button-hover-color;
+    box-shadow: $secondary-button-hover-shadow;
     
-    border: 2px solid #000000;
+    border: 2px solid $secondary-button-focus-border-color;
     box-sizing: border-box;
   }
 
   &:disabled {
-    color: rgba(0, 0, 0, 0.2);
-    background-color: rgba(0, 0, 0, 0.2);
+    opacity: $secondary-button-disabled-opacity;
+    color: $secondary-button-disabled-text-color;
+    background-color: $secondary-button-disabled-color;
+    cursor: not-allowed;
+    border: $secondary-button-disabled-border;
   }
 }
 
@@ -431,7 +557,7 @@ input[type="radio"].cookieItemRadioBtn {
     left: 10px;
   }
   padding: 0;
-  border: none;
+  border: $primary-button-border;
 
   width: 278px;
   height: 36px;
@@ -443,26 +569,30 @@ input[type="radio"].cookieItemRadioBtn {
   /* identical to box height, or 133% */
   text-align: center;
   
-  color: #FFFFFF;
-  background-color: #0067B8;
+  color: $primary-button-text-color;
+  background-color: $primary-button-color;
 
   &:hover {
-    color: #FFFFFF;
-    background-color: #0067B8;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    color: $primary-button-text-color;
+    background-color: $primary-button-hover-color;
+    box-shadow: $primary-button-hover-shadow;
+    border: $primary-button-hover-border;
   }
 
   &:focus {
-    background-color: #0067B8;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    background-color: $primary-button-hover-color;
+    box-shadow: $primary-button-hover-shadow;
     
-    border: 2px solid #000000;
+    border: 2px solid $primary-button-focus-border-color;
     box-sizing: border-box;
   }
 
   &:disabled {
-    color: rgba(0, 0, 0, 0.2);
-    background-color: rgba(0, 120, 215, 0.2);
+    opacity: $primary-button-disabled-opacity;
+    color: $primary-button-disabled-text-color;
+    background-color: $primary-button-disabled-color;
+    cursor: not-allowed;
+    border: $primary-button-disabled-border;
   }
 
   @include rtlDesign(0 10px 0 0, 0, left);
