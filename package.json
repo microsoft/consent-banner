@@ -1,6 +1,6 @@
 {
   "name": "consent-banner",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "The library which will generate a banner at the specified position for asking the cookie preferences.",
   "main": "dist/consent-banner.js",
   "types": "dist/consent-banner.d.ts",
@@ -8,12 +8,13 @@
     "cookie preferences",
     "banner"
   ],
+  "homepage": "https://github.com/microsoft/consent-banner",
   "author": "Microsoft",
   "license": "MIT",
   "files": [ "dist/consent-banner.js", "dist/consent-banner.d.ts" ],
   "repository": {
     "type" : "git",
-    "url" : "https://github.com/microsoft/consent-banner"
+    "url" : "https://github.com/microsoft/consent-banner.git"
   },
   "scripts": {
     "prepare": "npm run build-prod",
