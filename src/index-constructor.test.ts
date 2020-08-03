@@ -1,4 +1,5 @@
 import { ConsentControl } from "./index";
+import { IOptions } from './interfaces/Options';
 
 describe("Test constructor", () => {
     let testId: string = "app";
@@ -51,8 +52,11 @@ describe("Test constructor", () => {
             resetLabel: "This is reset all"
         };
 
+        let options: IOptions = {};
+        options.textResources = textResources;
+
         let callBack = function() { return; };
-        let cc = new ConsentControl(testId, "en", callBack, cookieCategories, textResources);
+        let cc = new ConsentControl(testId, "en", callBack, cookieCategories, options);
 
         expect(cc.culture).toBe("en");
         expect(cc.cookieCategories).toEqual(cookieCategories);
@@ -116,7 +120,11 @@ describe("Test constructor", () => {
         };
 
         let callBack = function() { return; };
-        let cc = new ConsentControl(testId, "en", callBack, undefined, textResources);
+
+        let options: IOptions = { };
+        options.textResources = textResources;
+
+        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.culture).toBe("en");
         expect(cc.cookieCategories).toEqual([
@@ -193,7 +201,10 @@ describe("Test constructor", () => {
         };
 
         let callBack = function() { return; };
-        let cc = new ConsentControl(testId, "en", callBack, undefined, textResources);
+        let options: IOptions = { };
+        options.textResources = textResources;
+
+        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.culture).toBe("en");
         expect(cc.cookieCategories).toEqual([
@@ -247,7 +258,10 @@ describe("Test constructor", () => {
         };
 
         let callBack = function() { return; };
-        let cc = new ConsentControl(testId, "en", callBack, undefined, textResources);
+        let options: IOptions = { };
+        options.textResources = textResources;
+
+        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
@@ -277,7 +291,10 @@ describe("Test constructor", () => {
         };
 
         let callBack = function() { return; };
-        let cc = new ConsentControl(testId, "en", callBack, undefined, textResources);
+        let options: IOptions = { };
+        options.textResources = textResources;
+
+        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
@@ -307,7 +324,10 @@ describe("Test constructor", () => {
         };
 
         let callBack = function() { return; };
-        let cc = new ConsentControl(testId, "en", callBack, undefined, textResources);
+        let options: IOptions = { };
+        options.textResources = textResources;
+
+        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
@@ -337,7 +357,10 @@ describe("Test constructor", () => {
         };
 
         let callBack = function() { return; };
-        let cc = new ConsentControl(testId, "en", callBack, undefined, textResources);
+        let options: IOptions = { };
+        options.textResources = textResources;
+
+        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
@@ -367,7 +390,10 @@ describe("Test constructor", () => {
         };
 
         let callBack = function() { return; };
-        let cc = new ConsentControl(testId, "en", callBack, undefined, textResources);
+        let options: IOptions = { };
+        options.textResources = textResources;
+
+        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
@@ -397,7 +423,10 @@ describe("Test constructor", () => {
         };
 
         let callBack = function() { return; };
-        let cc = new ConsentControl(testId, "en", callBack, undefined, textResources);
+        let options: IOptions = { };
+        options.textResources = textResources;
+
+        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
@@ -427,7 +456,10 @@ describe("Test constructor", () => {
         };
 
         let callBack = function() { return; };
-        let cc = new ConsentControl(testId, "en", callBack, undefined, textResources);
+        let options: IOptions = { };
+        options.textResources = textResources;
+
+        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
@@ -457,7 +489,10 @@ describe("Test constructor", () => {
         };
 
         let callBack = function() { return; };
-        let cc = new ConsentControl(testId, "en", callBack, undefined, textResources);
+        let options: IOptions = { };
+        options.textResources = textResources;
+
+        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
@@ -487,7 +522,10 @@ describe("Test constructor", () => {
         };
 
         let callBack = function() { return; };
-        let cc = new ConsentControl(testId, "en", callBack, undefined, textResources);
+        let options: IOptions = { };
+        options.textResources = textResources;
+
+        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "This is banner message.",
@@ -516,7 +554,10 @@ describe("Test constructor", () => {
         };
 
         let callBack = function() { return; };
-        let cc = new ConsentControl(testId, "en", callBack, undefined, textResources);
+        let options: IOptions = { };
+        options.textResources = textResources;
+
+        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.culture).toBe("en");
         expect(cc.cookieCategories).toEqual([
@@ -569,7 +610,10 @@ describe("Test constructor", () => {
         };
 
         let callBack = function() { return; };
-        let cc = new ConsentControl(testId, "en", callBack, undefined, textResources);
+        let options: IOptions = { };
+        options.textResources = textResources;
+
+        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.textResources).toEqual({
             bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
