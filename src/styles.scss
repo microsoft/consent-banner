@@ -1,7 +1,9 @@
+// Banner button size, can be changed
 $bannerBtnWidth: 150px;
 $bannerBtnHeight: 36px;
 
-//// Light
+/// Theme. 
+/// Default: Light
 $banner-background-color: #F2F2F2;
 $cookieModal-background-color: rgba(255, 255, 255, 0.6);
 $preferences-background-color: #ffffff;
@@ -41,94 +43,6 @@ $radio-button-hover-border-color: #0067B8;
 $radio-button-hover-background-color: rgba(0, 0, 0, 0.8);
 $radio-button-disabled-color: rgba(0, 0, 0, 0.2);
 $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
-
-/***********************************   start    ***********************************/
-
-//// Dark
-// $banner-background-color: #242424;
-// $cookieModal-background-color: rgba(23, 23, 23, 0.6);
-// $preferences-background-color: #171717;
-// $border-color: #4db2ff;
-// $close-button-color: #e3e3e3;
-
-// $hyperlink-font-color: #4db2ff;
-// $text-color: #e3e3e3;
-
-// $secondary-button-color: #171717;
-// $secondary-button-hover-color: #2e2e2e;
-// $secondary-button-disabled-opacity: 0.5;
-// $secondary-button-disabled-color: #2e2e2e;
-// $secondary-button-border: 1px solid #c7c7c7;
-// $secondary-button-hover-border: 1px solid #c7c7c7;
-// $secondary-button-disabled-border: 1px solid #242424;
-// $secondary-button-focus-border-color: #c7c7c7;
-// $secondary-button-text-color: #e3e3e3;
-// $secondary-button-disabled-text-color: #e3e3e3;
-// $secondary-button-hover-shadow: none;
-
-// $primary-button-color: #4db2ff;
-// $primary-button-hover-color: #0091ff;
-// $primary-button-disabled-opacity: 0.5;
-// $primary-button-disabled-color: #4db2ff;
-// $primary-button-border: 1px solid #4db2ff;
-// $primary-button-hover-border: 1px solid rgba(0, 0, 0, 0);
-// $primary-button-disabled-border: 1px solid rgba(255, 255, 255, 0);
-// $primary-button-focus-border-color: #4db2ff;
-// $primary-button-text-color: black;
-// $primary-button-disabled-text-color: black;
-// $primary-button-hover-shadow: none;
-
-// $radio-button-border-color: #e3e3e3;
-// $radio-button-background-color: #e3e3e3;
-// $radio-button-hover-border-color: #4db2ff;
-// $radio-button-hover-background-color: rgba(227, 227, 227, 0.8);
-// $radio-button-disabled-color: rgba(227, 227, 227, 0.2);
-// $radio-button-disabled-border-color: rgba(227, 227, 227, 0.2);
-
-///////////////////////////////////
-
-//// high-contrast
-// $banner-background-color: black;
-// $cookieModal-background-color: rgba(0, 0, 0, 0.6);
-// $preferences-background-color: black;
-// $border-color: yellow;
-// $close-button-color: #e3e3e3;
-
-// $hyperlink-font-color: yellow;
-// $text-color: white;
-
-// $secondary-button-color: black;
-// $secondary-button-hover-color: black;
-// $secondary-button-disabled-opacity: 0.5;
-// $secondary-button-disabled-color: black;
-// $secondary-button-border: 1px solid white;
-// $secondary-button-hover-border: 1px solid yellow;
-// $secondary-button-disabled-border: 1px solid black;
-// $secondary-button-focus-border-color: white;
-// $secondary-button-text-color: white;
-// $secondary-button-disabled-text-color: white;
-// $secondary-button-hover-shadow: none;
-
-// $primary-button-color: yellow;
-// $primary-button-hover-color: #ffff33;
-// $primary-button-disabled-opacity: 0.5;
-// $primary-button-disabled-color: yellow;
-// $primary-button-border: 1px solid yellow;
-// $primary-button-hover-border: 1px solid yellow;
-// $primary-button-disabled-border: 1px solid white;
-// $primary-button-focus-border-color: yellow;
-// $primary-button-text-color: black;
-// $primary-button-disabled-text-color: black;
-// $primary-button-hover-shadow: none;
-
-// $radio-button-border-color: white;
-// $radio-button-background-color: white;
-// $radio-button-hover-border-color: yellow;
-// $radio-button-hover-background-color: rgba(255, 255, 255, 0.8);
-// $radio-button-disabled-color: rgba(255, 255, 255, 0.2);
-// $radio-button-disabled-border-color: rgba(255, 255, 255, 0.2);
-
-/***********************************   End    ***********************************/
 
 @mixin bannerFont($weight, $size, $style: normal) {
   font : {

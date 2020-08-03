@@ -4,7 +4,7 @@ import { HtmlTools } from './htmlTools';
 
 import { RTL_LANGUAGE } from './language-list.const';
 import { ICookieCategory } from './interfaces/CookieCategories';
-import { ITextResources, IOptions, ITheme } from './interfaces/Options';
+import { ITextResources, IOptions, IThemes, ITheme } from './interfaces/Options';
 import { ICookieCategoriesPreferences } from './interfaces/CookieCategoriesPreferences';
 
 export class ConsentControl {
@@ -16,6 +16,7 @@ export class ConsentControl {
     
     cookieCategories: ICookieCategory[];
     textResources: ITextResources;
+    themes: IThemes = { };
 
     preferencesCtrl: PreferencesControl | null = null;
     private direction: string = 'ltr';
@@ -200,6 +201,8 @@ export class ConsentControl {
             this.setTextResources(options.textResources);
         }
 
+        this.setThemes(options?.themes);
+
         if (options?.initialTheme) {
             this.applyTheme(options.initialTheme);
         }
@@ -242,6 +245,292 @@ export class ConsentControl {
         }
         if (textResources.resetLabel) {
             this.textResources.resetLabel = textResources.resetLabel;
+        }
+    }
+
+    /**
+     * Set themes in the banner and preferences dialog
+     * If a theme is not included, the default one will be used
+     * 
+     * @param {IThemes} themes themes that will be used in the banner and preferences dialog
+     */
+    public setThemes(themes?: IThemes): void {
+        this.themes.light = this.defaultLightTheme;
+        if (themes?.light) {
+            this.setCertainTheme(themes.light, this.themes.light);
+        }
+
+        this.themes.dark = this.defaultDarkTheme;
+        if (themes?.dark) {
+            this.setCertainTheme(themes.dark, this.themes.dark);
+        }
+
+        this.themes["high-contrast"] = this.defaultHighContrast;
+        if (themes?.["high-contrast"]) {
+            this.setCertainTheme(themes["high-contrast"], this.themes["high-contrast"]);
+        }
+    }
+
+    /**
+     * Use the passed theme to set the theme property
+     * 
+     * @param {ITheme} theme the passed theme that we want to display
+     * @param {ITheme} currentTheme the theme property that we want to set
+     */
+    public setCertainTheme(theme: ITheme, currentTheme: ITheme): void {
+        if (theme["close-button-color"]) {
+            currentTheme["close-button-color"] = theme["close-button-color"];
+        }
+        if (theme["secondary-button-disabled-opacity"]) {
+            currentTheme["secondary-button-disabled-opacity"] = theme["secondary-button-disabled-opacity"];
+        }
+        if (theme["secondary-button-hover-shadow"]) {
+            currentTheme["secondary-button-hover-shadow"] = theme["secondary-button-hover-shadow"];
+        }
+        if (theme["primary-button-disabled-opacity"]) {
+            currentTheme["primary-button-disabled-opacity"] = theme["primary-button-disabled-opacity"];
+        }
+        if (theme["primary-button-hover-border"]) {
+            currentTheme["primary-button-hover-border"] = theme["primary-button-hover-border"];
+        }
+        if (theme["primary-button-disabled-border"]) {
+            currentTheme["primary-button-disabled-border"] = theme["primary-button-disabled-border"];
+        }
+        if (theme["primary-button-hover-shadow"]) {
+            currentTheme["primary-button-hover-shadow"] = theme["primary-button-hover-shadow"];
+        }
+
+        // Styles that can be determined by another one
+
+        if (theme["banner-background-color"]) {
+            currentTheme["banner-background-color"] = theme["banner-background-color"];
+
+            if (!theme["preferences-background-color"]) {
+                currentTheme["preferences-background-color"] = theme["banner-background-color"];
+            }
+        }
+
+        if (theme["preferences-background-color"]) {
+            currentTheme["preferences-background-color"] = theme["preferences-background-color"];
+
+            if (!theme["cookieModal-background-color"]) {
+                let provided: string = theme["preferences-background-color"];
+                this.setMissingColorFromAnotherProperty("cookieModal-background-color", provided, 0.6, currentTheme);
+            }
+            else {
+                currentTheme["cookieModal-background-color"] = theme["cookieModal-background-color"];
+            }
+
+            if (!theme["banner-background-color"]) {
+                currentTheme["banner-background-color"] = theme["preferences-background-color"];
+            }
+
+            if (!theme["primary-button-text-color"]) {
+                currentTheme["primary-button-text-color"] = theme["preferences-background-color"];
+            }
+            else {
+                currentTheme["primary-button-text-color"] = theme["primary-button-text-color"];
+            }
+
+            if (!theme["primary-button-disabled-text-color"]) {
+                currentTheme["primary-button-disabled-text-color"] = theme["preferences-background-color"];
+            }
+            else {
+                currentTheme["primary-button-disabled-text-color"] = theme["primary-button-disabled-text-color"];
+            }
+        }
+
+        if (theme["primary-button-color"]) {
+            currentTheme["primary-button-color"] = theme["primary-button-color"];
+
+            if (!theme["border-color"]) {
+                currentTheme["border-color"] = theme["primary-button-color"];
+            }
+            else {
+                currentTheme["border-color"] = theme["border-color"];
+            }
+
+            if (!theme["hyperlink-font-color"]) {
+                currentTheme["hyperlink-font-color"] = theme["primary-button-color"];
+            }
+            else {
+                currentTheme["hyperlink-font-color"] = theme["hyperlink-font-color"];
+            }
+
+            if (!theme["primary-button-hover-color"]) {
+                currentTheme["primary-button-hover-color"] = theme["primary-button-color"];
+            }
+            else {
+                currentTheme["primary-button-hover-color"] = theme["primary-button-hover-color"];
+            }
+
+            if (!theme["primary-button-disabled-color"]) {
+                currentTheme["primary-button-disabled-color"] = theme["primary-button-color"];
+            }
+            else {
+                currentTheme["primary-button-disabled-color"] = theme["primary-button-disabled-color"];
+            }
+
+            if (!theme["primary-button-border"]) {
+                currentTheme["primary-button-border"] = "1px solid " + theme["primary-button-color"];
+            }
+            else {
+                currentTheme["primary-button-border"] = theme["primary-button-border"];
+            }
+
+            if (!theme["primary-button-focus-border-color"]) {
+                currentTheme["primary-button-focus-border-color"] = theme["primary-button-color"];
+            }
+            else {
+                currentTheme["primary-button-focus-border-color"] = theme["primary-button-focus-border-color"];
+            }
+
+            if (!theme["radio-button-hover-border-color"]) {
+                currentTheme["radio-button-hover-border-color"] = theme["primary-button-color"];
+            }
+            else {
+                currentTheme["radio-button-hover-border-color"] = theme["radio-button-hover-border-color"];
+            }
+        }
+
+        if (theme["text-color"]) {
+            currentTheme["text-color"] = theme["text-color"];
+
+            if (!theme["secondary-button-text-color"]) {
+                currentTheme["secondary-button-text-color"] = theme["text-color"];
+            }
+            else {
+                currentTheme["secondary-button-text-color"] = theme["secondary-button-text-color"];
+            }
+
+            if (!theme["secondary-button-disabled-text-color"]) {
+                currentTheme["secondary-button-disabled-text-color"] = theme["text-color"];
+            }
+            else {
+                currentTheme["secondary-button-disabled-text-color"] = theme["secondary-button-disabled-text-color"];
+            }
+
+            if (!theme["radio-button-border-color"]) {
+                currentTheme["radio-button-border-color"] = theme["text-color"];
+            }
+            else {
+                currentTheme["radio-button-border-color"] = theme["radio-button-border-color"];
+            }
+
+            if (!theme["radio-button-background-color"]) {
+                currentTheme["radio-button-background-color"] = theme["text-color"];
+            }
+            else {
+                currentTheme["radio-button-background-color"] = theme["radio-button-background-color"];
+            }
+
+            if (!theme["radio-button-hover-background-color"]) {
+                let provided: string = theme["text-color"];
+                this.setMissingColorFromAnotherProperty("radio-button-hover-background-color", provided, 0.8, currentTheme);
+            }
+            else {
+                currentTheme["radio-button-hover-background-color"] = theme["radio-button-hover-background-color"];
+            }
+
+            if (!theme["radio-button-disabled-color"]) {
+                let provided: string = theme["text-color"];
+                this.setMissingColorFromAnotherProperty("radio-button-disabled-color", provided, 0.2, currentTheme);
+            }
+            else {
+                currentTheme["radio-button-disabled-color"] = theme["radio-button-disabled-color"];
+            }
+
+            if (!theme["radio-button-disabled-border-color"]) {
+                let provided: string = theme["text-color"];
+                this.setMissingColorFromAnotherProperty("radio-button-disabled-border-color", provided, 0.2, currentTheme);
+            }
+            else {
+                currentTheme["radio-button-disabled-border-color"] = theme["radio-button-disabled-border-color"];
+            }
+        }
+
+        if (theme["secondary-button-color"]) {
+            currentTheme["secondary-button-color"] = theme["secondary-button-color"];
+
+            if (!theme["secondary-button-hover-color"]) {
+                currentTheme["secondary-button-hover-color"] = theme["secondary-button-color"];
+            }
+            else {
+                currentTheme["secondary-button-hover-color"] = theme["secondary-button-hover-color"];
+            }
+        }
+
+        if (theme["secondary-button-disabled-color"]) {
+            currentTheme["secondary-button-disabled-color"] = theme["secondary-button-disabled-color"];
+
+            if (!theme["secondary-button-disabled-border"]) {
+                currentTheme["secondary-button-disabled-border"] = "1px solid " + theme["secondary-button-disabled-color"];
+            }
+            else {
+                currentTheme["secondary-button-disabled-border"] = theme["secondary-button-disabled-border"];
+            }
+        }
+
+        if (theme["secondary-button-border"]) {
+            currentTheme["secondary-button-border"] = theme["secondary-button-border"];
+
+            if (!theme["secondary-button-hover-border"]) {
+                currentTheme["secondary-button-hover-border"] = theme["secondary-button-border"];
+            }
+            else {
+                currentTheme["secondary-button-hover-border"] = theme["secondary-button-hover-border"];
+            }
+
+            if (!theme["secondary-button-focus-border-color"]) {
+                let secondaryBtnBorderElement: string[] = theme["secondary-button-border"].split(" ");
+                currentTheme["secondary-button-focus-border-color"] = secondaryBtnBorderElement[secondaryBtnBorderElement.length - 1];
+            }
+            else {
+                currentTheme["secondary-button-focus-border-color"] = theme["secondary-button-focus-border-color"];
+            }
+        }
+    }
+
+    /**
+     * Set missing color from another provided color
+     * 
+     * e.g.: 
+     * provider: #ffffff; missing: rgba(255, 255, 255, transparencyFactor)
+     * provider: rgb(255, 255, 255); missing: rgba(255, 255, 255, transparencyFactor)
+     * provider: rgb(255, 255, 255, 1); missing: rgba(255, 255, 255, transparencyFactor)
+     * 
+     * @param {keyof ITheme} missing missing property in the theme
+     * @param {string} provider the provided property in the theme
+     * @param {number} transparencyFactor the alpha channel that will be used in the missing property
+     * @param {ITheme} currentTheme the target theme that will be set
+     */
+    private setMissingColorFromAnotherProperty(missing: keyof ITheme, 
+                                               provider: string, 
+                                               transparencyFactor: number,  
+                                               currentTheme: ITheme): void {
+        
+        // provider: #ffffff; missing: rgba(255, 255, 255, transparencyFactor)
+        if (provider.startsWith("#")) {
+            let hexColor = parseInt(provider, 16);
+            let r = (hexColor >> 16) & 255;
+            let g = (hexColor >> 8) & 255;
+            let b = hexColor & 255;
+
+            currentTheme[missing] = "rgba(" + r + ", " + g + ", " + b + ", " + transparencyFactor + ")";
+        }
+        // provider: rgb(255, 255, 255); missing: rgba(255, 255, 255, transparencyFactor)
+        else if (provider.startsWith("rgb(")) {
+            let missingColor = "rgba" + provider.substring(3, provider.length - 1) + ", " + transparencyFactor + ")";
+            currentTheme[missing] = missingColor;
+        }
+        // provider: rgb(255, 255, 255, 1); missing: rgba(255, 255, 255, transparencyFactor)
+        else if (provider.startsWith("rgba")) {
+            let rgbIdx = provider.lastIndexOf(",");
+            let transparency = provider.substring(rgbIdx + 1, provider.length - 1);
+
+            let newTransparency = parseInt(transparency) * transparencyFactor;
+            let missingColor = provider.substring(0, rgbIdx + 1) + newTransparency + ")";
+            currentTheme[missing] = missingColor;
         }
     }
 
@@ -473,10 +762,3 @@ export class ConsentControl {
         return this.direction;
     }
 }
-
-let callBack = function(obj: any) { console.log(obj); };
-
-let cc = new ConsentControl("app", "en", callBack);
-let cookieCategoriePreferences: ICookieCategoriesPreferences = { "c1": undefined, "c2": undefined, "c3": undefined };
-
-cc.showBanner(cookieCategoriePreferences);
