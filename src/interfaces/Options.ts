@@ -12,9 +12,9 @@ export interface IThemes {
 
 export interface ITheme {
     "banner-background-color"?: string;
-    "cookieModal-background-color"?: string;
-    "preferences-background-color"?: string;
-    "border-color"?: string;
+    "background-color-between-page-and-dialog"?: string;
+    "dialog-background-color"?: string;
+    "dialog-border-color"?: string;
     "close-button-color"?: string;
     "hyperlink-font-color"?: string;
     "text-color"?: string;
@@ -41,7 +41,7 @@ export interface ITheme {
     "primary-button-disabled-text-color"?: string;
     "primary-button-hover-shadow"?: string;
     "radio-button-border-color"?: string;
-    "radio-button-background-color"?: string;
+    "radio-button-checked-background-color"?: string;
     "radio-button-hover-border-color"?: string;
     "radio-button-hover-background-color"?: string;
     "radio-button-disabled-color"?: string;
