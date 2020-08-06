@@ -3,6 +3,8 @@ import { PreferencesControl } from './preferencesControl';
 import { HtmlTools } from './htmlTools';
 
 import { RTL_LANGUAGE } from './language-list.const';
+import { DEFAULT_THEMES } from './theme-styles';
+
 import { ICookieCategory } from './interfaces/CookieCategories';
 import { ITextResources, IOptions, IThemes, ITheme } from './interfaces/Options';
 import { ICookieCategoriesPreferences } from './interfaces/CookieCategoriesPreferences';
@@ -16,7 +18,11 @@ export class ConsentControl {
     
     cookieCategories: ICookieCategory[];
     textResources: ITextResources;
-    themes: IThemes = { };
+    themes: IThemes = {
+        light: { ...DEFAULT_THEMES.lightTheme },
+        dark: { ...DEFAULT_THEMES.darkTheme },
+        "high-contrast": { ...DEFAULT_THEMES.highContrast }
+    };
 
     preferencesCtrl: PreferencesControl | null = null;
     private direction: string = 'ltr';
@@ -62,122 +68,6 @@ export class ConsentControl {
         resetLabel: "Reset all"
     };
 
-    defaultLightTheme: ITheme = {
-        "banner-background-color": "#F2F2F2",
-        "background-color-between-page-and-dialog": "rgba(255, 255, 255, 0.6)",
-        "dialog-background-color": "#ffffff",
-        "dialog-border-color": "#0067B8",
-        "close-button-color": "#666666",
-        "hyperlink-font-color": "#0067B8",
-        "text-color": "#000000",
-        "secondary-button-color": "#EBEBEB",
-        "secondary-button-hover-color": "#DBDBDB",
-        "secondary-button-disabled-opacity": "1",
-        "secondary-button-disabled-color": "rgba(0, 0, 0, 0.2)",
-        "secondary-button-border": "none",
-        "secondary-button-hover-border": "none",
-        "secondary-button-disabled-border": "none",
-        "secondary-button-focus-border-color": "#000000",
-        "secondary-button-text-color": "#000000",
-        "secondary-button-disabled-text-color": "rgba(0, 0, 0, 0.2)",
-        "secondary-button-hover-shadow": "0px 4px 10px rgba(0, 0, 0, 0.25)",
-        "primary-button-color": "#0067B8",
-        "primary-button-hover-color": "#0067B8",
-        "primary-button-disabled-opacity": "1",
-        "primary-button-disabled-color": "rgba(0, 120, 215, 0.2)",
-        "primary-button-border": "none",
-        "primary-button-hover-border": "none",
-        "primary-button-disabled-border": "none",
-        "primary-button-focus-border-color": "#000000",
-        "primary-button-text-color": "#FFFFFF",
-        "primary-button-disabled-text-color": "rgba(0, 0, 0, 0.2)",
-        "primary-button-hover-shadow": "0px 4px 10px rgba(0, 0, 0, 0.25)",
-        "radio-button-border-color": "#000000",
-        "radio-button-checked-background-color": "#000000",
-        "radio-button-hover-border-color": "#0067B8",
-        "radio-button-hover-background-color": "rgba(0, 0, 0, 0.8)",
-        "radio-button-disabled-color": "rgba(0, 0, 0, 0.2)",
-        "radio-button-disabled-border-color": "rgba(0, 0, 0, 0.2)"
-    };
-
-    // Use the color in https://docs.microsoft.com
-    defaultDarkTheme: ITheme = {
-        "banner-background-color": "#242424",
-        "background-color-between-page-and-dialog": "rgba(23, 23, 23, 0.6)",
-        "dialog-background-color": "#171717",
-        "dialog-border-color": "#4db2ff",
-        "close-button-color": "#e3e3e3",
-        "hyperlink-font-color": "#4db2ff",
-        "text-color": "#e3e3e3",
-        "secondary-button-color": "#171717",
-        "secondary-button-hover-color": "#2e2e2e",
-        "secondary-button-disabled-opacity": "0.5",
-        "secondary-button-disabled-color": "#2e2e2e",
-        "secondary-button-border": "1px solid #c7c7c7",
-        "secondary-button-hover-border": "1px solid #c7c7c7",
-        "secondary-button-disabled-border": "1px solid #242424",
-        "secondary-button-focus-border-color": "#c7c7c7",
-        "secondary-button-text-color": "#e3e3e3",
-        "secondary-button-disabled-text-color": "#e3e3e3",
-        "secondary-button-hover-shadow": "none",
-        "primary-button-color": "#4db2ff",
-        "primary-button-hover-color": "#0091ff",
-        "primary-button-disabled-opacity": "0.5",
-        "primary-button-disabled-color": "#4db2ff",
-        "primary-button-border": "1px solid #4db2ff",
-        "primary-button-hover-border": "1px solid rgba(0, 0, 0, 0)",
-        "primary-button-disabled-border": "1px solid rgba(255, 255, 255, 0)",
-        "primary-button-focus-border-color": "#4db2ff",
-        "primary-button-text-color": "black",
-        "primary-button-disabled-text-color": "black",
-        "primary-button-hover-shadow": "none",
-        "radio-button-border-color": "#e3e3e3",
-        "radio-button-checked-background-color": "#e3e3e3",
-        "radio-button-hover-border-color": "#4db2ff",
-        "radio-button-hover-background-color": "rgba(227, 227, 227, 0.8)",
-        "radio-button-disabled-color": "rgba(227, 227, 227, 0.2)",
-        "radio-button-disabled-border-color": "rgba(227, 227, 227, 0.2)"
-    }
-
-    // Use the color in https://docs.microsoft.com
-    defaultHighContrast: ITheme = {
-        "banner-background-color": "black",
-        "background-color-between-page-and-dialog": "rgba(0, 0, 0, 0.6)",
-        "dialog-background-color": "black",
-        "dialog-border-color": "yellow",
-        "close-button-color": "#e3e3e3",
-        "hyperlink-font-color": "yellow",
-        "text-color": "white",
-        "secondary-button-color": "black",
-        "secondary-button-hover-color": "black",
-        "secondary-button-disabled-opacity": "0.5",
-        "secondary-button-disabled-color": "black",
-        "secondary-button-border": "1px solid white",
-        "secondary-button-hover-border": "1px solid yellow",
-        "secondary-button-disabled-border": "1px solid black",
-        "secondary-button-focus-border-color": "white",
-        "secondary-button-text-color": "white",
-        "secondary-button-disabled-text-color": "white",
-        "secondary-button-hover-shadow": "none",
-        "primary-button-color": "yellow",
-        "primary-button-hover-color": "#ffff33",
-        "primary-button-disabled-opacity": "0.5",
-        "primary-button-disabled-color": "yellow",
-        "primary-button-border": "1px solid yellow",
-        "primary-button-hover-border": "1px solid yellow",
-        "primary-button-disabled-border": "1px solid white",
-        "primary-button-focus-border-color": "yellow",
-        "primary-button-text-color": "black",
-        "primary-button-disabled-text-color": "black",
-        "primary-button-hover-shadow": "none",
-        "radio-button-border-color": "white",
-        "radio-button-checked-background-color": "white",
-        "radio-button-hover-border-color": "yellow",
-        "radio-button-hover-background-color": "rgba(255, 255, 255, 0.8)",
-        "radio-button-disabled-color": "rgba(255, 255, 255, 0.2)",
-        "radio-button-disabled-border-color": "rgba(255, 255, 255, 0.2)"
-    }
-
     constructor(containerElementOrId: string | HTMLElement, 
                 culture: string, 
                 onPreferencesChanged: (cookieCategoriesPreferences: ICookieCategoriesPreferences) => void, 
@@ -201,7 +91,13 @@ export class ConsentControl {
             this.setTextResources(options.textResources);
         }
 
-        this.setThemes(options?.themes);
+        for (let themeName in options?.themes) {
+            let typeThemeName = <keyof IThemes> themeName;
+
+            if (options?.themes[typeThemeName]) {
+                this.createTheme(themeName, <ITheme> options?.themes[typeThemeName]);
+            }
+        }
 
         if (options?.initialTheme) {
             this.applyTheme(options.initialTheme);
@@ -226,136 +122,103 @@ export class ConsentControl {
     }
 
     /**
-     * Set themes in the banner and preferences dialog
-     * If a theme is not included, the default one will be used
-     * 
-     * @param {IThemes} themes themes that will be used in the banner and preferences dialog
-     */
-    public setThemes(themes?: IThemes): void {
-        this.themes.light = this.defaultLightTheme;
-        if (themes?.light) {
-            this.setCertainTheme(themes.light, this.themes.light);
-        }
-
-        this.themes.dark = this.defaultDarkTheme;
-        if (themes?.dark) {
-            this.setCertainTheme(themes.dark, this.themes.dark);
-        }
-
-        this.themes["high-contrast"] = this.defaultHighContrast;
-        if (themes?.["high-contrast"]) {
-            this.setCertainTheme(themes["high-contrast"], this.themes["high-contrast"]);
-        }
-    }
-
-    /**
      * Use the passed theme to set the theme property
      * 
+     * @param {string} name the theme property that we want to set
      * @param {ITheme} theme the passed theme that we want to display
-     * @param {ITheme} currentTheme the theme property that we want to set
      */
-    public setCertainTheme(theme: ITheme, currentTheme: ITheme): void {
+    public createTheme(name: string, theme: ITheme): void {
+        let typeName = <keyof IThemes> name;
+        let currentTheme = <ITheme> this.themes[typeName];
+
         for (let key of Object.keys(currentTheme)) {
             let typeKey = <keyof ITheme> key;
 
             if (theme[typeKey]) {
-                currentTheme[typeKey] = theme[typeKey];
+                currentTheme[typeKey] = <string> theme[typeKey];
             }
         }
 
         // Styles that can be determined by another one
 
-        if (theme["banner-background-color"] && !theme["dialog-background-color"]) {
-            currentTheme["dialog-background-color"] = theme["banner-background-color"];
+        // determined by "dialog-background-color"
+        if (!theme["background-color-between-page-and-dialog"]) {
+            let provided: string = theme["dialog-background-color"];
+            this.setMissingColorFromAnotherProperty("background-color-between-page-and-dialog", provided, 0.6, currentTheme);
+        }
+        if (!theme["primary-button-text-color"]) {
+            currentTheme["primary-button-text-color"] = theme["dialog-background-color"];
+        }
+        if (!theme["primary-button-disabled-text-color"]) {
+            currentTheme["primary-button-disabled-text-color"] = theme["dialog-background-color"];
         }
 
-        if (theme["dialog-background-color"]) {
-            if (!theme["background-color-between-page-and-dialog"]) {
-                let provided: string = theme["dialog-background-color"];
-                this.setMissingColorFromAnotherProperty("background-color-between-page-and-dialog", provided, 0.6, currentTheme);
-            }
-
-            if (!theme["banner-background-color"]) {
-                currentTheme["banner-background-color"] = theme["dialog-background-color"];
-            }
-            if (!theme["primary-button-text-color"]) {
-                currentTheme["primary-button-text-color"] = theme["dialog-background-color"];
-            }
-            if (!theme["primary-button-disabled-text-color"]) {
-                currentTheme["primary-button-disabled-text-color"] = theme["dialog-background-color"];
-            }
+        // determined by "primary-button-color"
+        if (!theme["dialog-border-color"]) {
+            currentTheme["dialog-border-color"] = theme["primary-button-color"];
+        }
+        if (!theme["hyperlink-font-color"]) {
+            currentTheme["hyperlink-font-color"] = theme["primary-button-color"];
+        }
+        if (!theme["primary-button-hover-color"]) {
+            currentTheme["primary-button-hover-color"] = theme["primary-button-color"];
+        }
+        if (!theme["primary-button-disabled-color"]) {
+            currentTheme["primary-button-disabled-color"] = theme["primary-button-color"];
+        }
+        if (!theme["primary-button-border"]) {
+            currentTheme["primary-button-border"] = "1px solid " + theme["primary-button-color"];
+        }
+        if (!theme["primary-button-focus-border-color"]) {
+            currentTheme["primary-button-focus-border-color"] = theme["primary-button-color"];
+        }
+        if (!theme["radio-button-hover-border-color"]) {
+            currentTheme["radio-button-hover-border-color"] = theme["primary-button-color"];
         }
 
-        if (theme["primary-button-color"]) {
-            if (!theme["dialog-border-color"]) {
-                currentTheme["dialog-border-color"] = theme["primary-button-color"];
-            }
-            if (!theme["hyperlink-font-color"]) {
-                currentTheme["hyperlink-font-color"] = theme["primary-button-color"];
-            }
-            if (!theme["primary-button-hover-color"]) {
-                currentTheme["primary-button-hover-color"] = theme["primary-button-color"];
-            }
-            if (!theme["primary-button-disabled-color"]) {
-                currentTheme["primary-button-disabled-color"] = theme["primary-button-color"];
-            }
-            if (!theme["primary-button-border"]) {
-                currentTheme["primary-button-border"] = "1px solid " + theme["primary-button-color"];
-            }
-            if (!theme["primary-button-focus-border-color"]) {
-                currentTheme["primary-button-focus-border-color"] = theme["primary-button-color"];
-            }
-            if (!theme["radio-button-hover-border-color"]) {
-                currentTheme["radio-button-hover-border-color"] = theme["primary-button-color"];
-            }
+        // determined by "text-color"
+        if (!theme["secondary-button-text-color"]) {
+            currentTheme["secondary-button-text-color"] = theme["text-color"];
+        }
+        if (!theme["secondary-button-disabled-text-color"]) {
+            currentTheme["secondary-button-disabled-text-color"] = theme["text-color"];
+        }
+        if (!theme["radio-button-border-color"]) {
+            currentTheme["radio-button-border-color"] = theme["text-color"];
+        }
+        if (!theme["radio-button-checked-background-color"]) {
+            currentTheme["radio-button-checked-background-color"] = theme["text-color"];
+        }
+        if (!theme["radio-button-hover-background-color"]) {
+            let provided: string = theme["text-color"];
+            this.setMissingColorFromAnotherProperty("radio-button-hover-background-color", provided, 0.8, currentTheme);
+        }
+        if (!theme["radio-button-disabled-color"]) {
+            let provided: string = theme["text-color"];
+            this.setMissingColorFromAnotherProperty("radio-button-disabled-color", provided, 0.2, currentTheme);
+        }
+        if (!theme["radio-button-disabled-border-color"]) {
+            let provided: string = theme["text-color"];
+            this.setMissingColorFromAnotherProperty("radio-button-disabled-border-color", provided, 0.2, currentTheme);
         }
 
-        if (theme["text-color"]) {
-            if (!theme["secondary-button-text-color"]) {
-                currentTheme["secondary-button-text-color"] = theme["text-color"];
-            }
-            if (!theme["secondary-button-disabled-text-color"]) {
-                currentTheme["secondary-button-disabled-text-color"] = theme["text-color"];
-            }
-            if (!theme["radio-button-border-color"]) {
-                currentTheme["radio-button-border-color"] = theme["text-color"];
-            }
-            if (!theme["radio-button-checked-background-color"]) {
-                currentTheme["radio-button-checked-background-color"] = theme["text-color"];
-            }
-
-            if (!theme["radio-button-hover-background-color"]) {
-                let provided: string = theme["text-color"];
-                this.setMissingColorFromAnotherProperty("radio-button-hover-background-color", provided, 0.8, currentTheme);
-            }
-
-            if (!theme["radio-button-disabled-color"]) {
-                let provided: string = theme["text-color"];
-                this.setMissingColorFromAnotherProperty("radio-button-disabled-color", provided, 0.2, currentTheme);
-            }
-
-            if (!theme["radio-button-disabled-border-color"]) {
-                let provided: string = theme["text-color"];
-                this.setMissingColorFromAnotherProperty("radio-button-disabled-border-color", provided, 0.2, currentTheme);
-            }
-        }
-
-        if (theme["secondary-button-color"] && !theme["secondary-button-hover-color"]) {
+        // determined by "secondary-button-color"
+        if (!theme["secondary-button-hover-color"]) {
             currentTheme["secondary-button-hover-color"] = theme["secondary-button-color"];
         }
 
-        if (theme["secondary-button-disabled-color"] && !theme["secondary-button-disabled-border"]) {
+        // determined by "secondary-button-disabled-color"
+        if (!theme["secondary-button-disabled-border"]) {
             currentTheme["secondary-button-disabled-border"] = "1px solid " + theme["secondary-button-disabled-color"];
         }
-
-        if (theme["secondary-button-border"]) {
-            if (!theme["secondary-button-hover-border"]) {
-                currentTheme["secondary-button-hover-border"] = theme["secondary-button-border"];
-            }
-            if (!theme["secondary-button-focus-border-color"]) {
-                let secondaryBtnBorderElement: string[] = theme["secondary-button-border"].split(" ");
-                currentTheme["secondary-button-focus-border-color"] = secondaryBtnBorderElement[secondaryBtnBorderElement.length - 1];
-            }
+        
+        // determined by "secondary-button-border"
+        if (!theme["secondary-button-hover-border"]) {
+            currentTheme["secondary-button-hover-border"] = theme["secondary-button-border"];
+        }
+        if (!theme["secondary-button-focus-border-color"]) {
+            let secondaryBtnBorderElement: string[] = theme["secondary-button-border"].split(" ");
+            currentTheme["secondary-button-focus-border-color"] = secondaryBtnBorderElement[secondaryBtnBorderElement.length - 1];
         }
     }
 
