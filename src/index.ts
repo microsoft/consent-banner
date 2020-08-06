@@ -129,15 +129,23 @@ export class ConsentControl {
      */
     public createTheme(name: string, theme: ITheme): void {
         let typeName = <keyof IThemes> name;
-        let currentTheme = <ITheme> this.themes[typeName];
 
-        for (let key of Object.keys(currentTheme)) {
-            let typeKey = <keyof ITheme> key;
-
-            if (theme[typeKey]) {
-                currentTheme[typeKey] = <string> theme[typeKey];
+        if (!this.themes[typeName]) {
+            this.themes[typeName] = theme;
+        }
+        else {
+            let currentTheme = <ITheme> this.themes[typeName];
+    
+            for (let key of Object.keys(currentTheme)) {
+                let typeKey = <keyof ITheme> key;
+    
+                if (theme[typeKey]) {
+                    currentTheme[typeKey] = <string> theme[typeKey];
+                }
             }
         }
+
+        let currentTheme = <ITheme> this.themes[typeName];
 
         // Styles that can be determined by another one
 

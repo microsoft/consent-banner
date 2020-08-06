@@ -5,6 +5,8 @@ export interface IOptions {
 }
 
 export interface IThemes {
+    [key: string]: ITheme | undefined;
+    
     light?: ITheme;
     dark?: ITheme;
     "high-contrast"?: ITheme;
