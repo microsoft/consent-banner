@@ -2,7 +2,7 @@ import * as styles from "./styles.scss";
 import { HtmlTools } from './htmlTools';
 
 import { ICookieCategory } from './interfaces/CookieCategories';
-import { ITextResources } from './interfaces/TextResources';
+import { ITextResources } from './interfaces/Options';
 import { ICookieCategoriesPreferences } from './interfaces/CookieCategoriesPreferences';
 
 export class PreferencesControl {

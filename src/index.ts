@@ -3,8 +3,10 @@ import { PreferencesControl } from './preferencesControl';
 import { HtmlTools } from './htmlTools';
 
 import { RTL_LANGUAGE } from './language-list.const';
+import { DEFAULT_THEMES } from './theme-styles';
+
 import { ICookieCategory } from './interfaces/CookieCategories';
-import { ITextResources } from './interfaces/TextResources';
+import { ITextResources, IOptions, IThemes, ITheme } from './interfaces/Options';
 import { ICookieCategoriesPreferences } from './interfaces/CookieCategoriesPreferences';
 
 export class ConsentControl {
@@ -16,6 +18,11 @@ export class ConsentControl {
     
     cookieCategories: ICookieCategory[];
     textResources: ITextResources;
+    themes: IThemes = {
+        light: { ...DEFAULT_THEMES.lightTheme },
+        dark: { ...DEFAULT_THEMES.darkTheme },
+        "high-contrast": { ...DEFAULT_THEMES.highContrast }
+    };
 
     preferencesCtrl: PreferencesControl | null = null;
     private direction: string = 'ltr';
@@ -65,7 +72,7 @@ export class ConsentControl {
                 culture: string, 
                 onPreferencesChanged: (cookieCategoriesPreferences: ICookieCategoriesPreferences) => void, 
                 cookieCategories?: ICookieCategory[], 
-                textResources?: ITextResources) {
+                options?: IOptions) {
         
         this.setContainerElement(containerElementOrId);
 
@@ -80,8 +87,20 @@ export class ConsentControl {
         }
 
         this.textResources = this.defaultTextResources;
-        if (textResources) {
-            this.setTextResources(textResources);
+        if (options?.textResources) {
+            this.setTextResources(options.textResources);
+        }
+
+        for (let themeName in options?.themes) {
+            let typeThemeName = <keyof IThemes> themeName;
+
+            if (options?.themes[typeThemeName]) {
+                this.createTheme(themeName, <ITheme> options?.themes[typeThemeName]);
+            }
+        }
+
+        if (options?.initialTheme) {
+            this.applyTheme(options.initialTheme);
         }
 
         this.setDirection();
@@ -93,36 +112,177 @@ export class ConsentControl {
      * @param {ITextResources} textResources the text want to be displayed
      */
     public setTextResources(textResources: ITextResources): void {
-        if (textResources.bannerMessageHtml) {
-            this.textResources.bannerMessageHtml = textResources.bannerMessageHtml;
+        for (let key of Object.keys(this.textResources)) {
+            let typeKey = <keyof ITextResources> key;
+
+            if (textResources[typeKey]) {
+                this.textResources[typeKey] = textResources[typeKey];
+            }
         }
-        if (textResources.acceptAllLabel) {
-            this.textResources.acceptAllLabel = textResources.acceptAllLabel;
+    }
+
+    /**
+     * Use the passed theme to set the theme property
+     * 
+     * @param {string} name the theme property that we want to set
+     * @param {ITheme} theme the passed theme that we want to display
+     */
+    public createTheme(name: string, theme: ITheme): void {
+        let typeName = <keyof IThemes> name;
+
+        if (!this.themes[typeName]) {
+            this.themes[typeName] = theme;
         }
-        if (textResources.moreInfoLabel) {
-            this.textResources.moreInfoLabel = textResources.moreInfoLabel;
+        else {
+            let currentTheme = <ITheme> this.themes[typeName];
+    
+            for (let key of Object.keys(currentTheme)) {
+                let typeKey = <keyof ITheme> key;
+    
+                if (theme[typeKey]) {
+                    currentTheme[typeKey] = <string> theme[typeKey];
+                }
+            }
         }
-        if (textResources.preferencesDialogCloseLabel) {
-            this.textResources.preferencesDialogCloseLabel = textResources.preferencesDialogCloseLabel;
+
+        let currentTheme = <ITheme> this.themes[typeName];
+
+        // Styles that can be determined by another one
+
+        // determined by "dialog-background-color"
+        if (!theme["background-color-between-page-and-dialog"]) {
+            let provided: string = theme["dialog-background-color"];
+            this.setMissingColorFromAnotherProperty("background-color-between-page-and-dialog", provided, 0.6, currentTheme);
         }
-        if (textResources.preferencesDialogTitle) {
-            this.textResources.preferencesDialogTitle = textResources.preferencesDialogTitle;
+        if (!theme["primary-button-text-color"]) {
+            currentTheme["primary-button-text-color"] = theme["dialog-background-color"];
         }
-        if (textResources.preferencesDialogDescHtml) {
-            this.textResources.preferencesDialogDescHtml = textResources.preferencesDialogDescHtml;
+        if (!theme["primary-button-disabled-text-color"]) {
+            currentTheme["primary-button-disabled-text-color"] = theme["dialog-background-color"];
         }
-        if (textResources.acceptLabel) {
-            this.textResources.acceptLabel = textResources.acceptLabel;
+
+        // determined by "primary-button-color"
+        if (!theme["dialog-border-color"]) {
+            currentTheme["dialog-border-color"] = theme["primary-button-color"];
         }
-        if (textResources.rejectLabel) {
-            this.textResources.rejectLabel = textResources.rejectLabel;
+        if (!theme["hyperlink-font-color"]) {
+            currentTheme["hyperlink-font-color"] = theme["primary-button-color"];
         }
-        if (textResources.saveLabel) {
-            this.textResources.saveLabel = textResources.saveLabel;
+        if (!theme["primary-button-hover-color"]) {
+            currentTheme["primary-button-hover-color"] = theme["primary-button-color"];
         }
-        if (textResources.resetLabel) {
-            this.textResources.resetLabel = textResources.resetLabel;
+        if (!theme["primary-button-disabled-color"]) {
+            currentTheme["primary-button-disabled-color"] = theme["primary-button-color"];
         }
+        if (!theme["primary-button-border"]) {
+            currentTheme["primary-button-border"] = "1px solid " + theme["primary-button-color"];
+        }
+        if (!theme["primary-button-focus-border-color"]) {
+            currentTheme["primary-button-focus-border-color"] = theme["primary-button-color"];
+        }
+        if (!theme["radio-button-hover-border-color"]) {
+            currentTheme["radio-button-hover-border-color"] = theme["primary-button-color"];
+        }
+
+        // determined by "text-color"
+        if (!theme["secondary-button-text-color"]) {
+            currentTheme["secondary-button-text-color"] = theme["text-color"];
+        }
+        if (!theme["secondary-button-disabled-text-color"]) {
+            currentTheme["secondary-button-disabled-text-color"] = theme["text-color"];
+        }
+        if (!theme["radio-button-border-color"]) {
+            currentTheme["radio-button-border-color"] = theme["text-color"];
+        }
+        if (!theme["radio-button-checked-background-color"]) {
+            currentTheme["radio-button-checked-background-color"] = theme["text-color"];
+        }
+        if (!theme["radio-button-hover-background-color"]) {
+            let provided: string = theme["text-color"];
+            this.setMissingColorFromAnotherProperty("radio-button-hover-background-color", provided, 0.8, currentTheme);
+        }
+        if (!theme["radio-button-disabled-color"]) {
+            let provided: string = theme["text-color"];
+            this.setMissingColorFromAnotherProperty("radio-button-disabled-color", provided, 0.2, currentTheme);
+        }
+        if (!theme["radio-button-disabled-border-color"]) {
+            let provided: string = theme["text-color"];
+            this.setMissingColorFromAnotherProperty("radio-button-disabled-border-color", provided, 0.2, currentTheme);
+        }
+
+        // determined by "secondary-button-color"
+        if (!theme["secondary-button-hover-color"]) {
+            currentTheme["secondary-button-hover-color"] = theme["secondary-button-color"];
+        }
+
+        // determined by "secondary-button-disabled-color"
+        if (!theme["secondary-button-disabled-border"]) {
+            currentTheme["secondary-button-disabled-border"] = "1px solid " + theme["secondary-button-disabled-color"];
+        }
+        
+        // determined by "secondary-button-border"
+        if (!theme["secondary-button-hover-border"]) {
+            currentTheme["secondary-button-hover-border"] = theme["secondary-button-border"];
+        }
+        if (!theme["secondary-button-focus-border-color"]) {
+            let secondaryBtnBorderElement: string[] = theme["secondary-button-border"].split(" ");
+            currentTheme["secondary-button-focus-border-color"] = secondaryBtnBorderElement[secondaryBtnBorderElement.length - 1];
+        }
+    }
+
+    /**
+     * Set missing color from another provided color
+     * 
+     * e.g.: 
+     * provider: #ffffff; missing: rgba(255, 255, 255, transparencyFactor)
+     * provider: rgb(255, 255, 255); missing: rgba(255, 255, 255, transparencyFactor)
+     * provider: rgb(255, 255, 255, 1); missing: rgba(255, 255, 255, transparencyFactor)
+     * 
+     * @param {keyof ITheme} missing missing property in the theme
+     * @param {string} provider the provided property in the theme
+     * @param {number} transparencyFactor the alpha channel that will be used in the missing property
+     * @param {ITheme} currentTheme the target theme that will be set
+     */
+    private setMissingColorFromAnotherProperty(missing: keyof ITheme, 
+                                               provider: string, 
+                                               transparencyFactor: number,  
+                                               currentTheme: ITheme): void {
+        
+        // provider: #ffffff; missing: rgba(255, 255, 255, transparencyFactor)
+        if (provider.startsWith("#")) {
+            let hexColor = parseInt(provider, 16);
+            let r = (hexColor >> 16) & 255;
+            let g = (hexColor >> 8) & 255;
+            let b = hexColor & 255;
+
+            currentTheme[missing] = "rgba(" + r + ", " + g + ", " + b + ", " + transparencyFactor + ")";
+        }
+        // provider: rgb(255, 255, 255); missing: rgba(255, 255, 255, transparencyFactor)
+        else if (provider.startsWith("rgb(")) {
+            let missingColor = "rgba" + provider.substring(3, provider.length - 1) + ", " + transparencyFactor + ")";
+            currentTheme[missing] = missingColor;
+        }
+        // provider: rgb(255, 255, 255, 1); missing: rgba(255, 255, 255, transparencyFactor)
+        else if (provider.startsWith("rgba")) {
+            let rgbIdx = provider.lastIndexOf(",");
+            let transparency = provider.substring(rgbIdx + 1, provider.length - 1);
+
+            let newTransparency = parseInt(transparency) * transparencyFactor;
+            let missingColor = provider.substring(0, rgbIdx + 1) + newTransparency + ")";
+            currentTheme[missing] = missingColor;
+        }
+    }
+
+    /**
+     * 
+     * Apply the theme and change banner and preferences dialog's color 
+     * 
+     * TODO
+     * 
+     * @param {string} themeName theme that will be applied
+     */
+    public applyTheme(themeName: string): void {
+        ;
     }
 
     /**
