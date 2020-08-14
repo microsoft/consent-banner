@@ -356,7 +356,7 @@ li.cookieListItem {
 }
 
 @mixin defineRaioInput {
-  & + span.cookieItemRadioBtnLabel::before {
+  & + span::before {
     display: block;
     position: absolute;
     top: 0;
@@ -369,7 +369,45 @@ li.cookieListItem {
     background-color: $dialog-background-color;
   }
 
-  &:checked + span.cookieItemRadioBtnLabel::after {
+  &:not(:disabled) + span {
+    &:hover {
+      &::before {
+        border: 1px solid $radio-button-hover-border-color;
+      }
+
+      &::after {
+        display: block;
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        height: 10px;
+        width: 10px;
+        content: "";
+        border-radius: 50%;
+        background-color: $radio-button-hover-background-color;
+      }
+    }
+
+    &:focus {
+      &::before {
+        border: 1px solid $radio-button-hover-border-color;
+      }
+
+      &::after {
+        display: block;
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        height: 10px;
+        width: 10px;
+        content: "";
+        border-radius: 50%;
+        background-color: $radio-button-checked-background-color;
+      }
+    }
+  }
+
+  &:checked + span::after {
     display: block;
     position: absolute;
     top: 5px;
@@ -381,39 +419,7 @@ li.cookieListItem {
     background-color: $radio-button-checked-background-color;
   }
 
-  & + span.cookieItemRadioBtnLabel:hover::before {
-    border: 1px solid $radio-button-hover-border-color; 
-  }
-
-  & + span.cookieItemRadioBtnLabel:hover::after {
-    display: block;
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    height: 10px;
-    width: 10px;
-    content: "";
-    border-radius: 50%;
-    background-color: $radio-button-hover-background-color;
-  }
-
-  & + span.cookieItemRadioBtnLabel:focus::before {
-    border: 1px solid $radio-button-hover-border-color; 
-  }
-
-  & + span.cookieItemRadioBtnLabel:focus::after {
-    display: block;
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    height: 10px;
-    width: 10px;
-    content: "";
-    border-radius: 50%;
-    background-color: $radio-button-checked-background-color;
-  }
-
-  &:disabled + span.cookieItemRadioBtnLabel {
+  &:disabled + span {
     cursor: not-allowed;
 
     &::before {
@@ -439,10 +445,6 @@ input[type="radio"].cookieItemRadioBtn {
 
   cursor: pointer;
   box-sizing: border-box;
-
-  &:disabled {
-    cursor: not-allowed;
-  }
 
   appearance: none;
 

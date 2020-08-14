@@ -130,21 +130,7 @@ export class ConsentControl {
     public createTheme(name: string, theme: ITheme): void {
         let typeName = <keyof IThemes> name;
 
-        if (!this.themes[typeName]) {
-            this.themes[typeName] = theme;
-        }
-        else {
-            let currentTheme = <ITheme> this.themes[typeName];
-    
-            for (let key of Object.keys(currentTheme)) {
-                let typeKey = <keyof ITheme> key;
-    
-                if (theme[typeKey]) {
-                    currentTheme[typeKey] = <string> theme[typeKey];
-                }
-            }
-        }
-
+        this.themes[typeName] = theme;
         let currentTheme = <ITheme> this.themes[typeName];
 
         // Styles that can be determined by another one
@@ -457,7 +443,7 @@ export class ConsentControl {
     private setRadioBtnStyle(theme: ITheme): void {
         let radioButtonStyle = document.createElement('style');
         radioButtonStyle.type = 'text/css';
-        radioButtonStyle.innerHTML = `input[type="radio"].${ styles.cookieItemRadioBtn } + span.${ styles.cookieItemRadioBtnLabel }::before { 
+        radioButtonStyle.innerHTML = `input[type="radio"].${ styles.cookieItemRadioBtn } + span::before {
             border: 1px solid ${ theme["radio-button-border-color"] } !important;
             background-color: ${ theme["dialog-background-color"] } !important;
         }`;
@@ -465,42 +451,42 @@ export class ConsentControl {
 
         let radioButtonCheckedStyle = document.createElement('style');
         radioButtonCheckedStyle.type = 'text/css';
-        radioButtonCheckedStyle.innerHTML = `input[type="radio"].${ styles.cookieItemRadioBtn }:checked + span.${ styles.cookieItemRadioBtnLabel }::after {
+        radioButtonCheckedStyle.innerHTML = `input[type="radio"].${ styles.cookieItemRadioBtn }:checked + span::after {
             background-color: ${ theme["radio-button-checked-background-color"] } !important;
         }`;
         document.getElementsByTagName('head')[0].appendChild(radioButtonCheckedStyle);
 
         let radioButtonHoverStyle = document.createElement('style');
         radioButtonHoverStyle.type = 'text/css';
-        radioButtonHoverStyle.innerHTML = `input[type="radio"].${ styles.cookieItemRadioBtn } + span.${ styles.cookieItemRadioBtnLabel }:hover::before {
+        radioButtonHoverStyle.innerHTML = `input[type="radio"].${ styles.cookieItemRadioBtn } + span:hover::before {
             border: 1px solid ${ theme["radio-button-hover-border-color"] } !important;
         }`;
         document.getElementsByTagName('head')[0].appendChild(radioButtonHoverStyle);
 
         let radioButtonHoverAfterStyle = document.createElement('style');
         radioButtonHoverAfterStyle.type = 'text/css';
-        radioButtonHoverAfterStyle.innerHTML = `input[type="radio"].${ styles.cookieItemRadioBtn } + span.${ styles.cookieItemRadioBtnLabel }:hover::after {
+        radioButtonHoverAfterStyle.innerHTML = `input[type="radio"].${ styles.cookieItemRadioBtn } + span:hover::after {
             background-color: ${ theme["radio-button-hover-background-color"] } !important;
         }`;
         document.getElementsByTagName('head')[0].appendChild(radioButtonHoverAfterStyle);
 
         let radioButtonFocusStyle = document.createElement('style');
         radioButtonFocusStyle.type = 'text/css';
-        radioButtonFocusStyle.innerHTML = `input[type="radio"].${ styles.cookieItemRadioBtn } + span.${ styles.cookieItemRadioBtnLabel }:focus::before {
+        radioButtonFocusStyle.innerHTML = `input[type="radio"].${ styles.cookieItemRadioBtn } + span:focus::before {
             border: 1px solid ${ theme["radio-button-hover-border-color"] } !important;
         }`;
         document.getElementsByTagName('head')[0].appendChild(radioButtonFocusStyle);
 
         let radioButtonFocusAfterStyle = document.createElement('style');
         radioButtonFocusAfterStyle.type = 'text/css';
-        radioButtonFocusAfterStyle.innerHTML = `input[type="radio"].${ styles.cookieItemRadioBtn } + span.${ styles.cookieItemRadioBtnLabel }:focus::after {
+        radioButtonFocusAfterStyle.innerHTML = `input[type="radio"].${ styles.cookieItemRadioBtn } + span:focus::after {
             background-color: ${ theme["radio-button-checked-background-color"] } !important;
         }`;
         document.getElementsByTagName('head')[0].appendChild(radioButtonFocusAfterStyle);
 
         let radioButtonDisabledStyle = document.createElement('style');
         radioButtonDisabledStyle.type = 'text/css';
-        radioButtonDisabledStyle.innerHTML = `input[type="radio"].${ styles.cookieItemRadioBtn }:disabled + span.${ styles.cookieItemRadioBtnLabel }::before {
+        radioButtonDisabledStyle.innerHTML = `input[type="radio"].${ styles.cookieItemRadioBtn }:disabled + span::before {
             border: 1px solid ${ theme["radio-button-disabled-border-color"] } !important;
             background-color: ${ theme["radio-button-disabled-color"] } !important;
         }`;
