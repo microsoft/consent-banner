@@ -277,12 +277,234 @@ export class ConsentControl {
      * 
      * Apply the theme and change banner and preferences dialog's color 
      * 
-     * TODO
-     * 
      * @param {string} themeName theme that will be applied
      */
     public applyTheme(themeName: string): void {
-        ;
+        if (!this.themes[themeName]) {
+            throw new Error("Theme not found error");
+        }
+
+        let theme: ITheme = <ITheme> this.themes[themeName];
+
+        // overwrite banner styles
+        let bannerStyle = document.createElement('style');
+        bannerStyle.type = 'text/css';
+        bannerStyle.innerHTML = `.${ styles.bannerBody } {
+            background-color: ${ theme["banner-background-color"] } !important;
+        }`;
+
+        document.getElementsByTagName('head')[0].appendChild(bannerStyle);
+
+        // overwrite text color styles
+        let textColorStyle = document.createElement('style');
+        textColorStyle.type = 'text/css';
+        textColorStyle.innerHTML = `.${ styles.textColorTheme } {
+            color: ${ theme["text-color"] } !important;
+        }`;
+
+        document.getElementsByTagName('head')[0].appendChild(textColorStyle);
+        
+        // overwrite hyper link styles
+        let hyperLinkStyle = document.createElement('style');
+        hyperLinkStyle.type = 'text/css';
+        hyperLinkStyle.innerHTML = `.${ styles.hyperLinkTheme } a {
+            color: ${ theme["hyperlink-font-color"] } !important;
+        }`;
+
+        document.getElementsByTagName('head')[0].appendChild(hyperLinkStyle);
+        
+        this.setDialogStyle(theme);
+        this.setPrimaryBtnStyle(theme);
+        this.setSecondaryBtnStyle(theme);
+        this.setRadioBtnStyle(theme);
+    }
+
+    /**
+     * Apply the theme to dialog
+     * 
+     * @param {ITheme} theme theme that will be applied to dialog
+     */
+    private setDialogStyle(theme: ITheme): void {
+
+        // overwrite cookieModal styles (background between page and dialog)
+        let cookieModalStyle = document.createElement('style');
+        cookieModalStyle.type = 'text/css';
+        cookieModalStyle.innerHTML = `.${ styles.cookieModal } {
+            background-color: ${ theme["background-color-between-page-and-dialog"] } !important;
+        }`;
+
+        document.getElementsByTagName('head')[0].appendChild(cookieModalStyle);
+
+        // overwrite preferences dialog styles
+        let dialogStyle = document.createElement('style');
+        dialogStyle.type = 'text/css';
+        dialogStyle.innerHTML = `.${ styles.dialogTheme } {
+            background-color: ${ theme["dialog-background-color"] } !important;
+            border: 1px solid ${ theme["dialog-border-color"] } !important;
+        }`;
+
+        document.getElementsByTagName('head')[0].appendChild(dialogStyle);
+        
+        // overwrite close button styles
+        let closeIconStyle = document.createElement('style');
+        closeIconStyle.type = 'text/css';
+        closeIconStyle.innerHTML = `.${ styles.closeModalIcon } {
+            color: ${ theme["close-button-color"] } !important;
+            background-color: ${ theme["dialog-background-color"] } !important;
+        }`;
+
+        document.getElementsByTagName('head')[0].appendChild(closeIconStyle);
+
+    }
+
+    /**
+     * Apply the theme to secondary button
+     * 
+     * @param {ITheme} theme theme that will be applied to secondary button
+     */
+    private setSecondaryBtnStyle(theme: ITheme): void {
+        let secondaryButtonStyle = document.createElement('style');
+        secondaryButtonStyle.type = 'text/css';
+        secondaryButtonStyle.innerHTML = `.${ styles.secondaryButtonTheme } { 
+            border: ${ theme["secondary-button-border"] } !important;
+            background-color: ${ theme["secondary-button-color"] } !important;
+            color: ${ theme["secondary-button-text-color"] } !important;
+        }`;
+
+        let secondaryButtonHoverStyle = document.createElement('style');
+        secondaryButtonHoverStyle.type = 'text/css';
+        secondaryButtonHoverStyle.innerHTML = `.${ styles.secondaryButtonTheme }:hover {
+            color: ${ theme["secondary-button-text-color"] } !important;
+            background-color: ${ theme["secondary-button-hover-color"] } !important;
+            box-shadow: ${ theme["secondary-button-hover-shadow"] } !important;
+            border: ${ theme["secondary-button-hover-border"] } !important;
+        }`;
+
+        let secondaryButtonFocusStyle = document.createElement('style');
+        secondaryButtonFocusStyle.type = 'text/css';
+        secondaryButtonFocusStyle.innerHTML = `.${ styles.secondaryButtonTheme }:focus {
+            background-color: ${ theme["secondary-button-hover-color"] } !important;
+            box-shadow: ${ theme["secondary-button-hover-shadow"] } !important;
+            border: 2px solid ${ theme["secondary-button-focus-border-color"] } !important;
+        }`;
+
+        let secondaryButtonDisabledStyle = document.createElement('style');
+        secondaryButtonDisabledStyle.type = 'text/css';
+        secondaryButtonDisabledStyle.innerHTML = `.${ styles.secondaryButtonTheme }:disabled {
+            opacity: ${ theme["secondary-button-disabled-opacity"] } !important;
+            color: ${ theme["secondary-button-disabled-text-color"] } !important;
+            background-color: ${ theme["secondary-button-disabled-color"] } !important;
+            border: ${ theme["secondary-button-disabled-border"] } !important;
+        }`;
+
+        document.getElementsByTagName('head')[0].appendChild(secondaryButtonStyle);
+        document.getElementsByTagName('head')[0].appendChild(secondaryButtonHoverStyle);
+        document.getElementsByTagName('head')[0].appendChild(secondaryButtonFocusStyle);
+        document.getElementsByTagName('head')[0].appendChild(secondaryButtonDisabledStyle);
+    }
+
+    /**
+     * Apply the theme to primary button
+     * 
+     * @param {ITheme} theme theme that will be applied to primary button
+     */
+    private setPrimaryBtnStyle(theme: ITheme): void {
+        let primaryButtonStyle = document.createElement('style');
+        primaryButtonStyle.type = 'text/css';
+        primaryButtonStyle.innerHTML = `.${ styles.primaryButtonTheme } { 
+            border: ${ theme["primary-button-border"] } !important;
+            background-color: ${ theme["primary-button-color"] } !important;
+            color: ${ theme["primary-button-text-color"] } !important;
+        }`;
+
+        let primaryButtonHoverStyle = document.createElement('style');
+        primaryButtonHoverStyle.type = 'text/css';
+        primaryButtonHoverStyle.innerHTML = `.${ styles.primaryButtonTheme }:hover {
+            color: ${ theme["primary-button-text-color"] } !important;
+            background-color: ${ theme["primary-button-hover-color"] } !important;
+            box-shadow: ${ theme["primary-button-hover-shadow"] } !important;
+            border: ${ theme["primary-button-hover-border"] } !important;
+        }`;
+
+        let primaryButtonFocusStyle = document.createElement('style');
+        primaryButtonFocusStyle.type = 'text/css';
+        primaryButtonFocusStyle.innerHTML = `.${ styles.primaryButtonTheme }:focus {
+            background-color: ${ theme["primary-button-hover-color"] } !important;
+            box-shadow: ${ theme["primary-button-hover-shadow"] } !important;
+            border: 2px solid ${ theme["primary-button-focus-border-color"] } !important;
+        }`;
+
+        let primaryButtonDisabledStyle = document.createElement('style');
+        primaryButtonDisabledStyle.type = 'text/css';
+        primaryButtonDisabledStyle.innerHTML = `.${ styles.primaryButtonTheme }:disabled {
+            opacity: ${ theme["primary-button-disabled-opacity"] } !important;
+            color: ${ theme["primary-button-disabled-text-color"] } !important;
+            background-color: ${ theme["primary-button-disabled-color"] } !important;
+            border: ${ theme["primary-button-disabled-border"] } !important;
+        }`;
+
+        document.getElementsByTagName('head')[0].appendChild(primaryButtonStyle);
+        document.getElementsByTagName('head')[0].appendChild(primaryButtonHoverStyle);
+        document.getElementsByTagName('head')[0].appendChild(primaryButtonFocusStyle);
+        document.getElementsByTagName('head')[0].appendChild(primaryButtonDisabledStyle);
+    }
+
+    /**
+     * Apply the theme to radio button
+     * 
+     * @param {ITheme} theme theme that will be applied to radio button
+     */
+    private setRadioBtnStyle(theme: ITheme): void {
+        let radioButtonStyle = document.createElement('style');
+        radioButtonStyle.type = 'text/css';
+        radioButtonStyle.innerHTML = `input[type="radio"].${ styles.cookieItemRadioBtn } + span.${ styles.cookieItemRadioBtnLabel }::before { 
+            border: 1px solid ${ theme["radio-button-border-color"] } !important;
+            background-color: ${ theme["dialog-background-color"] } !important;
+        }`;
+        document.getElementsByTagName('head')[0].appendChild(radioButtonStyle);
+
+        let radioButtonCheckedStyle = document.createElement('style');
+        radioButtonCheckedStyle.type = 'text/css';
+        radioButtonCheckedStyle.innerHTML = `input[type="radio"].${ styles.cookieItemRadioBtn }:checked + span.${ styles.cookieItemRadioBtnLabel }::after {
+            background-color: ${ theme["radio-button-checked-background-color"] } !important;
+        }`;
+        document.getElementsByTagName('head')[0].appendChild(radioButtonCheckedStyle);
+
+        let radioButtonHoverStyle = document.createElement('style');
+        radioButtonHoverStyle.type = 'text/css';
+        radioButtonHoverStyle.innerHTML = `input[type="radio"].${ styles.cookieItemRadioBtn } + span.${ styles.cookieItemRadioBtnLabel }:hover::before {
+            border: 1px solid ${ theme["radio-button-hover-border-color"] } !important;
+        }`;
+        document.getElementsByTagName('head')[0].appendChild(radioButtonHoverStyle);
+
+        let radioButtonHoverAfterStyle = document.createElement('style');
+        radioButtonHoverAfterStyle.type = 'text/css';
+        radioButtonHoverAfterStyle.innerHTML = `input[type="radio"].${ styles.cookieItemRadioBtn } + span.${ styles.cookieItemRadioBtnLabel }:hover::after {
+            background-color: ${ theme["radio-button-hover-background-color"] } !important;
+        }`;
+        document.getElementsByTagName('head')[0].appendChild(radioButtonHoverAfterStyle);
+
+        let radioButtonFocusStyle = document.createElement('style');
+        radioButtonFocusStyle.type = 'text/css';
+        radioButtonFocusStyle.innerHTML = `input[type="radio"].${ styles.cookieItemRadioBtn } + span.${ styles.cookieItemRadioBtnLabel }:focus::before {
+            border: 1px solid ${ theme["radio-button-hover-border-color"] } !important;
+        }`;
+        document.getElementsByTagName('head')[0].appendChild(radioButtonFocusStyle);
+
+        let radioButtonFocusAfterStyle = document.createElement('style');
+        radioButtonFocusAfterStyle.type = 'text/css';
+        radioButtonFocusAfterStyle.innerHTML = `input[type="radio"].${ styles.cookieItemRadioBtn } + span.${ styles.cookieItemRadioBtnLabel }:focus::after {
+            background-color: ${ theme["radio-button-checked-background-color"] } !important;
+        }`;
+        document.getElementsByTagName('head')[0].appendChild(radioButtonFocusAfterStyle);
+
+        let radioButtonDisabledStyle = document.createElement('style');
+        radioButtonDisabledStyle.type = 'text/css';
+        radioButtonDisabledStyle.innerHTML = `input[type="radio"].${ styles.cookieItemRadioBtn }:disabled + span.${ styles.cookieItemRadioBtnLabel }::before {
+            border: 1px solid ${ theme["radio-button-disabled-border-color"] } !important;
+            background-color: ${ theme["radio-button-disabled-color"] } !important;
+        }`;
+        document.getElementsByTagName('head')[0].appendChild(radioButtonDisabledStyle);
     }
 
     /**
@@ -314,15 +536,15 @@ export class ConsentControl {
 
         const bannerInnerHtml = `
         <div class="${ styles.bannerInform }">
-            <span class="${ styles.infoIcon }">${ infoIcon }</span> <!--  used for icon  -->
-            <p class="${ styles.bannerInformBody }">
+            <span class="${ styles.infoIcon } ${ styles.textColorTheme }">${ infoIcon }</span> <!--  used for icon  -->
+            <p class="${ styles.bannerInformBody } ${ styles.hyperLinkTheme } ${ styles.textColorTheme }">
                 ${ this.textResources.bannerMessageHtml }
             </p>
         </div>
 
         <div class="${ styles.buttonGroup }">
-            <button type="button" class="${ styles.bannerButton }">${ HtmlTools.escapeHtml(this.textResources.acceptAllLabel) }</button>
-            <button type="button" class="${ styles.bannerButton }">${ HtmlTools.escapeHtml(this.textResources.moreInfoLabel) }</button>
+            <button type="button" class="${ styles.bannerButton } ${ styles.secondaryButtonTheme }">${ HtmlTools.escapeHtml(this.textResources.acceptAllLabel) }</button>
+            <button type="button" class="${ styles.bannerButton } ${ styles.secondaryButtonTheme }">${ HtmlTools.escapeHtml(this.textResources.moreInfoLabel) }</button>
         </div>
         `;
 

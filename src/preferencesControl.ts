@@ -37,15 +37,15 @@ export class PreferencesControl {
     public createPreferencesDialog(): void {
         let cookieModalInnerHtml = `
         <div role="presentation" tabindex="-1"></div>
-        <div role="dialog" aria-modal="true" aria-label="${ HtmlTools.escapeHtml(this.textResources.preferencesDialogTitle) }" class="${ styles.modalContainer }" tabindex="-1">
+        <div role="dialog" aria-modal="true" aria-label="${ HtmlTools.escapeHtml(this.textResources.preferencesDialogTitle) }" class="${ styles.modalContainer } ${ styles.dialogTheme }" tabindex="-1">
             <button aria-label="${ HtmlTools.escapeHtml(this.textResources.preferencesDialogCloseLabel) }" class="${ styles.closeModalIcon }" tabindex="0">&#x2715;</button>
             <div role="document" class="${ styles.modalBody }">
                 <div>
-                    <h2 class="${styles.modalTitle}">${ HtmlTools.escapeHtml(this.textResources.preferencesDialogTitle) }</h2>
+                    <h2 class="${styles.modalTitle} ${ styles.textColorTheme }">${ HtmlTools.escapeHtml(this.textResources.preferencesDialogTitle) }</h2>
                 </div>
                 
-                <form class="${ styles.modalContent }">
-                    <p class="${ styles.cookieStatement }">
+                <form class="${ styles.modalContent } ${ styles.hyperLinkTheme }">
+                    <p class="${ styles.cookieStatement } ${ styles.textColorTheme }">
                         ${ this.textResources.preferencesDialogDescHtml }
                     </p>
 
@@ -54,8 +54,8 @@ export class PreferencesControl {
                 </form>
                 
                 <div class="${ styles.modalButtonGroup }">
-                    <button type="button" aria-label="${ HtmlTools.escapeHtml(this.textResources.saveLabel) }" class="${ styles.modalButtonSave }" disabled>${ HtmlTools.escapeHtml(this.textResources.saveLabel) }</button>
-                    <button type="button" aria-label="${ HtmlTools.escapeHtml(this.textResources.resetLabel) }" class="${ styles.modalButtonReset }" disabled>${ HtmlTools.escapeHtml(this.textResources.resetLabel) }</button>
+                    <button type="button" aria-label="${ HtmlTools.escapeHtml(this.textResources.saveLabel) }" class="${ styles.modalButtonSave } ${ styles.primaryButtonTheme }" disabled>${ HtmlTools.escapeHtml(this.textResources.saveLabel) }</button>
+                    <button type="button" aria-label="${ HtmlTools.escapeHtml(this.textResources.resetLabel) }" class="${ styles.modalButtonReset } ${ styles.secondaryButtonTheme }" disabled>${ HtmlTools.escapeHtml(this.textResources.resetLabel) }</button>
                 </div>
             </div>
         </div>
@@ -75,9 +75,9 @@ export class PreferencesControl {
         for (let cookieCategory of this.cookieCategories) {
             if (cookieCategory.isUnswitchable) {
                 let item = `
-                <li class="${ styles.cookieListItem }">
-                    <h3 class="${ styles.cookieListItemTitle }">${ HtmlTools.escapeHtml(cookieCategory.name) }</h3>
-                    <p class="${ styles.cookieListItemDescription }">${ cookieCategory.descHtml }</p>
+                <li class="${ styles.cookieListItem } ${ styles.textColorTheme }">
+                    <h3 class="${ styles.cookieListItemTitle } ${ styles.textColorTheme }">${ HtmlTools.escapeHtml(cookieCategory.name) }</h3>
+                    <p class="${ styles.cookieListItemDescription } ${ styles.textColorTheme }">${ cookieCategory.descHtml }</p>
                 </li>
                 `;
 
@@ -93,22 +93,22 @@ export class PreferencesControl {
                 let acceptValue = this.cookieCategoriesPreferences[cookieCategory.id] === true ? "checked" : "";
                 let rejectValue = this.cookieCategoriesPreferences[cookieCategory.id] === false ? "checked" : "";
 
-                let acceptRadio = `<input type="radio" aria-label="${ HtmlTools.escapeHtml(this.textResources.acceptLabel) }" class="${styles.cookieItemRadioBtn}" name="${nameAttribute}" value="accept" ${acceptValue}>`;
-                let rejectRadio = `<input type="radio" aria-label="${ HtmlTools.escapeHtml(this.textResources.rejectLabel) }" class="${styles.cookieItemRadioBtn}" name="${nameAttribute}" value="reject" ${rejectValue}>`;
+                let acceptRadio = `<input type="radio" aria-label="${ HtmlTools.escapeHtml(this.textResources.acceptLabel) }" class="${ styles.cookieItemRadioBtn }" name="${ nameAttribute }" value="accept" ${ acceptValue }>`;
+                let rejectRadio = `<input type="radio" aria-label="${ HtmlTools.escapeHtml(this.textResources.rejectLabel) }" class="${ styles.cookieItemRadioBtn }" name="${ nameAttribute }" value="reject" ${ rejectValue }>`;
 
                 let item = `
-                <li class="${ styles.cookieListItem }">
+                <li class="${ styles.cookieListItem } ${ styles.textColorTheme }">
                     <div class="${ styles.cookieListItemGroup}" role="radiogroup" aria-label="${ HtmlTools.escapeHtml(cookieCategory.name) }">
-                        <h3 class="${ styles.cookieListItemTitle }">${ HtmlTools.escapeHtml(cookieCategory.name) }</h3>
-                        <p class="${ styles.cookieListItemDescription}">${cookieCategory.descHtml}</p>
+                        <h3 class="${ styles.cookieListItemTitle } ${ styles.textColorTheme }">${ HtmlTools.escapeHtml(cookieCategory.name) }</h3>
+                        <p class="${ styles.cookieListItemDescription} ${ styles.textColorTheme }">${cookieCategory.descHtml}</p>
                         <div class="${ styles.cookieItemRadioBtnGroup}">
                             <label class="${ styles.cookieItemRadioBtnCtrl}" role="radio">
                                 ${ acceptRadio}
-                                <span class="${ styles.cookieItemRadioBtnLabel}">${ HtmlTools.escapeHtml(this.textResources.acceptLabel) }</span>
+                                <span class="${ styles.cookieItemRadioBtnLabel} ${ styles.textColorTheme }">${ HtmlTools.escapeHtml(this.textResources.acceptLabel) }</span>
                             </label>
                             <label class="${ styles.cookieItemRadioBtnCtrl}" role="radio">
                                 ${ rejectRadio}
-                                <span class="${ styles.cookieItemRadioBtnLabel}">${ HtmlTools.escapeHtml(this.textResources.rejectLabel) }</span>
+                                <span class="${ styles.cookieItemRadioBtnLabel} ${ styles.textColorTheme }">${ HtmlTools.escapeHtml(this.textResources.rejectLabel) }</span>
                             </label>
                         </div>
                     </div>
