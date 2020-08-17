@@ -105,6 +105,73 @@ describe("Test constructor", () => {
         });
     });
 
+    test("No cookieCategories, textResources over provided", () => {
+        let textResources = {
+            market: "en-us",
+            bannerMessageHtml: "This is banner message.",
+            acceptAllLabel: "This is accept all",
+            rejectAllLabel: "I want to reject",
+            moreInfoLabel: "This is more info",
+            preferencesDialogCloseLabel: "This is Close",
+            preferencesDialogTitle: "This is preferences dialog title",
+            preferencesDialogDescHtml: "This is preferences dialog text",
+            acceptLabel: "This is accept",
+            middle: 6,
+            rejectLabel: "This is reject",
+            saveLabel: "This is save changes",
+            resetLabel: "This is reset all",
+            add: "additional",
+            complex: {
+                id: "c",
+                name: "1. Essential"
+            }
+        };
+    
+        let callBack = function() { return; };
+    
+        let options: IOptions = { };
+        options.textResources = textResources;
+    
+        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
+    
+        expect(cc.culture).toBe("en");
+        expect(cc.cookieCategories).toEqual([
+            {
+                id: "c0",
+                name: "1. Essential cookies",
+                descHtml: "We use this cookie, read more <a href='link'>here</a>.",
+                isUnswitchable: true
+            },
+            {
+                id: "c1",
+                name: "2. Performance & analytics",
+                descHtml: "We use this cookie, read more <a href='link'>here</a>."
+            },
+            {
+                id: "c2",
+                name: "3. Advertising/Marketing",
+                descHtml: "Blah"
+            },
+            {
+                id: "c3",
+                name: "4. Targeting/personalization",
+                descHtml: "Blah"
+            }
+        ]);
+        expect(cc.textResources).toEqual({
+            bannerMessageHtml: "This is banner message.",
+            acceptAllLabel: "This is accept all",
+            moreInfoLabel: "This is more info",
+            preferencesDialogCloseLabel: "This is Close",
+            preferencesDialogTitle: "This is preferences dialog title",
+            preferencesDialogDescHtml: "This is preferences dialog text",
+            acceptLabel: "This is accept",
+            rejectLabel: "This is reject",
+            saveLabel: "This is save changes",
+            resetLabel: "This is reset all"
+        });
+    });
+
     test("No cookieCategories, textResources full provided", () => {
         let textResources = {
             bannerMessageHtml: "This is banner message.",
