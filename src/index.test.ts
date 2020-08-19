@@ -830,14 +830,14 @@ describe("Test containerElement", () => {
         let callBack = function() { return; };
         let cc = new ConsentControl(testId, "en", callBack);
 
-        expect(() => cc.setContainerElement("testId")).toThrow('Container not found error');
+        expect(() => cc.setContainerElement("testId")).toThrowError('Container not found error');
     });
 
     test("Use empty element in setContainerElement(containerElement) to change container", () => {
         let callBack = function() { return; };
         let cc = new ConsentControl(testId, "en", callBack);
 
-        expect(() => cc.setContainerElement("")).toThrow('Container not found error');
-        expect(() => cc.setContainerElement(<HTMLElement> document.getElementById("test"))).toThrow('Container not found error');
+        expect(() => cc.setContainerElement("")).toThrowError('Container not found error');
+        expect(() => cc.setContainerElement(<HTMLElement> document.getElementById("test"))).toThrowError('Container not found error');
     });
 });
