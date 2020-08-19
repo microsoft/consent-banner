@@ -1,8 +1,17 @@
 import { ConsentControl } from "./index";
-import { IOptions, IThemes } from './interfaces/Options';
+import { IOptions, IThemes, ITheme } from "./interfaces/Options";
+import { ThemesController } from "./themes/themesController";
 
 describe("Test themes in constructor", () => {
     let testId: string = "app";
+
+    function testCreateThemeStyle(id: string): void {
+        let bannerStyle = document.getElementById(id);
+        expect(bannerStyle).toBeTruthy();
+        expect(bannerStyle?.getAttribute("type")).toBe("text/css");
+        expect(bannerStyle?.nodeName).toBe("STYLE");
+        expect(bannerStyle?.parentNode).toEqual(document.head);
+    }
 
     beforeEach(() => {
         let newDiv = document.createElement("div");
@@ -21,6 +30,11 @@ describe("Test themes in constructor", () => {
             else {
                 throw new Error("Parent not found error");
             }
+        }
+
+        let hs = document.getElementsByTagName("style");
+        for (let i = 0, max = hs.length; i < max; i++) {
+            hs[0].parentNode!.removeChild(hs[0]);
         }
     });
     
@@ -882,5 +896,181 @@ describe("Test themes in constructor", () => {
             "radio-button-disabled-color": "rgba(255, 255, 255, 0.2)",
             "radio-button-disabled-border-color": "rgba(255, 255, 255, 0.2)"
         });
+    });
+
+    test("Test createTheme method", () => {
+        let ultraDark = {
+            "close-button-color": "#F0FFFF",
+            "secondary-button-disabled-opacity": "0.81",
+            "secondary-button-hover-shadow": "2px 5px 5px #7FFF00",
+            "primary-button-disabled-opacity": "0.75",
+            "primary-button-hover-border": "1px inset #008080",
+            "primary-button-disabled-border": "1px inset #608070",
+            "primary-button-hover-shadow": "2px 2px 5px #A0522D",
+            "banner-background-color": "#8B4513",
+            "dialog-background-color": "#660066",
+            "primary-button-color": "#98FB98",
+            "text-color": "#AFEEEE",
+            "secondary-button-color": "#FF5299",
+            "secondary-button-disabled-color": "#FFC2E0",
+            "secondary-button-border": "1px dotted #FFC9B6",
+            "background-color-between-page-and-dialog": "rgba(102, 102, 153, 0.62)",
+            "dialog-border-color": "#D4FF7D",
+            "hyperlink-font-color": "#D175A3",
+            "secondary-button-hover-color": "#FFB8FF",
+            "secondary-button-hover-border": "1px dotted rgba(240, 199, 128, 0.43)",
+            "secondary-button-disabled-border": "1px dotted rgba(220, 109, 8, 0.43)",
+            "secondary-button-focus-border-color": "rgba(255, 75, 162, 0.71)",
+            "secondary-button-text-color": "#33CCCC",
+            "secondary-button-disabled-text-color": "#5252A8",
+            "primary-button-hover-color": "#00FF00",
+            "primary-button-disabled-color": "#0099BB",
+            "primary-button-border": "1px inset #C0C0C0",
+            "primary-button-focus-border-color": "#828183",
+            "primary-button-text-color": "#FF3300",
+            "primary-button-disabled-text-color": "#FF9900",
+            "radio-button-border-color": "#9ACD32",
+            "radio-button-checked-background-color": "#DC143C",
+            "radio-button-hover-border-color": "#DB7093",
+            "radio-button-hover-background-color": "rgba(160, 2, 205, 0.91)",
+            "radio-button-disabled-color": "rgba(175, 95, 95, 0.43)",
+            "radio-button-disabled-border-color": "rgba(118, 97, 155, 0.43)"
+        };
+
+        let callBack = function() { return; };
+        
+        let cc = new ConsentControl(testId, "en", callBack, undefined, undefined);
+        cc.createTheme("ultra", ultraDark);
+
+        expect(cc.themes["ultra"]).toEqual(ultraDark);
+    });
+
+    test("Test createTheme method in ThemesController", () => {
+        let currentTheme: ITheme = {
+            "close-button-color": "#000000",
+            "secondary-button-disabled-opacity": "0.7",
+            "secondary-button-hover-shadow": "5px 4px 10px red",
+            "primary-button-disabled-opacity": "0.7",
+            "primary-button-hover-border": "1px double red",
+            "primary-button-disabled-border": "1px double white",
+            "primary-button-hover-shadow": "5px 4px 10px #171717",
+            "banner-background-color": "#00FFFF",
+            "dialog-background-color": "#FAEBD7",
+            "primary-button-color": "#008B8B",
+            "text-color": "#191970",
+            "secondary-button-color": "#9370DB",
+            "secondary-button-disabled-color": "#FF00FF",
+            "secondary-button-border": "1px dashed black"
+        }
+
+        ThemesController.createTheme(currentTheme, currentTheme);
+
+        expect(currentTheme["background-color-between-page-and-dialog"]).toBe("rgba(250, 235, 215, 0.6)");
+        expect(currentTheme["dialog-border-color"]).toBe("#008B8B");
+        expect(currentTheme["hyperlink-font-color"]).toBe("#008B8B");
+        expect(currentTheme["secondary-button-hover-color"]).toBe("#9370DB");
+        expect(currentTheme["secondary-button-hover-border"]).toBe("1px dashed black");
+        expect(currentTheme["secondary-button-disabled-border"]).toBe("1px solid #FF00FF");
+        expect(currentTheme["secondary-button-focus-border-color"]).toBe("black");
+        expect(currentTheme["secondary-button-text-color"]).toBe("#191970");
+        expect(currentTheme["secondary-button-disabled-text-color"]).toBe("#191970");
+        expect(currentTheme["primary-button-hover-color"]).toBe("#008B8B");
+        expect(currentTheme["primary-button-disabled-color"]).toBe("#008B8B");
+        expect(currentTheme["primary-button-border"]).toBe("1px solid #008B8B");
+        expect(currentTheme["primary-button-focus-border-color"]).toBe("#008B8B");
+        expect(currentTheme["primary-button-text-color"]).toBe("#FAEBD7");
+        expect(currentTheme["primary-button-disabled-text-color"]).toBe("#FAEBD7");
+        expect(currentTheme["radio-button-border-color"]).toBe("#191970");
+        expect(currentTheme["radio-button-checked-background-color"]).toBe("#191970");
+        expect(currentTheme["radio-button-hover-border-color"]).toBe("#008B8B");
+        expect(currentTheme["radio-button-hover-background-color"]).toBe("rgba(25, 25, 112, 0.8)");
+        expect(currentTheme["radio-button-disabled-color"]).toBe("rgba(25, 25, 112, 0.2)");
+        expect(currentTheme["radio-button-disabled-border-color"]).toBe("rgba(25, 25, 112, 0.2)");
+    });
+
+    test("Test setMissingColorFromAnotherProperty method", () => {
+        let provider1 = "#123456";
+        let provider2 = "rgb(12, 34, 56)";
+        let provider3 = "rgba(21, 43, 65, 0.9)";
+
+        let currentTheme1: ITheme = {
+            "close-button-color": "#666666",
+            "secondary-button-disabled-opacity": "1",
+            "secondary-button-hover-shadow": "0px 4px 10px rgba(0, 0, 0, 0.25)",
+            "primary-button-disabled-opacity": "1",
+            "primary-button-hover-border": "none",
+            "primary-button-disabled-border": "none",
+            "primary-button-hover-shadow": "0px 4px 10px rgba(0, 0, 0, 0.25)",
+            "banner-background-color": "#F2F2F2",
+            "dialog-background-color": provider1,
+            "primary-button-color": "#0067B8",
+            "text-color": provider2,
+            "secondary-button-color": "#EBEBEB",
+            "secondary-button-disabled-color": "rgba(0, 0, 0, 0.2)",
+            "secondary-button-border": "none"
+        };
+
+        let currentTheme2: ITheme = {
+            "close-button-color": "#666666",
+            "secondary-button-disabled-opacity": "1",
+            "secondary-button-hover-shadow": "0px 4px 10px rgba(0, 0, 0, 0.25)",
+            "primary-button-disabled-opacity": "1",
+            "primary-button-hover-border": "none",
+            "primary-button-disabled-border": "none",
+            "primary-button-hover-shadow": "0px 4px 10px rgba(0, 0, 0, 0.25)",
+            "banner-background-color": "#F2F2F2",
+            "dialog-background-color": provider1,
+            "primary-button-color": "#0067B8",
+            "text-color": provider3,
+            "secondary-button-color": "#EBEBEB",
+            "secondary-button-disabled-color": "rgba(0, 0, 0, 0.2)",
+            "secondary-button-border": "none"
+        };
+
+        ThemesController.createTheme(currentTheme1, currentTheme1);
+
+        expect(currentTheme1["background-color-between-page-and-dialog"]).toBe("rgba(18, 52, 86, 0.6)");
+        expect(currentTheme1["radio-button-hover-background-color"]).toBe("rgba(12, 34, 56, 0.8)");
+        expect(currentTheme1["radio-button-disabled-color"]).toBe("rgba(12, 34, 56, 0.2)");
+        expect(currentTheme1["radio-button-disabled-border-color"]).toBe("rgba(12, 34, 56, 0.2)");
+
+        ThemesController.createTheme(currentTheme2, currentTheme2);
+        expect(currentTheme2["radio-button-hover-background-color"]).toBe("rgba(21, 43, 65,0.72)");
+    });
+
+    test("Test createThemeStyle method", () => {
+        ThemesController.createThemeStyle();
+
+        testCreateThemeStyle("bannerStyle");
+        testCreateThemeStyle("textColorStyle");
+        testCreateThemeStyle("hyperLinkStyle");
+        
+        testCreateThemeStyle("cookieModalStyle");
+        testCreateThemeStyle("dialogStyle");
+        testCreateThemeStyle("closeIconStyle");
+
+        testCreateThemeStyle("secondaryButtonStyle");
+        testCreateThemeStyle("secondaryButtonHoverStyle");
+        testCreateThemeStyle("secondaryButtonFocusStyle");
+        testCreateThemeStyle("secondaryButtonDisabledStyle");
+
+        testCreateThemeStyle("primaryButtonStyle");
+        testCreateThemeStyle("primaryButtonHoverStyle");
+        testCreateThemeStyle("primaryButtonFocusStyle");
+        testCreateThemeStyle("primaryButtonDisabledStyle");
+
+        testCreateThemeStyle("radioButtonStyle");
+        testCreateThemeStyle("radioButtonCheckedStyle");
+        testCreateThemeStyle("radioButtonHoverStyle");
+        testCreateThemeStyle("radioButtonHoverAfterStyle");
+        testCreateThemeStyle("radioButtonFocusStyle");
+        testCreateThemeStyle("radioButtonFocusAfterStyle");
+        testCreateThemeStyle("radioButtonDisabledStyle");
+    });
+
+    test("When theme is unknown, applyTheme() would throw an error", () => {
+        let callBack = function() { return; };
+        let cc = new ConsentControl(testId, "en", callBack, undefined, undefined);
+        expect(() => cc.applyTheme("rare")).toThrowError("Theme not found error");
     });
 });
