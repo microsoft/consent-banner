@@ -72,11 +72,6 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
   color: $hyperlink-font-color;
 }
 
-.dialogTheme {
-  background-color: $dialog-background-color;
-  border: 1px solid $dialog-border-color;
-}
-
 .secondaryButtonTheme {
   background-color: $secondary-button-color;
   border: $secondary-button-border;
@@ -235,6 +230,9 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
   
   box-sizing: border-box;
   width: 640px;
+
+  background-color: $dialog-background-color;
+  border: 1px solid $dialog-border-color;
 }
 
 .closeModalIcon {

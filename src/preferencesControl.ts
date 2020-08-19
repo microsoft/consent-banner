@@ -37,7 +37,7 @@ export class PreferencesControl {
     public createPreferencesDialog(): void {
         let cookieModalInnerHtml = `
         <div role="presentation" tabindex="-1"></div>
-        <div role="dialog" aria-modal="true" aria-label="${ HtmlTools.escapeHtml(this.textResources.preferencesDialogTitle) }" class="${ styles.modalContainer } ${ styles.dialogTheme }" tabindex="-1">
+        <div role="dialog" aria-modal="true" aria-label="${ HtmlTools.escapeHtml(this.textResources.preferencesDialogTitle) }" class="${ styles.modalContainer }" tabindex="-1">
             <button aria-label="${ HtmlTools.escapeHtml(this.textResources.preferencesDialogCloseLabel) }" class="${ styles.closeModalIcon }" tabindex="0">&#x2715;</button>
             <div role="document" class="${ styles.modalBody }">
                 <div>
