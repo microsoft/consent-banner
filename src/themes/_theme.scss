@@ -1,0 +1,88 @@
+$secondary-button-disabled-opacity: 1;
+$secondary-button-hover-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+$primary-button-disabled-opacity: 1;
+$primary-button-hover-border: none;
+$primary-button-disabled-border: none;
+$primary-button-hover-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+
+$primary-button-color: #0067B8;
+$secondary-button-color: #EBEBEB;
+$secondary-button-disabled-color: rgba(0, 0, 0, 0.2);
+$secondary-button-border: none;
+
+$text-color: #000000;
+$hyperlink-font-color: #0067B8;
+
+$secondary-button-hover-color: #DBDBDB;
+$secondary-button-hover-border: none;
+$secondary-button-disabled-border: none;
+$secondary-button-focus-border-color: #000000;
+$secondary-button-text-color: #000000;
+$secondary-button-disabled-text-color: rgba(0, 0, 0, 0.2);
+
+$primary-button-hover-color: #0067B8;
+$primary-button-disabled-color: rgba(0, 120, 215, 0.2);
+$primary-button-border: none;
+$primary-button-focus-border-color: #000000;
+$primary-button-text-color: #FFFFFF;
+$primary-button-disabled-text-color: rgba(0, 0, 0, 0.2);
+
+.textColorTheme {
+  color: $text-color;
+}
+
+.hyperLinkTheme a {
+  color: $hyperlink-font-color;
+}
+
+.secondaryButtonTheme {
+  background-color: $secondary-button-color;
+  border: $secondary-button-border;
+  color: $secondary-button-text-color;
+  
+  &:hover {
+    color: $secondary-button-text-color;
+    background-color: $secondary-button-hover-color;
+    box-shadow: $secondary-button-hover-shadow;
+    border: $secondary-button-hover-border;
+  }
+  
+  &:focus {
+    background-color: $secondary-button-hover-color;
+    box-shadow: $secondary-button-hover-shadow;
+    border: 2px solid $secondary-button-focus-border-color;
+  }
+  
+  &:disabled {
+    opacity: $secondary-button-disabled-opacity;
+    color: $secondary-button-disabled-text-color;
+    background-color: $secondary-button-disabled-color;
+    border: $secondary-button-disabled-border;
+  }
+}
+
+.primaryButtonTheme {
+  border: $primary-button-border;
+  background-color: $primary-button-color;
+  color: $primary-button-text-color;
+  
+  &:hover {
+    color: $primary-button-text-color;
+    background-color: $primary-button-hover-color;
+    box-shadow: $primary-button-hover-shadow;
+    border: $primary-button-hover-border;
+  }
+  
+  &:focus {
+    background-color: $primary-button-hover-color;
+    box-shadow: $primary-button-hover-shadow;
+    border: 2px solid $primary-button-focus-border-color;
+  }
+  
+  &:disabled {
+    opacity: $primary-button-disabled-opacity;
+    color: $primary-button-disabled-text-color;
+    background-color: $primary-button-disabled-color;
+    border: $primary-button-disabled-border;
+  }
+}
