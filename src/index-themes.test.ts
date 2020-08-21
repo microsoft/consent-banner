@@ -1,16 +1,17 @@
 import { ConsentControl } from "./index";
+import * as styles from "./styles.scss";
+
 import { IOptions, IThemes, ITheme } from "./interfaces/Options";
 import { ThemesController } from "./themes/themesController";
 
 describe("Test themes in constructor", () => {
     let testId: string = "app";
 
-    function testCreateThemeStyle(id: string): void {
-        let bannerStyle = document.getElementById(id);
-        expect(bannerStyle).toBeTruthy();
-        expect(bannerStyle?.getAttribute("type")).toBe("text/css");
-        expect(bannerStyle?.nodeName).toBe("STYLE");
-        expect(bannerStyle?.parentNode).toEqual(document.head);
+    function testCreateThemeStyle(styleClassText: string): void {
+        let themesStyles = document.getElementById("themesStyles");
+        let isStyleValid = themesStyles?.innerHTML.indexOf(styleClassText) !== -1;
+
+        expect(isStyleValid).toBeTruthy();
     }
 
     beforeEach(() => {
@@ -1041,36 +1042,96 @@ describe("Test themes in constructor", () => {
     test("Test createThemeStyle method", () => {
         ThemesController.createThemeStyle();
 
-        testCreateThemeStyle("bannerStyle");
-        testCreateThemeStyle("textColorStyle");
-        testCreateThemeStyle("hyperLinkStyle");
+        let themesStyles = document.getElementById("themesStyles");
+        expect(themesStyles).toBeTruthy();
+        expect(themesStyles?.getAttribute("type")).toBe("text/css");
+        expect(themesStyles?.nodeName).toBe("STYLE");
+        expect(themesStyles?.parentNode).toEqual(document.head);
+
+        testCreateThemeStyle(`.${ styles.bannerBody } {`);
+        testCreateThemeStyle(`.${ styles.textColorTheme } {`);
+        testCreateThemeStyle(`.${ styles.hyperLinkTheme } a {`);
         
-        testCreateThemeStyle("cookieModalStyle");
-        testCreateThemeStyle("dialogStyle");
-        testCreateThemeStyle("closeIconStyle");
+        testCreateThemeStyle(`.${ styles.cookieModal } {`);
+        testCreateThemeStyle(`.${ styles.modalContainer } {`);
+        testCreateThemeStyle(`.${ styles.closeModalIcon } {`);
+        
+        testCreateThemeStyle(`.${ styles.secondaryButtonTheme } {`);
+        testCreateThemeStyle(`.${ styles.secondaryButtonTheme }:hover {`);
+        testCreateThemeStyle(`.${ styles.secondaryButtonTheme }:focus {`);
+        testCreateThemeStyle(`.${ styles.secondaryButtonTheme }:disabled {`);
 
-        testCreateThemeStyle("secondaryButtonStyle");
-        testCreateThemeStyle("secondaryButtonHoverStyle");
-        testCreateThemeStyle("secondaryButtonFocusStyle");
-        testCreateThemeStyle("secondaryButtonDisabledStyle");
+        testCreateThemeStyle(`.${ styles.primaryButtonTheme } {`);
+        testCreateThemeStyle(`.${ styles.primaryButtonTheme }:hover {`);
+        testCreateThemeStyle(`.${ styles.primaryButtonTheme }:focus {`);
+        testCreateThemeStyle(`.${ styles.primaryButtonTheme }:disabled {`);
 
-        testCreateThemeStyle("primaryButtonStyle");
-        testCreateThemeStyle("primaryButtonHoverStyle");
-        testCreateThemeStyle("primaryButtonFocusStyle");
-        testCreateThemeStyle("primaryButtonDisabledStyle");
-
-        testCreateThemeStyle("radioButtonStyle");
-        testCreateThemeStyle("radioButtonCheckedStyle");
-        testCreateThemeStyle("radioButtonHoverStyle");
-        testCreateThemeStyle("radioButtonHoverAfterStyle");
-        testCreateThemeStyle("radioButtonFocusStyle");
-        testCreateThemeStyle("radioButtonFocusAfterStyle");
-        testCreateThemeStyle("radioButtonDisabledStyle");
+        testCreateThemeStyle(`input[type="radio"].${ styles.cookieItemRadioBtn } + span::before {`);
+        testCreateThemeStyle(`input[type="radio"].${ styles.cookieItemRadioBtn }:checked + span::after {`);
+        testCreateThemeStyle(`input[type="radio"].${ styles.cookieItemRadioBtn } + span:hover::before {`);
+        testCreateThemeStyle(`input[type="radio"].${ styles.cookieItemRadioBtn } + span:hover::after {`);
+        testCreateThemeStyle(`input[type="radio"].${ styles.cookieItemRadioBtn } + span:focus::before {`);
+        testCreateThemeStyle(`input[type="radio"].${ styles.cookieItemRadioBtn } + span:focus::after {`);
+        testCreateThemeStyle(`input[type="radio"].${ styles.cookieItemRadioBtn }:disabled + span::before {`);
     });
 
     test("When theme is unknown, applyTheme() would throw an error", () => {
         let callBack = function() { return; };
         let cc = new ConsentControl(testId, "en", callBack, undefined, undefined);
         expect(() => cc.applyTheme("rare")).toThrowError("Theme not found error");
+    });
+
+    test("Test initialTheme", () => {
+        let callBack = function() { return; };
+        let options: IOptions = { };
+        let themes: IThemes = { };
+
+        options.initialTheme = "dark";
+        options.themes = themes;
+
+        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
+        cc.showBanner({});
+
+        let bannerBody = document.querySelector(`.${ styles.bannerBody }`)!;
+        expect(getComputedStyle(bannerBody).backgroundColor).toBe("rgb(36, 36, 36)");
+
+        let textColor = document.querySelector(`.${ styles.textColorTheme }`)!;
+        expect(getComputedStyle(textColor).color).toBe("rgb(227, 227, 227)");
+
+        let hyperLinkTheme = document.querySelector(`.${ styles.hyperLinkTheme } a`)!;
+        expect(getComputedStyle(hyperLinkTheme).color).toBe("rgb(77, 178, 255)");
+
+        let cookieModal = document.querySelector(`.${ styles.cookieModal }`)!;
+        expect(getComputedStyle(cookieModal).backgroundColor).toBe("rgba(23, 23, 23, 0.6)");
+
+        let modalContainer = document.querySelector(`.${ styles.modalContainer }`)!;
+        expect(getComputedStyle(modalContainer).backgroundColor).toBe("rgb(23, 23, 23)");
+        expect(getComputedStyle(modalContainer).border).toBe("1px solid #4db2ff");
+
+        let closeIcon = document.querySelector(`.${ styles.closeModalIcon }`)!;
+        expect(getComputedStyle(closeIcon).backgroundColor).toBe("rgb(23, 23, 23)");
+        expect(getComputedStyle(closeIcon).color).toBe("rgb(227, 227, 227)");
+
+        let primaryButtonTheme = <HTMLInputElement> document.querySelector(`.${ styles.primaryButtonTheme }`);
+        expect(getComputedStyle(primaryButtonTheme).opacity).toBe("0.5");
+        expect(getComputedStyle(primaryButtonTheme).border).toBe("1px solid rgba(255, 255, 255, 0)");
+        expect(getComputedStyle(primaryButtonTheme).backgroundColor).toBe("rgb(77, 178, 255)");
+        expect(getComputedStyle(primaryButtonTheme).color).toBe("black");
+
+        primaryButtonTheme.disabled = false;
+        expect(getComputedStyle(primaryButtonTheme).border).toBe("1px solid #4db2ff");
+        expect(getComputedStyle(primaryButtonTheme).backgroundColor).toBe("rgb(77, 178, 255)");
+        expect(getComputedStyle(primaryButtonTheme).color).toBe("black");
+
+        let secondaryButtonTheme = <HTMLInputElement> document.querySelector(`.${ styles.modalButtonReset }`);
+        expect(getComputedStyle(secondaryButtonTheme).opacity).toBe("0.5");
+        expect(getComputedStyle(secondaryButtonTheme).border).toBe("1px solid #242424");
+        expect(getComputedStyle(secondaryButtonTheme).backgroundColor).toBe("rgb(46, 46, 46)");
+        expect(getComputedStyle(secondaryButtonTheme).color).toBe("rgb(227, 227, 227)");
+
+        secondaryButtonTheme.disabled = false;
+        expect(getComputedStyle(secondaryButtonTheme).border).toBe("1px solid #c7c7c7");
+        expect(getComputedStyle(secondaryButtonTheme).backgroundColor).toBe("rgb(23, 23, 23)");
+        expect(getComputedStyle(secondaryButtonTheme).color).toBe("rgb(227, 227, 227)");
     });
 });
