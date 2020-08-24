@@ -1,3 +1,5 @@
+@import "./themes/theme";
+
 // Banner button size, can be changed
 $bannerBtnWidth: 150px;
 $bannerBtnHeight: 36px;
@@ -5,39 +7,12 @@ $bannerBtnHeight: 36px;
 /// Theme. 
 /// Default: Light
 $close-button-color: #666666;
-$secondary-button-disabled-opacity: 1;
-$secondary-button-hover-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
-$primary-button-disabled-opacity: 1;
-$primary-button-hover-border: none;
-$primary-button-disabled-border: none;
-$primary-button-hover-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
 
 $banner-background-color: #F2F2F2;
 $dialog-background-color: #FFFFFF;
-$primary-button-color: #0067B8;
-$text-color: #000000;
-$secondary-button-color: #EBEBEB;
-$secondary-button-disabled-color: rgba(0, 0, 0, 0.2);
-$secondary-button-border: none;
 
 $background-color-between-page-and-dialog: rgba(255, 255, 255, 0.6);
 $dialog-border-color: #0067B8;
-
-$hyperlink-font-color: #0067B8;
-
-$secondary-button-hover-color: #DBDBDB;
-$secondary-button-hover-border: none;
-$secondary-button-disabled-border: none;
-$secondary-button-focus-border-color: #000000;
-$secondary-button-text-color: #000000;
-$secondary-button-disabled-text-color: rgba(0, 0, 0, 0.2);
-
-$primary-button-hover-color: #0067B8;
-$primary-button-disabled-color: rgba(0, 120, 215, 0.2);
-$primary-button-border: none;
-$primary-button-focus-border-color: #000000;
-$primary-button-text-color: #FFFFFF;
-$primary-button-disabled-text-color: rgba(0, 0, 0, 0.2);
 
 $radio-button-border-color: #000000;
 $radio-button-checked-background-color: #000000;
@@ -100,8 +75,6 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
   
   /* identical to box height */
   line-height: 24px;
-
-  color: $text-color;
 }
 
 .bannerInformBody {
@@ -110,11 +83,9 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
   
   @include bannerFont(normal, 13px);
   line-height: 16px;
-  color: $text-color;
 
   /* Add styles to hyperlinks in case websites close the default styles for hyperlinks */
   & a {
-    color: $hyperlink-font-color;
     text-decoration: underline;
   }
 }
@@ -128,40 +99,21 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
 .bannerButton {
   margin: 4px;
   padding: 0;
-  border: $secondary-button-border;
 
   width: $bannerBtnWidth;
   height: $bannerBtnHeight;
-  background-color: $secondary-button-color;
   
   cursor: pointer;
   @include bannerFont(normal, 15px);
   line-height: 20px;
   text-align: center;
 
-  color: $secondary-button-text-color;
-  
-  &:hover {
-    color: $secondary-button-text-color;
-    background-color: $secondary-button-hover-color;
-    box-shadow: $secondary-button-hover-shadow;
-    border: $secondary-button-hover-border;
-  }
-
   &:focus {
-    background-color: $secondary-button-hover-color;
-    box-shadow: $secondary-button-hover-shadow;
-    
-    border: 2px solid $secondary-button-focus-border-color;
     box-sizing: border-box;
   }
 
   &:disabled {
-    opacity: $secondary-button-disabled-opacity;
-    color: $secondary-button-disabled-text-color;
-    background-color: $secondary-button-disabled-color;
     cursor: not-allowed;
-    border: $secondary-button-disabled-border;
   }
 }
 
@@ -191,10 +143,11 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
     right: auto;
   }
   
-  background-color: $dialog-background-color;
   box-sizing: border-box;
-  border: 1px solid $dialog-border-color;
   width: 640px;
+
+  background-color: $dialog-background-color;
+  border: 1px solid $dialog-border-color;
 }
 
 .closeModalIcon {
@@ -232,7 +185,6 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
   @include bannerFont(600, 20px);
   line-height: 24px;
   text-transform: none;
-  color: $text-color;
 }
 
 .modalContent {
@@ -247,11 +199,9 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
 
   @include bannerFont(normal, 15px);
   line-height: 20px;
-  color: $text-color;
 
   /* Add styles to hyperlinks in case websites close the default styles for hyperlinks */
   & a {
-    color: $hyperlink-font-color;
     text-decoration: underline;
   }
 }
@@ -274,7 +224,6 @@ li.cookieListItem {
 
   @include bannerFont(600, 18px);
   line-height: 24px;
-  color: $text-color;
 
   /* Close the default styles which adds decimal numbers in front of list items */
   list-style: none;
@@ -294,7 +243,6 @@ li.cookieListItem {
   @include bannerFont(600, 18px);
   line-height: 24px;
   text-transform: none;
-  color: $text-color;
 }
 
 .cookieListItemDescription {
@@ -306,7 +254,6 @@ li.cookieListItem {
 
   @include bannerFont(normal, 15px);
   line-height: 20px;
-  color: $text-color;
 }
 
 .cookieItemRadioBtnGroup {
@@ -315,63 +262,83 @@ li.cookieListItem {
 
 .cookieItemRadioBtnCtrl {
   display: inline-block;
+  position: relative;
   margin : {
     bottom: 16px;
   }
 }
 
 @mixin defineRaioInput {
-  border-radius: 50%;
-  outline: none;
-
-  &:checked::after {
+  & + span::before {
     display: block;
     position: absolute;
-    top: 4px;
-    left: 4px;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    content: "";
     border-radius: 50%;
+    border: 1px solid $radio-button-border-color; 
+    background-color: $dialog-background-color;
+  }
+
+  &:not(:disabled) + span {
+    &:hover {
+      &::before {
+        border: 1px solid $radio-button-hover-border-color;
+      }
+
+      &::after {
+        display: block;
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        height: 10px;
+        width: 10px;
+        content: "";
+        border-radius: 50%;
+        background-color: $radio-button-hover-background-color;
+      }
+    }
+
+    &:focus {
+      &::before {
+        border: 1px solid $radio-button-hover-border-color;
+      }
+
+      &::after {
+        display: block;
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        height: 10px;
+        width: 10px;
+        content: "";
+        border-radius: 50%;
+        background-color: $radio-button-checked-background-color;
+      }
+    }
+  }
+
+  &:checked + span::after {
+    display: block;
+    position: absolute;
+    top: 5px;
+    left: 5px;
     height: 10px;
     width: 10px;
     content: "";
+    border-radius: 50%;
     background-color: $radio-button-checked-background-color;
   }
 
-  &:hover {
-    border: 1px solid $radio-button-hover-border-color;
-    
-    &:after {
-      display: block;
-      position: absolute;
-      top: 4px;
-      left: 4px;
-      border-radius: 50%;
-      height: 10px;
-      width: 10px;
-      content: "";
-      background-color: $radio-button-hover-background-color;
-    }
-  }
-
-  &:focus {
-    border: 1px solid $radio-button-hover-border-color;
-    
-    &:after {
-      display: block;
-      position: absolute;
-      top: 4px;
-      left: 4px;
-      border-radius: 50%;
-      height: 10px;
-      width: 10px;
-      content: "";
-      background-color: $radio-button-checked-background-color;
-    }
-  }
-
-  &:disabled {
-    background-color: $radio-button-disabled-color;
-    border: 1px solid $radio-button-disabled-border-color;
+  &:disabled + span {
     cursor: not-allowed;
+
+    &::before {
+      border: 1px solid $radio-button-disabled-border-color;
+      background-color: $radio-button-disabled-color;
+    }
   }
 }
 
@@ -386,9 +353,10 @@ input[type="radio"].cookieItemRadioBtn {
 
   width: 20px;
   height: 20px;
+  border-radius: 50%;
+  outline: none;
 
   cursor: pointer;
-  border: 1px solid $radio-button-border-color;
   box-sizing: border-box;
 
   appearance: none;
@@ -400,7 +368,6 @@ input[type="radio"].cookieItemRadioBtn {
 .cookieItemRadioBtnLabel {
   display: block;
   float: right;
-  position: relative;   /* Adjust the position */
   margin : {
     left: 8px;
     right: 34px;
@@ -414,7 +381,7 @@ input[type="radio"].cookieItemRadioBtn {
   /* identical to box height, or 133% */
 
   text-transform: none;
-  color: $text-color;
+  cursor: pointer;
 
   @include rtlDesign(0 8px 0 34px, 0, left);
 }
@@ -428,7 +395,6 @@ input[type="radio"].cookieItemRadioBtn {
 
 .modalButtonReset {
   padding: 0;
-  border: $secondary-button-border;
 
   width: 278px;
   height: 36px;
@@ -440,30 +406,12 @@ input[type="radio"].cookieItemRadioBtn {
   /* identical to box height, or 133% */
   text-align: center;
 
-  color: $secondary-button-text-color;
-  background-color: $secondary-button-color;
-
-  &:hover {
-    color: $secondary-button-text-color;
-    background-color: $secondary-button-hover-color;
-    box-shadow: $secondary-button-hover-shadow;
-    border: $secondary-button-hover-border;
-  }
-
   &:focus {
-    background-color: $secondary-button-hover-color;
-    box-shadow: $secondary-button-hover-shadow;
-    
-    border: 2px solid $secondary-button-focus-border-color;
     box-sizing: border-box;
   }
 
   &:disabled {
-    opacity: $secondary-button-disabled-opacity;
-    color: $secondary-button-disabled-text-color;
-    background-color: $secondary-button-disabled-color;
     cursor: not-allowed;
-    border: $secondary-button-disabled-border;
   }
 }
 
@@ -473,7 +421,6 @@ input[type="radio"].cookieItemRadioBtn {
     left: 10px;
   }
   padding: 0;
-  border: $primary-button-border;
 
   width: 278px;
   height: 36px;
@@ -484,31 +431,13 @@ input[type="radio"].cookieItemRadioBtn {
   line-height: 20px;
   /* identical to box height, or 133% */
   text-align: center;
-  
-  color: $primary-button-text-color;
-  background-color: $primary-button-color;
-
-  &:hover {
-    color: $primary-button-text-color;
-    background-color: $primary-button-hover-color;
-    box-shadow: $primary-button-hover-shadow;
-    border: $primary-button-hover-border;
-  }
 
   &:focus {
-    background-color: $primary-button-hover-color;
-    box-shadow: $primary-button-hover-shadow;
-    
-    border: 2px solid $primary-button-focus-border-color;
     box-sizing: border-box;
   }
 
   &:disabled {
-    opacity: $primary-button-disabled-opacity;
-    color: $primary-button-disabled-text-color;
-    background-color: $primary-button-disabled-color;
     cursor: not-allowed;
-    border: $primary-button-disabled-border;
   }
 
   @include rtlDesign(0 10px 0 0, 0, left);

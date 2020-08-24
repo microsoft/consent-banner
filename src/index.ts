@@ -1,9 +1,10 @@
 import * as styles from './styles.scss';
 import { PreferencesControl } from './preferencesControl';
 import { HtmlTools } from './htmlTools';
+import { ThemesController } from './themes/themesController';
 
 import { RTL_LANGUAGE } from './language-list.const';
-import { DEFAULT_THEMES } from './theme-styles';
+import { DEFAULT_THEMES } from './themes/theme-styles';
 
 import { ICookieCategory } from './interfaces/CookieCategories';
 import { ITextResources, IOptions, IThemes, ITheme } from './interfaces/Options';
@@ -99,6 +100,7 @@ export class ConsentControl {
             }
         }
 
+        ThemesController.createThemeStyle();
         if (options?.initialTheme) {
             this.applyTheme(options.initialTheme);
         }
@@ -129,160 +131,24 @@ export class ConsentControl {
      */
     public createTheme(name: string, theme: ITheme): void {
         let typeName = <keyof IThemes> name;
+        this.themes[typeName] = theme;
 
-        if (!this.themes[typeName]) {
-            this.themes[typeName] = theme;
-        }
-        else {
-            let currentTheme = <ITheme> this.themes[typeName];
-    
-            for (let key of Object.keys(currentTheme)) {
-                let typeKey = <keyof ITheme> key;
-    
-                if (theme[typeKey]) {
-                    currentTheme[typeKey] = <string> theme[typeKey];
-                }
-            }
-        }
-
-        let currentTheme = <ITheme> this.themes[typeName];
-
-        // Styles that can be determined by another one
-
-        // determined by "dialog-background-color"
-        if (!theme["background-color-between-page-and-dialog"]) {
-            let provided: string = theme["dialog-background-color"];
-            this.setMissingColorFromAnotherProperty("background-color-between-page-and-dialog", provided, 0.6, currentTheme);
-        }
-        if (!theme["primary-button-text-color"]) {
-            currentTheme["primary-button-text-color"] = theme["dialog-background-color"];
-        }
-        if (!theme["primary-button-disabled-text-color"]) {
-            currentTheme["primary-button-disabled-text-color"] = theme["dialog-background-color"];
-        }
-
-        // determined by "primary-button-color"
-        if (!theme["dialog-border-color"]) {
-            currentTheme["dialog-border-color"] = theme["primary-button-color"];
-        }
-        if (!theme["hyperlink-font-color"]) {
-            currentTheme["hyperlink-font-color"] = theme["primary-button-color"];
-        }
-        if (!theme["primary-button-hover-color"]) {
-            currentTheme["primary-button-hover-color"] = theme["primary-button-color"];
-        }
-        if (!theme["primary-button-disabled-color"]) {
-            currentTheme["primary-button-disabled-color"] = theme["primary-button-color"];
-        }
-        if (!theme["primary-button-border"]) {
-            currentTheme["primary-button-border"] = "1px solid " + theme["primary-button-color"];
-        }
-        if (!theme["primary-button-focus-border-color"]) {
-            currentTheme["primary-button-focus-border-color"] = theme["primary-button-color"];
-        }
-        if (!theme["radio-button-hover-border-color"]) {
-            currentTheme["radio-button-hover-border-color"] = theme["primary-button-color"];
-        }
-
-        // determined by "text-color"
-        if (!theme["secondary-button-text-color"]) {
-            currentTheme["secondary-button-text-color"] = theme["text-color"];
-        }
-        if (!theme["secondary-button-disabled-text-color"]) {
-            currentTheme["secondary-button-disabled-text-color"] = theme["text-color"];
-        }
-        if (!theme["radio-button-border-color"]) {
-            currentTheme["radio-button-border-color"] = theme["text-color"];
-        }
-        if (!theme["radio-button-checked-background-color"]) {
-            currentTheme["radio-button-checked-background-color"] = theme["text-color"];
-        }
-        if (!theme["radio-button-hover-background-color"]) {
-            let provided: string = theme["text-color"];
-            this.setMissingColorFromAnotherProperty("radio-button-hover-background-color", provided, 0.8, currentTheme);
-        }
-        if (!theme["radio-button-disabled-color"]) {
-            let provided: string = theme["text-color"];
-            this.setMissingColorFromAnotherProperty("radio-button-disabled-color", provided, 0.2, currentTheme);
-        }
-        if (!theme["radio-button-disabled-border-color"]) {
-            let provided: string = theme["text-color"];
-            this.setMissingColorFromAnotherProperty("radio-button-disabled-border-color", provided, 0.2, currentTheme);
-        }
-
-        // determined by "secondary-button-color"
-        if (!theme["secondary-button-hover-color"]) {
-            currentTheme["secondary-button-hover-color"] = theme["secondary-button-color"];
-        }
-
-        // determined by "secondary-button-disabled-color"
-        if (!theme["secondary-button-disabled-border"]) {
-            currentTheme["secondary-button-disabled-border"] = "1px solid " + theme["secondary-button-disabled-color"];
-        }
-        
-        // determined by "secondary-button-border"
-        if (!theme["secondary-button-hover-border"]) {
-            currentTheme["secondary-button-hover-border"] = theme["secondary-button-border"];
-        }
-        if (!theme["secondary-button-focus-border-color"]) {
-            let secondaryBtnBorderElement: string[] = theme["secondary-button-border"].split(" ");
-            currentTheme["secondary-button-focus-border-color"] = secondaryBtnBorderElement[secondaryBtnBorderElement.length - 1];
-        }
+        // Determine optional styles
+        ThemesController.createTheme(<ITheme> this.themes[typeName], theme);
     }
 
     /**
-     * Set missing color from another provided color
-     * 
-     * e.g.: 
-     * provider: #ffffff; missing: rgba(255, 255, 255, transparencyFactor)
-     * provider: rgb(255, 255, 255); missing: rgba(255, 255, 255, transparencyFactor)
-     * provider: rgb(255, 255, 255, 1); missing: rgba(255, 255, 255, transparencyFactor)
-     * 
-     * @param {keyof ITheme} missing missing property in the theme
-     * @param {string} provider the provided property in the theme
-     * @param {number} transparencyFactor the alpha channel that will be used in the missing property
-     * @param {ITheme} currentTheme the target theme that will be set
-     */
-    private setMissingColorFromAnotherProperty(missing: keyof ITheme, 
-                                               provider: string, 
-                                               transparencyFactor: number,  
-                                               currentTheme: ITheme): void {
-        
-        // provider: #ffffff; missing: rgba(255, 255, 255, transparencyFactor)
-        if (provider.startsWith("#")) {
-            let hexColor = parseInt(provider, 16);
-            let r = (hexColor >> 16) & 255;
-            let g = (hexColor >> 8) & 255;
-            let b = hexColor & 255;
-
-            currentTheme[missing] = "rgba(" + r + ", " + g + ", " + b + ", " + transparencyFactor + ")";
-        }
-        // provider: rgb(255, 255, 255); missing: rgba(255, 255, 255, transparencyFactor)
-        else if (provider.startsWith("rgb(")) {
-            let missingColor = "rgba" + provider.substring(3, provider.length - 1) + ", " + transparencyFactor + ")";
-            currentTheme[missing] = missingColor;
-        }
-        // provider: rgb(255, 255, 255, 1); missing: rgba(255, 255, 255, transparencyFactor)
-        else if (provider.startsWith("rgba")) {
-            let rgbIdx = provider.lastIndexOf(",");
-            let transparency = provider.substring(rgbIdx + 1, provider.length - 1);
-
-            let newTransparency = parseInt(transparency) * transparencyFactor;
-            let missingColor = provider.substring(0, rgbIdx + 1) + newTransparency + ")";
-            currentTheme[missing] = missingColor;
-        }
-    }
-
-    /**
-     * 
      * Apply the theme and change banner and preferences dialog's color 
-     * 
-     * TODO
      * 
      * @param {string} themeName theme that will be applied
      */
     public applyTheme(themeName: string): void {
-        ;
+        if (!this.themes[themeName]) {
+            throw new Error("Theme not found error");
+        }
+
+        let theme: ITheme = <ITheme> this.themes[themeName];
+        ThemesController.applyTheme(theme);
     }
 
     /**
@@ -298,7 +164,7 @@ export class ConsentControl {
             let meta = document.createElement('meta');
             meta.name = "viewport";
             meta.content = "width=device-width, initial-scale=1.0";
-            document.getElementsByTagName('head')[0].appendChild(meta);
+            document.head.appendChild(meta);
         }
 
         // Remove existing banner and preference dialog
@@ -314,15 +180,15 @@ export class ConsentControl {
 
         const bannerInnerHtml = `
         <div class="${ styles.bannerInform }">
-            <span class="${ styles.infoIcon }">${ infoIcon }</span> <!--  used for icon  -->
-            <p class="${ styles.bannerInformBody }">
+            <span class="${ styles.infoIcon } ${ styles.textColorTheme }">${ infoIcon }</span> <!--  used for icon  -->
+            <p class="${ styles.bannerInformBody } ${ styles.hyperLinkTheme } ${ styles.textColorTheme }">
                 ${ this.textResources.bannerMessageHtml }
             </p>
         </div>
 
         <div class="${ styles.buttonGroup }">
-            <button type="button" class="${ styles.bannerButton }">${ HtmlTools.escapeHtml(this.textResources.acceptAllLabel) }</button>
-            <button type="button" class="${ styles.bannerButton }">${ HtmlTools.escapeHtml(this.textResources.moreInfoLabel) }</button>
+            <button type="button" class="${ styles.bannerButton } ${ styles.secondaryButtonTheme }">${ HtmlTools.escapeHtml(this.textResources.acceptAllLabel) }</button>
+            <button type="button" class="${ styles.bannerButton } ${ styles.secondaryButtonTheme }">${ HtmlTools.escapeHtml(this.textResources.moreInfoLabel) }</button>
         </div>
         `;
 
