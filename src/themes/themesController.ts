@@ -127,10 +127,10 @@ export class ThemesController {
         }`;
         newStyles += newHyperLinkStyle;
         
-        newStyles += this.setDialogStyle(theme);
-        newStyles += this.setPrimaryBtnStyle(theme);
-        newStyles += this.setSecondaryBtnStyle(theme);
-        newStyles += this.setRadioBtnStyle(theme);
+        newStyles += this.buildDialogStyle(theme);
+        newStyles += this.buildPrimaryBtnStyle(theme);
+        newStyles += this.buildSecondaryBtnStyle(theme);
+        newStyles += this.buildRadioBtnStyle(theme);
 
         document.getElementById('ms-consent-banner-theme-styles')!.innerHTML = newStyles;
     }
@@ -183,7 +183,7 @@ export class ThemesController {
      * 
      * @param {ITheme} theme theme that will be applied to dialog
      */
-    private static setDialogStyle(theme: ITheme): string {
+    private static buildDialogStyle(theme: ITheme): string {
         let newStyles = '';
 
         // overwrite cookieModal styles (background between page and dialog)
@@ -214,7 +214,7 @@ export class ThemesController {
      * 
      * @param {ITheme} theme theme that will be applied to secondary button
      */
-    private static setSecondaryBtnStyle(theme: ITheme): string {
+    private static buildSecondaryBtnStyle(theme: ITheme): string {
         let newStyles = '';
 
         let newSecondaryBtnStyle = `.${ styles.secondaryButtonTheme } {
@@ -255,7 +255,7 @@ export class ThemesController {
      * 
      * @param {ITheme} theme theme that will be applied to primary button
      */
-    private static setPrimaryBtnStyle(theme: ITheme): string {
+    private static buildPrimaryBtnStyle(theme: ITheme): string {
         let newStyles = '';
 
         let newPrimaryBtnStyle = `.${ styles.primaryButtonTheme } {
@@ -296,7 +296,7 @@ export class ThemesController {
      * 
      * @param {ITheme} theme theme that will be applied to radio button
      */
-    private static setRadioBtnStyle(theme: ITheme): string {
+    private static buildRadioBtnStyle(theme: ITheme): string {
         let newStyles = '';
 
         let newRadioBtnStyle = `input[type="radio"].${ styles.cookieItemRadioBtn } + span::before {
