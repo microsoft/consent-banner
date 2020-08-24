@@ -98,19 +98,9 @@ export class ThemesController {
     public static createThemeStyle(): void {
         let themesStyles = document.createElement('style');
         themesStyles.type = 'text/css';
-        themesStyles.id = 'themesStyles';
+        themesStyles.id = 'ms-consent-banner-theme-styles';
 
-        let bannerStyle = `.${ styles.bannerBody } {}`;
-        let textColorStyle = `.${ styles.textColorTheme } {}`;
-        let hyperLinkStyle = `.${ styles.hyperLinkTheme } a {}`;
-
-        themesStyles.innerHTML = bannerStyle + textColorStyle + hyperLinkStyle;
         document.head.appendChild(themesStyles);
-
-        this.createDialogStyle();
-        this.createPrimaryBtnStyle();
-        this.createSecondaryBtnStyle();
-        this.createRadioBtnStyle();
     }
 
     /**
@@ -120,36 +110,29 @@ export class ThemesController {
      * @param {ITheme} theme theme that will be applied
      */
     public static applyTheme(theme: ITheme): void {
+        let newStyles = '';
 
-        // overwrite banner styles
-        let bannerStyleClass = `.${ styles.bannerBody } {`;
         let newBannerStyle = `.${ styles.bannerBody } {
             background-color: ${ theme["banner-background-color"] } !important;
         }`;
+        newStyles += newBannerStyle;
         
-        this.setStyleInnerHTML(bannerStyleClass, newBannerStyle);
-        
-        // overwrite text color styles
-        let textColorStyleClass = `.${ styles.textColorTheme } {`;
         let newTextColorStyle = `.${ styles.textColorTheme } {
             color: ${ theme["text-color"] } !important;
         }`;
+        newStyles += newTextColorStyle;
 
-        this.setStyleInnerHTML(textColorStyleClass, newTextColorStyle);
-
-        // overwrite hyper link styles
-        let hyperLinkStyleClass = `.${ styles.hyperLinkTheme } a {`;
         let newHyperLinkStyle = `.${ styles.hyperLinkTheme } a {
             color: ${ theme["hyperlink-font-color"] } !important;
         }`;
+        newStyles += newHyperLinkStyle;
         
-        this.setStyleInnerHTML(hyperLinkStyleClass, newHyperLinkStyle);
-        
-        this.setDialogStyle(theme);
-        this.setPrimaryBtnStyle(theme);
-        this.setSecondaryBtnStyle(theme);
-        this.setRadioBtnStyle(theme);
+        newStyles += this.setDialogStyle(theme);
+        newStyles += this.setPrimaryBtnStyle(theme);
+        newStyles += this.setSecondaryBtnStyle(theme);
+        newStyles += this.setRadioBtnStyle(theme);
 
+        document.getElementById('ms-consent-banner-theme-styles')!.innerHTML = newStyles;
     }
 
     /**
@@ -196,120 +179,34 @@ export class ThemesController {
     }
 
     /**
-     * Create theme elements for the preferences dialog
-     */
-    private static createDialogStyle(): void {
-        let themesStyles = <HTMLElement> document.getElementById('themesStyles');
-
-        let cookieModalStyle = `.${ styles.cookieModal } {}`;
-        themesStyles.innerHTML += cookieModalStyle;
-
-        let dialogStyle = `.${ styles.modalContainer } {}`;
-        themesStyles.innerHTML += dialogStyle;
-
-        let closeIconStyle = `.${ styles.closeModalIcon } {}`;
-        themesStyles.innerHTML += closeIconStyle;
-    }
-
-    /**
-     * Create theme elements for secondary button
-     */
-    private static createSecondaryBtnStyle(): void {
-        let themesStyles = <HTMLElement> document.getElementById('themesStyles');
-
-        let secondaryButtonStyle = `.${ styles.secondaryButtonTheme } {}`;
-        themesStyles.innerHTML += secondaryButtonStyle;
-
-        let secondaryButtonHoverStyle = `.${ styles.secondaryButtonTheme }:hover {}`;
-        themesStyles.innerHTML += secondaryButtonHoverStyle;
-
-        let secondaryButtonFocusStyle = `.${ styles.secondaryButtonTheme }:focus {}`;
-        themesStyles.innerHTML += secondaryButtonFocusStyle;
-
-        let secondaryButtonDisabledStyle = `.${ styles.secondaryButtonTheme }:disabled {}`;
-        themesStyles.innerHTML += secondaryButtonDisabledStyle;
-    }
-
-    /**
-     * Create theme elements for primary button
-     */
-    private static createPrimaryBtnStyle(): void {
-        let themesStyles = <HTMLElement> document.getElementById('themesStyles');
-
-        let primaryButtonStyle = `.${ styles.primaryButtonTheme } {}`;
-        themesStyles.innerHTML += primaryButtonStyle;
-
-        let primaryButtonHoverStyle = `.${ styles.primaryButtonTheme }:hover {}`;
-        themesStyles.innerHTML += primaryButtonHoverStyle;
-
-        let primaryButtonFocusStyle = `.${ styles.primaryButtonTheme }:focus {}`;
-        themesStyles.innerHTML += primaryButtonFocusStyle;
-
-        let primaryButtonDisabledStyle = `.${ styles.primaryButtonTheme }:disabled {}`;
-        themesStyles.innerHTML += primaryButtonDisabledStyle;
-    }
-
-    /**
-     * Create theme elements for radio button
-     */
-    private static createRadioBtnStyle(): void {
-        let themesStyles = <HTMLElement> document.getElementById('themesStyles');
-
-        let radioButtonStyle = `input[type="radio"].${ styles.cookieItemRadioBtn } + span::before {}`;
-        themesStyles.innerHTML += radioButtonStyle;
-
-        let radioButtonCheckedStyle = `input[type="radio"].${ styles.cookieItemRadioBtn }:checked + span::after {}`;
-        themesStyles.innerHTML += radioButtonCheckedStyle;
-
-        let radioButtonHoverStyle = `input[type="radio"].${ styles.cookieItemRadioBtn } + span:hover::before {}`;
-        themesStyles.innerHTML += radioButtonHoverStyle;
-
-        let radioButtonHoverAfterStyle = `input[type="radio"].${ styles.cookieItemRadioBtn } + span:hover::after {}`;
-        themesStyles.innerHTML += radioButtonHoverAfterStyle;
-
-        let radioButtonFocusStyle = `input[type="radio"].${ styles.cookieItemRadioBtn } + span:focus::before {}`;
-        themesStyles.innerHTML += radioButtonFocusStyle;
-
-        let radioButtonFocusAfterStyle = `input[type="radio"].${ styles.cookieItemRadioBtn } + span:focus::after {}`;
-        themesStyles.innerHTML += radioButtonFocusAfterStyle;
-
-        let radioButtonDisabledStyle = `input[type="radio"].${ styles.cookieItemRadioBtn }:disabled + span::before {}`;
-        themesStyles.innerHTML += radioButtonDisabledStyle;
-    }
-
-    /**
      * Apply the theme to dialog
      * 
      * @param {ITheme} theme theme that will be applied to dialog
      */
-    private static setDialogStyle(theme: ITheme): void {
+    private static setDialogStyle(theme: ITheme): string {
+        let newStyles = '';
 
         // overwrite cookieModal styles (background between page and dialog)
-        let cookieModalStyleClass = `.${ styles.cookieModal } {`;
         let newCookieModalStyle = `.${ styles.cookieModal } {
             background-color: ${ theme["background-color-between-page-and-dialog"] } !important;
         }`;
-
-        this.setStyleInnerHTML(cookieModalStyleClass, newCookieModalStyle);
+        newStyles += newCookieModalStyle;
 
         // overwrite preferences dialog styles
-        let dialogStyleClass = `.${ styles.modalContainer } {`;
         let newDialogStyle = `.${ styles.modalContainer } {
             background-color: ${ theme["dialog-background-color"] } !important;
             border: 1px solid ${ theme["dialog-border-color"] } !important;
         }`;
-
-        this.setStyleInnerHTML(dialogStyleClass, newDialogStyle);
+        newStyles += newDialogStyle;
 
         // overwrite close button styles
-        let closeIconStyleClass = `.${ styles.closeModalIcon } {`;
         let newCloseIconStyle = `.${ styles.closeModalIcon } {
             color: ${ theme["close-button-color"] } !important;
             background-color: ${ theme["dialog-background-color"] } !important;
         }`;
+        newStyles += newCloseIconStyle;
 
-        this.setStyleInnerHTML(closeIconStyleClass, newCloseIconStyle);
-
+        return newStyles;
     }
 
     /**
@@ -317,44 +214,40 @@ export class ThemesController {
      * 
      * @param {ITheme} theme theme that will be applied to secondary button
      */
-    private static setSecondaryBtnStyle(theme: ITheme): void {
-        let secondaryBtnStyleClass = `.${ styles.secondaryButtonTheme } {`;
+    private static setSecondaryBtnStyle(theme: ITheme): string {
+        let newStyles = '';
+
         let newSecondaryBtnStyle = `.${ styles.secondaryButtonTheme } {
             border: ${ theme["secondary-button-border"] } !important;
             background-color: ${ theme["secondary-button-color"] } !important;
             color: ${ theme["secondary-button-text-color"] } !important;
         }`;
+        newStyles += newSecondaryBtnStyle;
 
-        this.setStyleInnerHTML(secondaryBtnStyleClass, newSecondaryBtnStyle);
-
-        let secondaryBtnHoverStyleClass = `.${ styles.secondaryButtonTheme }:hover {`;
         let newSecondaryBtnHoverStyle = `.${ styles.secondaryButtonTheme }:hover {
             color: ${ theme["secondary-button-text-color"] } !important;
             background-color: ${ theme["secondary-button-hover-color"] } !important;
             box-shadow: ${ theme["secondary-button-hover-shadow"] } !important;
             border: ${ theme["secondary-button-hover-border"] } !important;
         }`;
+        newStyles += newSecondaryBtnHoverStyle;
 
-        this.setStyleInnerHTML(secondaryBtnHoverStyleClass, newSecondaryBtnHoverStyle);
-
-        let secondaryBtnFocusStyleClass = `.${ styles.secondaryButtonTheme }:focus {`;
         let newSecondaryBtnFocusStyle = `.${ styles.secondaryButtonTheme }:focus {
             background-color: ${ theme["secondary-button-hover-color"] } !important;
             box-shadow: ${ theme["secondary-button-hover-shadow"] } !important;
             border: 2px solid ${ theme["secondary-button-focus-border-color"] } !important;
         }`;
+        newStyles += newSecondaryBtnFocusStyle;
 
-        this.setStyleInnerHTML(secondaryBtnFocusStyleClass, newSecondaryBtnFocusStyle);
-
-        let secondaryBtnDisabledStyleClass = `.${ styles.secondaryButtonTheme }:disabled {`;
         let newSecondaryBtnDisabledStyle = `.${ styles.secondaryButtonTheme }:disabled {
             opacity: ${ theme["secondary-button-disabled-opacity"] } !important;
             color: ${ theme["secondary-button-disabled-text-color"] } !important;
             background-color: ${ theme["secondary-button-disabled-color"] } !important;
             border: ${ theme["secondary-button-disabled-border"] } !important;
         }`;
+        newStyles += newSecondaryBtnDisabledStyle;
 
-        this.setStyleInnerHTML(secondaryBtnDisabledStyleClass, newSecondaryBtnDisabledStyle);
+        return newStyles;
     }
 
     /**
@@ -362,44 +255,40 @@ export class ThemesController {
      * 
      * @param {ITheme} theme theme that will be applied to primary button
      */
-    private static setPrimaryBtnStyle(theme: ITheme): void {
-        let primaryBtnStyleClass = `.${ styles.primaryButtonTheme } {`;
+    private static setPrimaryBtnStyle(theme: ITheme): string {
+        let newStyles = '';
+
         let newPrimaryBtnStyle = `.${ styles.primaryButtonTheme } {
             border: ${ theme["primary-button-border"] } !important;
             background-color: ${ theme["primary-button-color"] } !important;
             color: ${ theme["primary-button-text-color"] } !important;
         }`;
+        newStyles += newPrimaryBtnStyle;
 
-        this.setStyleInnerHTML(primaryBtnStyleClass, newPrimaryBtnStyle);
-
-        let primaryBtnHoverStyleClass = `.${ styles.primaryButtonTheme }:hover {`;
         let newPrimaryBtnHoverStyle = `.${ styles.primaryButtonTheme }:hover {
             color: ${ theme["primary-button-text-color"] } !important;
             background-color: ${ theme["primary-button-hover-color"] } !important;
             box-shadow: ${ theme["primary-button-hover-shadow"] } !important;
             border: ${ theme["primary-button-hover-border"] } !important;
         }`;
+        newStyles += newPrimaryBtnHoverStyle;
 
-        this.setStyleInnerHTML(primaryBtnHoverStyleClass, newPrimaryBtnHoverStyle);
-
-        let primaryBtnFocusStyleClass = `.${ styles.primaryButtonTheme }:focus {`;
         let newPrimaryBtnFocusStyle = `.${ styles.primaryButtonTheme }:focus {
             background-color: ${ theme["primary-button-hover-color"] } !important;
             box-shadow: ${ theme["primary-button-hover-shadow"] } !important;
             border: 2px solid ${ theme["primary-button-focus-border-color"] } !important;
         }`;
+        newStyles += newPrimaryBtnFocusStyle;
 
-        this.setStyleInnerHTML(primaryBtnFocusStyleClass, newPrimaryBtnFocusStyle);
-
-        let primaryBtnDisabledStyleClass = `.${ styles.primaryButtonTheme }:disabled {`;
         let newPrimaryBtnDisabledStyle = `.${ styles.primaryButtonTheme }:disabled {
             opacity: ${ theme["primary-button-disabled-opacity"] } !important;
             color: ${ theme["primary-button-disabled-text-color"] } !important;
             background-color: ${ theme["primary-button-disabled-color"] } !important;
             border: ${ theme["primary-button-disabled-border"] } !important;
         }`;
+        newStyles += newPrimaryBtnDisabledStyle;
 
-        this.setStyleInnerHTML(primaryBtnDisabledStyleClass, newPrimaryBtnDisabledStyle);
+        return newStyles;
     }
 
     /**
@@ -407,74 +296,46 @@ export class ThemesController {
      * 
      * @param {ITheme} theme theme that will be applied to radio button
      */
-    private static setRadioBtnStyle(theme: ITheme): void {
-        let radioBtnStyleClass = `input[type="radio"].${ styles.cookieItemRadioBtn } + span::before {`;
+    private static setRadioBtnStyle(theme: ITheme): string {
+        let newStyles = '';
+
         let newRadioBtnStyle = `input[type="radio"].${ styles.cookieItemRadioBtn } + span::before {
             border: 1px solid ${ theme["radio-button-border-color"] } !important;
             background-color: ${ theme["dialog-background-color"] } !important;
         }`;
+        newStyles += newRadioBtnStyle;
 
-        this.setStyleInnerHTML(radioBtnStyleClass, newRadioBtnStyle);
-
-        let radioBtnCheckedStyleClass = `input[type="radio"].${ styles.cookieItemRadioBtn }:checked + span::after {`;
         let newRadioBtnCheckedStyle = `input[type="radio"].${ styles.cookieItemRadioBtn }:checked + span::after {
             background-color: ${ theme["radio-button-checked-background-color"] } !important;
         }`;
+        newStyles += newRadioBtnCheckedStyle;
 
-        this.setStyleInnerHTML(radioBtnCheckedStyleClass, newRadioBtnCheckedStyle);
-
-        let radioBtnHoverStyleClass = `input[type="radio"].${ styles.cookieItemRadioBtn } + span:hover::before {`;
         let newRadioBtnHoverStyle = `input[type="radio"].${ styles.cookieItemRadioBtn } + span:hover::before {
             border: 1px solid ${ theme["radio-button-hover-border-color"] } !important;
         }`;
+        newStyles += newRadioBtnHoverStyle;
 
-        this.setStyleInnerHTML(radioBtnHoverStyleClass, newRadioBtnHoverStyle);
-
-        let radioBtnHoverAfterStyleClass = `input[type="radio"].${ styles.cookieItemRadioBtn } + span:hover::after {`;
         let newRadioBtnHoverAfterStyle = `input[type="radio"].${ styles.cookieItemRadioBtn } + span:hover::after {
             background-color: ${ theme["radio-button-hover-background-color"] } !important;
         }`;
-
-        this.setStyleInnerHTML(radioBtnHoverAfterStyleClass, newRadioBtnHoverAfterStyle)
+        newStyles += newRadioBtnHoverAfterStyle;
         
-        let radioBtnFocusStyleClass = `input[type="radio"].${ styles.cookieItemRadioBtn } + span:focus::before {`;
         let newRadioBtnFocusStyle = `input[type="radio"].${ styles.cookieItemRadioBtn } + span:focus::before {
             border: 1px solid ${ theme["radio-button-hover-border-color"] } !important;
         }`;
-
-        this.setStyleInnerHTML(radioBtnFocusStyleClass, newRadioBtnFocusStyle);
+        newStyles += newRadioBtnFocusStyle;
         
-        let radioBtnFocusAfterStyleClass = `input[type="radio"].${ styles.cookieItemRadioBtn } + span:focus::after {`;
         let newRadioBtnFocusAfterStyle = `input[type="radio"].${ styles.cookieItemRadioBtn } + span:focus::after {
             background-color: ${ theme["radio-button-checked-background-color"] } !important;
         }`;
-
-        this.setStyleInnerHTML(radioBtnFocusAfterStyleClass, newRadioBtnFocusAfterStyle);
+        newStyles += newRadioBtnFocusAfterStyle;
         
-        let radioBtnDisabledStyleClass = `input[type="radio"].${ styles.cookieItemRadioBtn }:disabled + span::before {`;
         let newRadioBtnDisabledStyle = `input[type="radio"].${ styles.cookieItemRadioBtn }:disabled + span::before {
             border: 1px solid ${ theme["radio-button-disabled-border-color"] } !important;
             background-color: ${ theme["radio-button-disabled-color"] } !important;
         }`;
+        newStyles += newRadioBtnDisabledStyle;
 
-        this.setStyleInnerHTML(radioBtnDisabledStyleClass, newRadioBtnDisabledStyle);
-    }
-
-    /**
-     * Set the new css rule
-     * 
-     * @param {string} targetClass the css class that we want to set
-     * @param {string} innerHTML the new innerHTML that we want to use
-     */
-    private static setStyleInnerHTML(targetClass: string, innerHTML: string): void {
-        let themesStyles = <HTMLElement> document.getElementById('themesStyles');
-
-        let targetClassStart = themesStyles.innerHTML.indexOf(targetClass);
-        let targetClassEnd = themesStyles.innerHTML.indexOf('}', targetClassStart);
-
-        let oldTargetClassStyle = themesStyles.innerHTML.substring(targetClassStart, targetClassEnd + 1);
-        let newTargetClassStyle = innerHTML;
-
-        themesStyles.innerHTML = themesStyles.innerHTML.replace(oldTargetClassStyle, newTargetClassStyle);
+        return newStyles;
     }
 }

@@ -1042,7 +1042,7 @@ describe("Test themes in constructor", () => {
     test("Test createThemeStyle method", () => {
         ThemesController.createThemeStyle();
 
-        let themesStyles = document.getElementById("themesStyles");
+        let themesStyles = document.getElementById("ms-consent-banner-theme-styles");
         expect(themesStyles).toBeTruthy();
         expect(themesStyles?.getAttribute("type")).toBe("text/css");
         expect(themesStyles?.nodeName).toBe("STYLE");
