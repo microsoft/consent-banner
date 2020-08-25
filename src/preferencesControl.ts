@@ -147,6 +147,12 @@ export class PreferencesControl {
     public hidePreferencesDialog(): void {
         let cookieModal = document.getElementsByClassName(styles.cookieModal)[0];
         this.containerElement.removeChild(cookieModal);
+
+        let cookieInfo = document.getElementsByClassName(styles.bannerButton)[1];
+        if (cookieInfo) {
+            (<HTMLElement> cookieInfo).focus();
+        }
+
         this.onPreferencesClosed();
     }
 
