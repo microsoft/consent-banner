@@ -158,7 +158,7 @@ var cc = new ConsentControl(
 
 + `createTheme(name: string, theme: ITheme)` can be used to create the new theme. `name` is the name of this new theme, which can be used by `applyTheme(themeName: string)`. `theme` is the new theme object.
     
-    `ConsentControl` consists of three built in themes, `light`, `dark`, and `high-contrast`.
+    `ConsentControl` consists of three built in themes, `light`, `dark`, and `high-contrast`. `dark` and `high-contrast` themes are from [Microsoft Docs](docs.microsoft.com).
 
 + You can apply the theme manually by using `applyTheme(themeName: string)`. `themeName` is the name of the theme which you want to apply.
 
@@ -231,13 +231,21 @@ var cc = new ConsentControl(
 There are six data types: `ICookieCategory`, `ITextResources`, `ICookieCategoriesPreferences`, `IOptions`, `IThemes`, and `ITheme`.
 
 + `ICookieCategory` is used to create cookie categories that will be showed in the preferences dialog.
+
 + `ITextResources` is the texts that will be used in the banner and preferences dialog.
+
 + `ICookieCategoriesPreferences` is used to store the preferences in each cookie categories.
+
 + `IOptions` is the options for the banner. It contains three parts, `textResources`, `themes`, and `initialTheme`.
+
     `textResources` is the initial text resources for texts.
+
     `themes` is a collections of themes that can be applied to the banner and preferences dialog.
+
     `initialTheme` is the initial theme that you want to applied before you call `applyTheme(themeName: string)`.
+
 + `IThemes` is a collections of themes. The properties names are the names of each themes, and the values are the theme objects.
+
 + `ITheme` is the theme object. It contains required properties and optional properties. Optional properties can be calculated by a built in method with required ones.
 
 ```TypeScript
@@ -328,7 +336,7 @@ interface ITheme {
 + Methods related to **banner**: `showBanner(cookieCategoriesPreferences: ICookieCategoriesPreferences)` and `hideBanner()`
 + Methods related to **Preferences Dialog**: `showPreferences(cookieCategoriesPreferences: ICookieCategoriesPreferences)` and `hidePreferences()`
 
-Also see [`ICookieCategoriesPreferences`](#data-types) in Data types
+Also see `ICookieCategoriesPreferences` in [Data types](#data-types)
 
 ```JavaScript
 // Insert all necessary HTML code and shows the banner. 
@@ -339,7 +347,8 @@ cc.showBanner(
     cookieCategoriesPreferences: ICookieCategoriesPreferences
 );
 
-// Hides the banner and the Preferences Dialog. Removes all HTML elements of the Consent Control from the DOM
+// Hides the banner and the Preferences Dialog. 
+// Removes all HTML elements of the Consent Control from the DOM
 cc.hideBanner();
 
 // Shows Preferences Dialog. Leaves banner state unchanged. 
