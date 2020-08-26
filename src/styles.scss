@@ -41,6 +41,7 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
 
 .bannerBody {
   position: relative;
+  display: flex;
   z-index: 9999;          /* on top of the page */
   width: 100%;
   background-color: $banner-background-color;
@@ -52,7 +53,6 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
 }
 
 .bannerInform {
-  display: inline-table;
   margin : {
     left: 5%;
     right: 5%;
@@ -92,6 +92,7 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
 
 .buttonGroup {
   display: inline-block;
+  align-self: center;
   position: relative;
   bottom: 4px;
 }
@@ -455,6 +456,10 @@ input[type="radio"].cookieItemRadioBtn {
     }
 
     width: 92.5%;
+  }
+
+  .bannerBody {
+    display:block;
   }
 
   .bannerButton {
