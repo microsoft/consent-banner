@@ -1,4 +1,4 @@
-interface ITheme {
+declare interface ITheme {
     "close-button-color": string;
     "secondary-button-disabled-opacity": string;
     "secondary-button-hover-shadow": string;
