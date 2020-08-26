@@ -37,8 +37,8 @@ export class PreferencesControl {
     public createPreferencesDialog(): void {
         let cookieModalInnerHtml = `
         <div role="presentation" tabindex="-1"></div>
-        <div role="dialog" aria-modal="true" aria-label="${ HtmlTools.escapeHtml(this.textResources.preferencesDialogTitle) }" class="${ styles.modalContainer }" tabindex="-1">
-            <button aria-label="${ HtmlTools.escapeHtml(this.textResources.preferencesDialogCloseLabel) }" class="${ styles.closeModalIcon }" tabindex="0">&#x2715;</button>
+        <div role="dialog" aria-modal="true" aria-label="${ HtmlTools.escapeHtml(this.textResources.preferencesDialogTitle) }" class="${ styles.modalContainer }" tabindex="0">
+            <button aria-label="${ HtmlTools.escapeHtml(this.textResources.preferencesDialogCloseLabel) }" class="${ styles.closeModalIcon }">&#x2715;</button>
             <div role="document" class="${ styles.modalBody }">
                 <div>
                     <h2 class="${styles.modalTitle} ${ styles.textColorTheme }">${ HtmlTools.escapeHtml(this.textResources.preferencesDialogTitle) }</h2>
@@ -215,6 +215,14 @@ export class PreferencesControl {
 
             // Reset UI
             this.setRadioBtnState();
+        });
+    
+        modalButtonReset?.addEventListener('keydown', (event) => {
+            if (event.keyCode == 9 && !event.shiftKey) {
+                event.preventDefault();
+                let dialog = <HTMLElement> document.getElementsByClassName(styles.modalContainer)[0];
+                dialog.focus();
+            }
         });
     }
     
