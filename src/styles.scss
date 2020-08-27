@@ -275,8 +275,8 @@ li.cookieListItem {
     position: absolute;
     top: 0;
     left: 0;
-    height: 20px;
-    width: 20px;
+    height: 18px;
+    width: 18px;
     content: "";
     border-radius: 50%;
     border: 1px solid $radio-button-border-color; 
@@ -418,9 +418,6 @@ input[type="radio"].cookieItemRadioBtn {
 
 .modalButtonSave {
   float: right;
-  margin : {
-    left: 10px;
-  }
   padding: 0;
 
   width: 278px;
@@ -471,6 +468,10 @@ input[type="radio"].cookieItemRadioBtn {
 
     width: 100%;
   }
+  
+  .closeModalIcon {
+    padding:3%;
+  }
 
   .cookieModal {
     overflow: hidden;
@@ -481,35 +482,60 @@ input[type="radio"].cookieItemRadioBtn {
     
     width: 93.33%;
     height: 96.4%;
+
+    overflow: hidden;
+  }
+
+  .modalTitle {
+    margin: {
+      top: 3%;
+      bottom: 3%;
+    }
   }
 
   .modalBody {
     margin : {
-      top: 24px;
-      left: 24px;
-      right: 24px;
+      top: 3%;
+      left: 3%;
+      right: 3%;
+      bottom: 3%;
     }
 
     height: 100%;
+  }
+
+  .modalBody > div:first-child {
+    max-height: 25%;
+    overflow: hidden;
   }
 
   .modalContent {
     height: 62%;   /* If "calc()" is not supported */
    
     height: calc(100% - 225px);
+    min-height: 40%;
+  }
+
+  .modalButtonGroup {
+    margin: {
+      top: 2%;
+      bottom: 2%;
+    }
   }
 
   .modalButtonReset {
     width: 100%;
+    max-height: 28px;
   }
 
   .modalButtonSave {
     margin : {
-      bottom: 12px;
+      bottom: 1%;
       left: 0;
     }
 
     width: 100%;
+    max-height: 28px;
 
     @include rtlDesign(0 0 12px 0, 0);
   }
