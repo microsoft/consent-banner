@@ -217,11 +217,22 @@ export class PreferencesControl {
             this.setRadioBtnState();
         });
     
+        let dialog = <HTMLElement> document.getElementsByClassName(styles.modalContainer)[0];
         modalButtonReset?.addEventListener('keydown', (event) => {
             if (event.keyCode == 9 && !event.shiftKey) {
                 event.preventDefault();
-                let dialog = <HTMLElement> document.getElementsByClassName(styles.modalContainer)[0];
                 dialog.focus();
+            }
+        });
+
+        dialog?.addEventListener('keydown', (event) => {
+            if (event.target !== event.currentTarget) {
+                return;
+            }
+
+            if (event.keyCode == 9 && event.shiftKey) {
+                event.preventDefault();
+                modalButtonReset.focus();
             }
         });
     }
