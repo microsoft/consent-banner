@@ -37,8 +37,8 @@ export class PreferencesControl {
     public createPreferencesDialog(): void {
         let cookieModalInnerHtml = `
         <div role="presentation" tabindex="-1"></div>
-        <div role="dialog" aria-modal="true" aria-label="${ HtmlTools.escapeHtml(this.textResources.preferencesDialogTitle) }" class="${ styles.modalContainer }" tabindex="0">
-            <button aria-label="${ HtmlTools.escapeHtml(this.textResources.preferencesDialogCloseLabel) }" class="${ styles.closeModalIcon }">&#x2715;</button>
+        <div role="dialog" aria-modal="true" aria-label="${ HtmlTools.escapeHtml(this.textResources.preferencesDialogTitle) }" class="${ styles.modalContainer }" tabindex="-1">
+            <button aria-label="${ HtmlTools.escapeHtml(this.textResources.preferencesDialogCloseLabel) }" class="${ styles.closeModalIcon }" tabindex="0">&#x2715;</button>
             <div role="document" class="${ styles.modalBody }">
                 <div>
                     <h2 class="${styles.modalTitle} ${ styles.textColorTheme }">${ HtmlTools.escapeHtml(this.textResources.preferencesDialogTitle) }</h2>
@@ -164,11 +164,48 @@ export class PreferencesControl {
      * 4. Click "Reset all" button, cookieCategoriesPreferences will be reset
      */
     private addPreferencesButtonsEvent(): void {
-        let closeModalIcon = document.getElementsByClassName(styles.closeModalIcon)[0];
+        let closeModalIcon: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.closeModalIcon)[0];
 
         let cookieItemRadioBtn: Element[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
-        let modalButtonSave: HTMLInputElement = <HTMLInputElement>document.getElementsByClassName(styles.modalButtonSave)[0];
+        let modalButtonSave: HTMLInputElement = <HTMLInputElement> document.getElementsByClassName(styles.modalButtonSave)[0];
         let modalButtonReset: HTMLInputElement = <HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0];
+
+        let lastAcceptRadioBtn: HTMLElement | null = null;
+        let lastRejectRadioBtn: HTMLElement | null = null;
+        if (cookieItemRadioBtn && cookieItemRadioBtn.length) {
+            lastAcceptRadioBtn = <HTMLElement> cookieItemRadioBtn[cookieItemRadioBtn.length - 1];
+            lastRejectRadioBtn = <HTMLElement> cookieItemRadioBtn[cookieItemRadioBtn.length - 2];
+        }
+
+        let lastElementTab = function(event: KeyboardEvent): void {
+            if (event.keyCode == 9 && !event.shiftKey) {
+                event.preventDefault();
+                closeModalIcon.focus();
+            }
+        };
+        let firstElementShiftTab = function(event: KeyboardEvent): void {
+            if (event.keyCode == 9 && event.shiftKey) {
+                event.preventDefault();
+                lastAcceptRadioBtn?.focus();
+            }
+        };
+
+        if (modalButtonReset && modalButtonSave && modalButtonReset.disabled && modalButtonSave.disabled) {
+            if (cookieItemRadioBtn && cookieItemRadioBtn.length) {
+                lastAcceptRadioBtn?.addEventListener('keydown', lastElementTab);
+                lastRejectRadioBtn?.addEventListener('keydown', lastElementTab);
+
+                closeModalIcon?.addEventListener('keydown', firstElementShiftTab);
+            }
+        }
+        else if (modalButtonReset && !modalButtonReset.disabled) {
+            closeModalIcon?.addEventListener('keydown', (event) => {
+                if (event.keyCode == 9 && event.shiftKey) {
+                    event.preventDefault();
+                    modalButtonReset.focus();
+                }
+            });
+        }
 
         closeModalIcon?.addEventListener('click', () => this.hidePreferencesDialog());
         
@@ -196,6 +233,17 @@ export class PreferencesControl {
                         }
                         if (modalButtonReset) {
                             modalButtonReset.disabled = false;
+
+                            lastAcceptRadioBtn?.removeEventListener('keydown', lastElementTab);
+                            lastRejectRadioBtn?.removeEventListener('keydown', lastElementTab);
+                            
+                            closeModalIcon?.removeEventListener('keydown', firstElementShiftTab);
+                            closeModalIcon?.addEventListener('keydown', (event) => {
+                                if (event.keyCode == 9 && event.shiftKey) {
+                                    event.preventDefault();
+                                    modalButtonReset.focus();
+                                }
+                            });
                         }
                     }
                 });
@@ -217,22 +265,10 @@ export class PreferencesControl {
             this.setRadioBtnState();
         });
     
-        let dialog = <HTMLElement> document.getElementsByClassName(styles.modalContainer)[0];
         modalButtonReset?.addEventListener('keydown', (event) => {
             if (event.keyCode == 9 && !event.shiftKey) {
                 event.preventDefault();
-                dialog.focus();
-            }
-        });
-
-        dialog?.addEventListener('keydown', (event) => {
-            if (event.target !== event.currentTarget) {
-                return;
-            }
-
-            if (event.keyCode == 9 && event.shiftKey) {
-                event.preventDefault();
-                modalButtonReset.focus();
+                closeModalIcon.focus();
             }
         });
     }

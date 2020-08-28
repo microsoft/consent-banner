@@ -264,6 +264,7 @@ li.cookieListItem {
 .cookieItemRadioBtnCtrl {
   display: inline-block;
   position: relative;
+  left: 2px;
   margin : {
     bottom: 16px;
   }
@@ -355,7 +356,6 @@ input[type="radio"].cookieItemRadioBtn {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  outline: none;
 
   cursor: pointer;
   box-sizing: border-box;
