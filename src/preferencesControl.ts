@@ -162,45 +162,54 @@ export class PreferencesControl {
      * 2. Click any "accept/reject" button, "Save changes" and "Reset all" button will be enabled
      * 3. Click any "accept/reject" button, cookieCategoriesPreferences will be set
      * 4. Click "Reset all" button, cookieCategoriesPreferences will be reset
+     * 5. When "X" button is focused, press Tab + Shift keys. Last element will be focused.
+     * 6. When last element is focused, press Tab key. "X" button will be focused.
      */
     private addPreferencesButtonsEvent(): void {
         let closeModalIcon: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.closeModalIcon)[0];
 
-        let cookieItemRadioBtn: Element[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
         let modalButtonSave: HTMLInputElement = <HTMLInputElement> document.getElementsByClassName(styles.modalButtonSave)[0];
         let modalButtonReset: HTMLInputElement = <HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0];
 
+        let acceptRejectButtons: Element[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
         let lastAcceptRadioBtn: HTMLElement | null = null;
         let lastRejectRadioBtn: HTMLElement | null = null;
-        if (cookieItemRadioBtn && cookieItemRadioBtn.length) {
-            lastAcceptRadioBtn = <HTMLElement> cookieItemRadioBtn[cookieItemRadioBtn.length - 1];
-            lastRejectRadioBtn = <HTMLElement> cookieItemRadioBtn[cookieItemRadioBtn.length - 2];
+        if (acceptRejectButtons.length) {
+            lastAcceptRadioBtn = <HTMLElement> acceptRejectButtons[acceptRejectButtons.length - 2];
+            lastRejectRadioBtn = <HTMLElement> acceptRejectButtons[acceptRejectButtons.length - 1];
         }
 
         let lastElementTab = function(event: KeyboardEvent): void {
-            if (event.keyCode == 9 && !event.shiftKey) {
+            if (event.key == 'Tab' && !event.shiftKey) {
                 event.preventDefault();
                 closeModalIcon.focus();
             }
         };
         let firstElementShiftTab = function(event: KeyboardEvent): void {
-            if (event.keyCode == 9 && event.shiftKey) {
+            if (event.key == 'Tab' && event.shiftKey) {
                 event.preventDefault();
-                lastAcceptRadioBtn?.focus();
+                lastRejectRadioBtn?.focus();
             }
         };
 
-        if (modalButtonReset && modalButtonSave && modalButtonReset.disabled && modalButtonSave.disabled) {
-            if (cookieItemRadioBtn && cookieItemRadioBtn.length) {
+        modalButtonReset?.addEventListener('keydown', (event) => {
+            if (event.key == 'Tab' && !event.shiftKey) {
+                event.preventDefault();
+                closeModalIcon.focus();
+            }
+        });
+
+        if (modalButtonReset.disabled && modalButtonSave.disabled) {
+            if (acceptRejectButtons.length) {
                 lastAcceptRadioBtn?.addEventListener('keydown', lastElementTab);
                 lastRejectRadioBtn?.addEventListener('keydown', lastElementTab);
 
                 closeModalIcon?.addEventListener('keydown', firstElementShiftTab);
             }
         }
-        else if (modalButtonReset && !modalButtonReset.disabled) {
+        else {
             closeModalIcon?.addEventListener('keydown', (event) => {
-                if (event.keyCode == 9 && event.shiftKey) {
+                if (event.key == 'Tab' && event.shiftKey) {
                     event.preventDefault();
                     modalButtonReset.focus();
                 }
@@ -209,8 +218,8 @@ export class PreferencesControl {
 
         closeModalIcon?.addEventListener('click', () => this.hidePreferencesDialog());
         
-        if (cookieItemRadioBtn && cookieItemRadioBtn.length) {
-            for (let radio of cookieItemRadioBtn) {
+        if (acceptRejectButtons.length) {
+            for (let radio of acceptRejectButtons) {
                 radio.addEventListener('click', () => {
                     let categId = radio.getAttribute('name');
                     if (categId) {
@@ -225,13 +234,16 @@ export class PreferencesControl {
                             this.cookieCategoriesPreferences[categId] = false;
                         }
     
-                        // Enable "Save changes" and "Reset all" buttons
+                        // Enable "Save changes" button
                         if (oldCategValue !== this.cookieCategoriesPreferences[categId]) {
-                            if (modalButtonSave) {
+                            if (modalButtonSave.disabled) {
                                 modalButtonSave.disabled = false;
                             }
                         }
-                        if (modalButtonReset) {
+
+                        // Enable "Reset all" button
+                        // Update event listener function in "X" and remove event listener in last accept/reject radio buttons
+                        if (modalButtonReset.disabled) {
                             modalButtonReset.disabled = false;
 
                             lastAcceptRadioBtn?.removeEventListener('keydown', lastElementTab);
@@ -239,7 +251,7 @@ export class PreferencesControl {
                             
                             closeModalIcon?.removeEventListener('keydown', firstElementShiftTab);
                             closeModalIcon?.addEventListener('keydown', (event) => {
-                                if (event.keyCode == 9 && event.shiftKey) {
+                                if (event.key == 'Tab' && event.shiftKey) {
                                     event.preventDefault();
                                     modalButtonReset.focus();
                                 }
@@ -263,13 +275,6 @@ export class PreferencesControl {
 
             // Reset UI
             this.setRadioBtnState();
-        });
-    
-        modalButtonReset?.addEventListener('keydown', (event) => {
-            if (event.keyCode == 9 && !event.shiftKey) {
-                event.preventDefault();
-                closeModalIcon.focus();
-            }
         });
     }
     
