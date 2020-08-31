@@ -158,7 +158,7 @@ var cc = new ConsentControl(
 
 + `createTheme(name: string, theme: ITheme)` can be used to create the new theme. `name` is the name of this new theme, which can be used by `applyTheme(themeName: string)`. `theme` is the new theme object.
     
-    `ConsentControl` consists of three built in themes, `light`, `dark`, and `high-contrast`. `dark` and `high-contrast` themes are from [Microsoft Docs](docs.microsoft.com).
+    `ConsentControl` consists of three built in themes, `light`, `dark`, and `high-contrast`. `dark` and `high-contrast` themes are from [Microsoft Docs](https://docs.microsoft.com/en-us/).
 
 + You can apply the theme manually by using `applyTheme(themeName: string)`. `themeName` is the name of the theme which you want to apply.
 
@@ -188,6 +188,8 @@ var cc = new ConsentControl(
     // Apply the "medium" theme
     cc.applyTheme("medium");
     ```
+
+    If the name of theme is not in the themes collections, it will throw an error. `new Error("Theme not found error")`
 
 + `setContainerElement(containerElementOrId: string | HTMLElement)` can be used to set the container element for the banner and preferences dialog. 
 
@@ -293,6 +295,7 @@ interface IThemes {
 }
 
 interface ITheme {
+    // All required properties
     "close-button-color": string;
     "secondary-button-disabled-opacity": string;
     "secondary-button-hover-shadow": string;
@@ -307,6 +310,8 @@ interface ITheme {
     "secondary-button-color": string;
     "secondary-button-disabled-color": string;
     "secondary-button-border": string;
+
+    // All optional properties
     "background-color-between-page-and-dialog"?: string;
     "dialog-border-color"?: string;
     "hyperlink-font-color"?: string;
