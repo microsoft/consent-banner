@@ -284,6 +284,10 @@ li.cookieListItem {
     background-color: $dialog-background-color;
   }
 
+  &:focus + span::before {
+    outline: 2px solid $radio-button-hover-background-color;
+  }
+
   &:not(:disabled) + span {
     &:hover {
       &::before {
@@ -353,9 +357,7 @@ input[type="radio"].cookieItemRadioBtn {
     right: 0;
   }
 
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
+  border-radius: 0;
 
   cursor: pointer;
   box-sizing: border-box;
