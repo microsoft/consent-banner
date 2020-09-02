@@ -94,7 +94,6 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
   display: inline-block;
   align-self: center;
   position: relative;
-  bottom: 4px;
 }
 
 .bannerButton {
@@ -270,25 +269,29 @@ li.cookieListItem {
   }
 }
 
+.bannerBody *::before, .cookieModal *::before, .bannerBody *::after, .cookieModal *::after {
+  box-sizing: inherit;
+}
+
 @mixin defineRaioInput {
-  & + span::before {
+  & + label::before {
     display: block;
     position: absolute;
     top: 0;
     left: 0;
-    height: 18px;
-    width: 18px;
+    height: 20px;
+    width: 20px;
     content: "";
     border-radius: 50%;
     border: 1px solid $radio-button-border-color; 
     background-color: $dialog-background-color;
   }
 
-  &:focus + span::before {
+  &:focus + label::before {
     outline: 2px solid $radio-button-hover-background-color;
   }
 
-  &:not(:disabled) + span {
+  &:not(:disabled) + label {
     &:hover {
       &::before {
         border: 1px solid $radio-button-hover-border-color;
@@ -326,7 +329,7 @@ li.cookieListItem {
     }
   }
 
-  &:checked + span::after {
+  &:checked + label::after {
     display: block;
     position: absolute;
     top: 5px;
@@ -338,7 +341,7 @@ li.cookieListItem {
     background-color: $radio-button-checked-background-color;
   }
 
-  &:disabled + span {
+  &:disabled + label {
     cursor: not-allowed;
 
     &::before {
@@ -360,6 +363,7 @@ input[type="radio"].cookieItemRadioBtn {
   border-radius: 0;
 
   cursor: pointer;
+  outline: none;
   box-sizing: border-box;
 
   appearance: none;
@@ -385,6 +389,7 @@ input[type="radio"].cookieItemRadioBtn {
 
   text-transform: none;
   cursor: pointer;
+  box-sizing: border-box;
 
   @include rtlDesign(0 8px 0 34px, 0, left);
 }
