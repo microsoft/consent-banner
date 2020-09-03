@@ -206,7 +206,7 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
   }
 }
 
-ol.cookieOrderedList {
+dl.cookieOrderedList {
   margin : {
     top: 36px;
     bottom: 0;
@@ -217,7 +217,7 @@ ol.cookieOrderedList {
   list-style: none;
 }
 
-li.cookieListItem {
+dt.cookieListItem {
   margin : {
     top: 20px;
   }
