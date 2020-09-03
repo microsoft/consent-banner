@@ -146,6 +146,13 @@ export class PreferencesControl {
 
             let dialog: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.modalContainer)[0];
             dialog.focus();
+
+            dialog.addEventListener('keydown', (event) => {
+                if (event.key == 'Escape') {
+                    event.preventDefault();
+                    this.hidePreferencesDialog();
+                }
+            });
         }
     }
 
