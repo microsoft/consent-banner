@@ -299,38 +299,43 @@ export class ThemesController {
     private static buildRadioBtnStyle(theme: ITheme): string {
         let newStyles = '';
 
-        let newRadioBtnStyle = `input[type="radio"].${ styles.cookieItemRadioBtn } + span::before {
+        let newRadioBtnStyle = `input[type="radio"].${ styles.cookieItemRadioBtn } + label::before {
             border: 1px solid ${ theme["radio-button-border-color"] } !important;
             background-color: ${ theme["dialog-background-color"] } !important;
         }`;
         newStyles += newRadioBtnStyle;
 
-        let newRadioBtnCheckedStyle = `input[type="radio"].${ styles.cookieItemRadioBtn }:checked + span::after {
+        let newRadioBtnFocusOutline = `input[type="radio"].${ styles.cookieItemRadioBtn }:focus + label::before {
+            outline: 2px solid ${ theme["radio-button-hover-background-color"] } !important;
+        }`;
+        newStyles += newRadioBtnFocusOutline;
+
+        let newRadioBtnCheckedStyle = `input[type="radio"].${ styles.cookieItemRadioBtn }:checked + label::after {
             background-color: ${ theme["radio-button-checked-background-color"] } !important;
         }`;
         newStyles += newRadioBtnCheckedStyle;
 
-        let newRadioBtnHoverStyle = `input[type="radio"].${ styles.cookieItemRadioBtn } + span:hover::before {
+        let newRadioBtnHoverStyle = `input[type="radio"].${ styles.cookieItemRadioBtn } + label:hover::before {
             border: 1px solid ${ theme["radio-button-hover-border-color"] } !important;
         }`;
         newStyles += newRadioBtnHoverStyle;
 
-        let newRadioBtnHoverAfterStyle = `input[type="radio"].${ styles.cookieItemRadioBtn } + span:hover::after {
+        let newRadioBtnHoverAfterStyle = `input[type="radio"].${ styles.cookieItemRadioBtn } + label:hover::after {
             background-color: ${ theme["radio-button-hover-background-color"] } !important;
         }`;
         newStyles += newRadioBtnHoverAfterStyle;
         
-        let newRadioBtnFocusStyle = `input[type="radio"].${ styles.cookieItemRadioBtn } + span:focus::before {
+        let newRadioBtnFocusStyle = `input[type="radio"].${ styles.cookieItemRadioBtn } + label:focus::before {
             border: 1px solid ${ theme["radio-button-hover-border-color"] } !important;
         }`;
         newStyles += newRadioBtnFocusStyle;
         
-        let newRadioBtnFocusAfterStyle = `input[type="radio"].${ styles.cookieItemRadioBtn } + span:focus::after {
+        let newRadioBtnFocusAfterStyle = `input[type="radio"].${ styles.cookieItemRadioBtn } + label:focus::after {
             background-color: ${ theme["radio-button-checked-background-color"] } !important;
         }`;
         newStyles += newRadioBtnFocusAfterStyle;
         
-        let newRadioBtnDisabledStyle = `input[type="radio"].${ styles.cookieItemRadioBtn }:disabled + span::before {
+        let newRadioBtnDisabledStyle = `input[type="radio"].${ styles.cookieItemRadioBtn }:disabled + label::before {
             border: 1px solid ${ theme["radio-button-disabled-border-color"] } !important;
             background-color: ${ theme["radio-button-disabled-color"] } !important;
         }`;

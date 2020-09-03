@@ -41,7 +41,7 @@ export class PreferencesControl {
             <button aria-label="${ HtmlTools.escapeHtml(this.textResources.preferencesDialogCloseLabel) }" class="${ styles.closeModalIcon }" tabindex="0">&#x2715;</button>
             <div role="document" class="${ styles.modalBody }">
                 <div>
-                    <h2 class="${styles.modalTitle} ${ styles.textColorTheme }">${ HtmlTools.escapeHtml(this.textResources.preferencesDialogTitle) }</h2>
+                    <h1 class="${ styles.modalTitle } ${ styles.textColorTheme }">${ HtmlTools.escapeHtml(this.textResources.preferencesDialogTitle) }</h1>
                 </div>
                 
                 <form class="${ styles.modalContent } ${ styles.hyperLinkTheme }">
@@ -49,8 +49,8 @@ export class PreferencesControl {
                         ${ this.textResources.preferencesDialogDescHtml }
                     </p>
 
-                    <ol class="${ styles.cookieOrderedList }">
-                    </ol>
+                    <dl class="${ styles.cookieOrderedList }">
+                    </dl>
                 </form>
                 
                 <div class="${ styles.modalButtonGroup }">
@@ -75,10 +75,10 @@ export class PreferencesControl {
         for (let cookieCategory of this.cookieCategories) {
             if (cookieCategory.isUnswitchable) {
                 let item = `
-                <li class="${ styles.cookieListItem } ${ styles.textColorTheme }">
-                    <h3 class="${ styles.cookieListItemTitle } ${ styles.textColorTheme }">${ HtmlTools.escapeHtml(cookieCategory.name) }</h3>
+                <dt class="${ styles.cookieListItem } ${ styles.textColorTheme }" aria-label="${ HtmlTools.escapeHtml(cookieCategory.name) }">
+                    <h2 class="${ styles.cookieListItemTitle } ${ styles.textColorTheme }">${ HtmlTools.escapeHtml(cookieCategory.name) }</h2>
                     <p class="${ styles.cookieListItemDescription } ${ styles.textColorTheme }">${ cookieCategory.descHtml }</p>
-                </li>
+                </dt>
                 `;
 
                 let cookieOrderedList = document.getElementsByClassName(styles.cookieOrderedList)[0];
@@ -93,26 +93,31 @@ export class PreferencesControl {
                 let acceptValue = this.cookieCategoriesPreferences[cookieCategory.id] === true ? "checked" : "";
                 let rejectValue = this.cookieCategoriesPreferences[cookieCategory.id] === false ? "checked" : "";
 
-                let acceptRadio = `<input type="radio" aria-label="${ HtmlTools.escapeHtml(this.textResources.acceptLabel) }" class="${ styles.cookieItemRadioBtn }" name="${ nameAttribute }" value="accept" ${ acceptValue }>`;
-                let rejectRadio = `<input type="radio" aria-label="${ HtmlTools.escapeHtml(this.textResources.rejectLabel) }" class="${ styles.cookieItemRadioBtn }" name="${ nameAttribute }" value="reject" ${ rejectValue }>`;
+                let acceptRadioId = `${ styles.cookieItemRadioBtn }_${ nameAttribute }_accept`;
+                let rejectRadioId = `${ styles.cookieItemRadioBtn }_${ nameAttribute }_reject`;
+
+                let acceptRadio = `<input type="radio" class="${ styles.cookieItemRadioBtn }" name="${ nameAttribute }" id="${ acceptRadioId }" value="accept" ${ acceptValue }>`;
+                let rejectRadio = `<input type="radio" class="${ styles.cookieItemRadioBtn }" name="${ nameAttribute }" id="${ rejectRadioId }" value="reject" ${ rejectValue }>`;
+
+                let cookieListItemTitleId = `${ styles.cookieListItemTitle }_${ nameAttribute }_title`;
 
                 let item = `
-                <li class="${ styles.cookieListItem } ${ styles.textColorTheme }">
-                    <div class="${ styles.cookieListItemGroup}" role="radiogroup" aria-label="${ HtmlTools.escapeHtml(cookieCategory.name) }">
-                        <h3 class="${ styles.cookieListItemTitle } ${ styles.textColorTheme }">${ HtmlTools.escapeHtml(cookieCategory.name) }</h3>
-                        <p class="${ styles.cookieListItemDescription} ${ styles.textColorTheme }">${cookieCategory.descHtml}</p>
-                        <div class="${ styles.cookieItemRadioBtnGroup}">
-                            <label class="${ styles.cookieItemRadioBtnCtrl}" role="radio">
-                                ${ acceptRadio}
-                                <span class="${ styles.cookieItemRadioBtnLabel} ${ styles.textColorTheme }">${ HtmlTools.escapeHtml(this.textResources.acceptLabel) }</span>
-                            </label>
-                            <label class="${ styles.cookieItemRadioBtnCtrl}" role="radio">
-                                ${ rejectRadio}
-                                <span class="${ styles.cookieItemRadioBtnLabel} ${ styles.textColorTheme }">${ HtmlTools.escapeHtml(this.textResources.rejectLabel) }</span>
-                            </label>
+                <dt class="${ styles.cookieListItem } ${ styles.textColorTheme }" aria-label="${ HtmlTools.escapeHtml(cookieCategory.name) }">
+                    <div class="${ styles.cookieListItemGroup }" role="radiogroup" aria-labelledby="${ cookieListItemTitleId }">
+                        <h2 class="${ styles.cookieListItemTitle } ${ styles.textColorTheme }" id="${ cookieListItemTitleId }">${ HtmlTools.escapeHtml(cookieCategory.name) }</h2>
+                        <p class="${ styles.cookieListItemDescription } ${ styles.textColorTheme }">${ cookieCategory.descHtml }</p>
+                        <div class="${ styles.cookieItemRadioBtnGroup }">
+                            <div class="${ styles.cookieItemRadioBtnCtrl }">
+                                ${ acceptRadio }
+                                <label class="${ styles.cookieItemRadioBtnLabel } ${ styles.textColorTheme }" for="${ acceptRadioId }">${ HtmlTools.escapeHtml(this.textResources.acceptLabel) }</label>
+                            </div>
+                            <div class="${ styles.cookieItemRadioBtnCtrl }">
+                                ${ rejectRadio }
+                                <label class="${ styles.cookieItemRadioBtnLabel } ${ styles.textColorTheme }" for="${ rejectRadioId }">${ HtmlTools.escapeHtml(this.textResources.rejectLabel) }</label>
+                            </div>
                         </div>
                     </div>
-                </li>
+                </dt>
                 `;
 
                 let cookieOrderedList = document.getElementsByClassName(styles.cookieOrderedList)[0];
@@ -138,6 +143,9 @@ export class PreferencesControl {
         let modal: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.cookieModal)[0];
         if (modal) {
             modal.style.display = 'block';
+
+            let dialog: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.modalContainer)[0];
+            dialog.focus();
         }
     }
 
