@@ -284,6 +284,18 @@ export class PreferencesControl {
         }
 
         for (let radio of acceptRejectButtons) {
+            radio.addEventListener('blur', (event) => {
+                let currentFocusRadtioBtn = <HTMLInputElement> event.target;
+                this.removeBlurRadioBtnOutline(currentFocusRadtioBtn);
+            });
+
+            radio.addEventListener('focus', (event) => {
+                let currentFocusRadtioBtn = <HTMLInputElement> event.target;
+
+                let currentFocusRadioBtnParent = currentFocusRadtioBtn.parentElement;
+                currentFocusRadioBtnParent!.className += ' ' + styles.cookieItemRadioBtnCtrlOutline;
+            });
+
             radio.addEventListener('click', () => {
                 // Enable "Reset all" button
                 // Update event listener function in "X" and remove event listener in last accept/reject radio buttons
@@ -297,6 +309,19 @@ export class PreferencesControl {
                     closeModalIcon.addEventListener('keydown', closeIconShiftTab2Reset);
                 }
             });
+        }
+    }
+
+    /**
+     * Remove outline class in radio button which is not focused
+     */
+    private removeBlurRadioBtnOutline(target: HTMLElement): void {
+        if (target) {
+            let radioBtnOutline = target.parentElement!;
+            let radioBtnOutlineClass = radioBtnOutline.className.lastIndexOf(' ');
+
+            let newRadioBtnClass = radioBtnOutline.className.substring(0, radioBtnOutlineClass);
+            radioBtnOutline.className = newRadioBtnClass;
         }
     }
     

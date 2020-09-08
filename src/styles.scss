@@ -273,6 +273,10 @@ dt.cookieListItem {
   box-sizing: inherit;
 }
 
+.cookieItemRadioBtnCtrlOutline {
+  outline: 2px solid $radio-button-hover-background-color;
+}
+
 @mixin defineRaioInput {
   & + label::before {
     display: block;
@@ -285,10 +289,6 @@ dt.cookieListItem {
     border-radius: 50%;
     border: 1px solid $radio-button-border-color; 
     background-color: $dialog-background-color;
-  }
-
-  &:focus + label::before {
-    outline: 2px solid $radio-button-hover-background-color;
   }
 
   &:not(:disabled) + label {
