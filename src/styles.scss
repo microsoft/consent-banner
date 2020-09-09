@@ -2,7 +2,7 @@
 
 // Banner button size, can be changed
 $bannerBtnWidth: 150px;
-$bannerBtnHeight: 36px;
+$bannerBtnHeight: 45px;
 
 /// Theme. 
 /// Default: Light
@@ -102,6 +102,7 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
 
   width: $bannerBtnWidth;
   height: $bannerBtnHeight;
+  vertical-align: top;
   
   cursor: pointer;
   @include bannerFont(normal, 15px);
