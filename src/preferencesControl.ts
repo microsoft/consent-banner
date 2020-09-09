@@ -186,6 +186,7 @@ export class PreferencesControl {
         let modalButtonSave: HTMLInputElement = <HTMLInputElement> document.getElementsByClassName(styles.modalButtonSave)[0];
         let modalButtonReset: HTMLInputElement = <HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0];
 
+        this.controlRadioBtnFocusStyle();
         this.controlNextActiveElement();
 
         closeModalIcon?.addEventListener('click', () => this.hidePreferencesDialog());
@@ -297,6 +298,41 @@ export class PreferencesControl {
                     closeModalIcon.addEventListener('keydown', closeIconShiftTab2Reset);
                 }
             });
+        }
+    }
+
+    /**
+     * 1. If the radio button is focused, add the outline styles.
+     * 2. If the radio button is blurred (not focused), remove the outline styles.
+     */
+    private controlRadioBtnFocusStyle(): void {
+        let acceptRejectButtons: Element[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
+
+        for (let radio of acceptRejectButtons) {
+            radio.addEventListener('blur', (event) => {
+                let currentFocusRadtioBtn = <HTMLInputElement> event.target;
+                this.removeBlurRadioBtnOutline(currentFocusRadtioBtn);
+            });
+
+            radio.addEventListener('focus', (event) => {
+                let currentFocusRadtioBtn = <HTMLInputElement> event.target;
+
+                let currentFocusRadioBtnParent = currentFocusRadtioBtn.parentElement;
+                currentFocusRadioBtnParent!.className += ' ' + styles.cookieItemRadioBtnCtrlOutline;
+            });
+        }
+    }
+
+    /**
+     * Remove outline class in radio button which is not focused
+     */
+    private removeBlurRadioBtnOutline(target: HTMLElement): void {
+        if (target) {
+            let radioBtnOutline = target.parentElement!;
+            let radioBtnOutlineClass = radioBtnOutline.className;
+
+            let newRadioBtnClass = radioBtnOutlineClass.replace(` ${ styles.cookieItemRadioBtnCtrlOutline }`, '');
+            radioBtnOutline.className = newRadioBtnClass;
         }
     }
     

@@ -305,7 +305,7 @@ export class ThemesController {
         }`;
         newStyles += newRadioBtnStyle;
 
-        let newRadioBtnFocusOutline = `input[type="radio"].${ styles.cookieItemRadioBtn }:focus + label::before {
+        let newRadioBtnFocusOutline = `.${ styles.cookieItemRadioBtnCtrlOutline } {
             outline: 2px solid ${ theme["radio-button-hover-background-color"] } !important;
         }`;
         newStyles += newRadioBtnFocusOutline;
