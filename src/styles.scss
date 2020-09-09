@@ -215,12 +215,14 @@ dl.cookieOrderedList {
 
   /* Close the default styles which adds decimal numbers in front of list items */
   list-style: none;
+  text-transform: none;
 }
 
 dt.cookieListItem {
   margin : {
     top: 20px;
   }
+  float: none;
 
   @include bannerFont(600, 18px);
   line-height: 24px;
@@ -360,6 +362,7 @@ input[type="radio"].cookieItemRadioBtn {
     right: 0;
   }
 
+  width: 0;
   border-radius: 0;
 
   cursor: pointer;
@@ -375,6 +378,9 @@ input[type="radio"].cookieItemRadioBtn {
 .cookieItemRadioBtnLabel {
   display: block;
   float: right;
+  margin : {
+    left: 19px;
+  }
   padding : {
     left: 8px;
     right: 34px;
