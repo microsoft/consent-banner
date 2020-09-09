@@ -265,9 +265,10 @@ dt.cookieListItem {
 .cookieItemRadioBtnCtrl {
   display: inline-block;
   position: relative;
-  left: 2px;
+  left: 5px;
   margin : {
     bottom: 16px;
+    right: 34px;
   }
 }
 
@@ -277,13 +278,14 @@ dt.cookieListItem {
 
 .cookieItemRadioBtnCtrlOutline {
   outline: 2px solid $radio-button-hover-background-color;
+  outline-offset: 3px;
 }
 
 @mixin defineRaioInput {
   & + label::before {
     display: block;
     position: absolute;
-    top: 0;
+    top: 2px;
     left: 0;
     height: 19px;
     width: 19px;
@@ -302,7 +304,7 @@ dt.cookieListItem {
       &::after {
         display: block;
         position: absolute;
-        top: 5px;
+        top: 7px;
         left: 5px;
         height: 9px;
         width: 9px;
@@ -320,7 +322,7 @@ dt.cookieListItem {
       &::after {
         display: block;
         position: absolute;
-        top: 5px;
+        top: 7px;
         left: 5px;
         height: 9px;
         width: 9px;
@@ -334,7 +336,7 @@ dt.cookieListItem {
   &:checked + label::after {
     display: block;
     position: absolute;
-    top: 5px;
+    top: 7px;
     left: 5px;
     height: 9px;
     width: 9px;
@@ -383,7 +385,6 @@ input[type="radio"].cookieItemRadioBtn {
   }
   padding : {
     left: 8px;
-    right: 34px;
   }
   width: 80%;   /* If "calc()" is not supported */
 
