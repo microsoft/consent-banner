@@ -64,6 +64,10 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
   @include rtlDesign(8px 5% 8px 0, 0);
 }
 
+.bannerBody svg {
+  fill: none;
+}
+
 .infoIcon {
   display: table-cell;
   padding: 12px;
