@@ -39,6 +39,14 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
   }
 }
 
+// For right-to-left direction (position)
+@mixin rtlDesignPosition($left, $right) {
+  div[dir="rtl"] & {
+    left: $left;
+    right: $right;
+  }
+}
+
 .bannerBody {
   position: relative;
   display: flex;
@@ -145,6 +153,7 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
   @at-root div[dir="rtl"]#{ & } {
     text-align: right;
   }
+  @include rtlDesignPosition(auto, 0);
 }
 
 .modalContainer {
@@ -283,6 +292,9 @@ dt.cookieListItem {
     bottom: 16px;
     right: 34px;
   }
+
+  @include rtlDesign(0 0 16px 34px, 0);
+  @include rtlDesignPosition(auto, 5px);
 }
 
 .bannerBody *::before, .cookieModal *::before, .bannerBody *::after, .cookieModal *::after {
@@ -306,6 +318,8 @@ dt.cookieListItem {
     border-radius: 50%;
     border: 1px solid $radio-button-border-color; 
     background-color: $dialog-background-color;
+
+    @include rtlDesignPosition(auto, 0);
   }
 
   &:not(:disabled) + label {
@@ -324,6 +338,8 @@ dt.cookieListItem {
         content: "";
         border-radius: 50%;
         background-color: $radio-button-hover-background-color;
+
+        @include rtlDesignPosition(auto, 5px);
       }
     }
 
@@ -342,6 +358,8 @@ dt.cookieListItem {
         content: "";
         border-radius: 50%;
         background-color: $radio-button-checked-background-color;
+
+        @include rtlDesignPosition(auto, 5px);
       }
     }
   }
@@ -356,6 +374,8 @@ dt.cookieListItem {
     content: "";
     border-radius: 50%;
     background-color: $radio-button-checked-background-color;
+
+    @include rtlDesignPosition(auto, 5px);
   }
 
   &:disabled + label {
@@ -411,7 +431,7 @@ input[type="radio"].cookieItemRadioBtn {
   cursor: pointer;
   box-sizing: border-box;
 
-  @include rtlDesign(0 8px 0 34px, 0, left);
+  @include rtlDesign(0 19px 0 0, 0 8px 0 0, left);
 }
 
 .modalButtonGroup {
@@ -465,7 +485,7 @@ input[type="radio"].cookieItemRadioBtn {
     cursor: not-allowed;
   }
 
-  @include rtlDesign(0 10px 0 0, 0, left);
+  @include rtlDesign(0, 0, left);
 }
 
 @media only screen and (max-width: 800px) {
@@ -564,6 +584,6 @@ input[type="radio"].cookieItemRadioBtn {
     width: 100%;
     max-height: 28px;
 
-    @include rtlDesign(0 0 12px 0, 0);
+    @include rtlDesign(0 0 1% 0, 0);
   }
 }
