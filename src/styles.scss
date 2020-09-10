@@ -1,8 +1,8 @@
 @import "./themes/theme";
 
-// Banner button size, can be changed
+// Banner button minimum size, can be changed
 $bannerBtnWidth: 150px;
-$bannerBtnHeight: 45px;
+$bannerBtnHeight: 36px;
 
 /// Theme. 
 /// Default: Light
@@ -45,6 +45,8 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
   z-index: 9999;          /* on top of the page */
   width: 100%;
   background-color: $banner-background-color;
+
+  justify-content: space-between;
   text-align: left;
 
   @at-root div[dir="rtl"]#{ & } {
@@ -55,14 +57,11 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
 .bannerInform {
   margin : {
     left: 5%;
-    right: 5%;
     top: 8px;
     bottom: 8px;
   }
   
-  width: 45%;   /* If "calc()" is not supported */
-
-  width: calc(85% - (#{ $bannerBtnWidth } + 3 * 4px) * 2);
+  @include rtlDesign(8px 5% 8px 0, 0);
 }
 
 .infoIcon {
@@ -92,16 +91,25 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
 
 .buttonGroup {
   display: inline-block;
+  margin : {
+    left: 5%;
+    right: 5%;
+  }
+
+  min-width: 40%;
+  min-width: calc((#{ $bannerBtnWidth } + 3 * 4px) * 2 + #{ $bannerBtnWidth });
+  min-width: fit-content;
+
   align-self: center;
   position: relative;
 }
 
 .bannerButton {
   margin: 4px;
-  padding: 0;
+  padding: 5px;
 
-  width: $bannerBtnWidth;
-  height: $bannerBtnHeight;
+  min-width: $bannerBtnWidth;
+  min-height: $bannerBtnHeight;
   vertical-align: top;
   
   cursor: pointer;
