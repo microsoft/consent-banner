@@ -294,7 +294,7 @@ dt.cookieListItem {
   }
   padding: 3px;
 
-  @include rtlDesign(0 0 13px 34px, 0);
+  @include rtlDesign(0 0 13px 34px, 3px);
   @include rtlDesignPosition(auto, 5px);
 }
 
@@ -319,7 +319,7 @@ dt.cookieListItem {
     border: 1px solid $radio-button-border-color; 
     background-color: $dialog-background-color;
 
-    @include rtlDesignPosition(auto, 0);
+    @include rtlDesignPosition(auto, 3px);
   }
 
   &:not(:disabled) + label {
@@ -339,7 +339,7 @@ dt.cookieListItem {
         border-radius: 50%;
         background-color: $radio-button-hover-background-color;
 
-        @include rtlDesignPosition(auto, 5px);
+        @include rtlDesignPosition(auto, 8px);
       }
     }
 
@@ -359,7 +359,7 @@ dt.cookieListItem {
         border-radius: 50%;
         background-color: $radio-button-checked-background-color;
 
-        @include rtlDesignPosition(auto, 5px);
+        @include rtlDesignPosition(auto, 8px);
       }
     }
   }
@@ -375,7 +375,7 @@ dt.cookieListItem {
     border-radius: 50%;
     background-color: $radio-button-checked-background-color;
 
-    @include rtlDesignPosition(auto, 5px);
+    @include rtlDesignPosition(auto, 8px);
   }
 
   &:disabled + label {
@@ -397,6 +397,7 @@ input[type="radio"].cookieItemRadioBtn {
     right: 0;
   }
 
+  height: 0;
   width: 0;
   border-radius: 0;
 
