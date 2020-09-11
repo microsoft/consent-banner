@@ -12,7 +12,8 @@
     <script src="consent-banner.js"></script>
     <script type="text/javascript">
         let options = { initialTheme: "light" };
-        let cc = new ConsentControl.ConsentControl("app", "en", (obj) => { console.log(obj); }, undefined, options);
+        let func = function(obj) { console.log(obj); };
+        let cc = new ConsentControl.ConsentControl("app", "en", func, undefined, options);
         cc.showBanner({});
     </script>
 </body>
