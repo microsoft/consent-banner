@@ -13,6 +13,7 @@ export class PreferencesControl {
     private containerElement: HTMLElement;
     private direction: string = 'ltr';
     private onPreferencesClosed: () => void;
+    private previousFocusElementBeforePopup: HTMLElement | null = null;
 
     constructor(cookieCategories: ICookieCategory[], 
                 textResources: ITextResources, 
@@ -142,6 +143,7 @@ export class PreferencesControl {
     public showPreferencesDialog(): void {
         let modal: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.cookieModal)[0];
         if (modal) {
+            this.previousFocusElementBeforePopup = <HTMLElement> document.activeElement;
             modal.style.display = 'block';
 
             let dialog: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.modalContainer)[0];
@@ -163,10 +165,7 @@ export class PreferencesControl {
         let cookieModal = document.getElementsByClassName(styles.cookieModal)[0];
         this.containerElement.removeChild(cookieModal);
 
-        let cookieInfo = document.getElementsByClassName(styles.bannerButton)[1];
-        if (cookieInfo) {
-            (<HTMLElement> cookieInfo).focus();
-        }
+        this.previousFocusElementBeforePopup?.focus();
 
         this.onPreferencesClosed();
     }
