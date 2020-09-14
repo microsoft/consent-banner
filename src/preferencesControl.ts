@@ -166,6 +166,7 @@ export class PreferencesControl {
         this.containerElement.removeChild(cookieModal);
 
         this.previousFocusElementBeforePopup?.focus();
+        this.previousFocusElementBeforePopup = null;
 
         this.onPreferencesClosed();
     }
