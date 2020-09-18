@@ -413,12 +413,19 @@ input[type="radio"].cookieItemRadioBtn {
 
 .cookieItemRadioBtnLabel {
   display: block;
+  position: static;
   float: right;
   margin : {
+    top: 0;
+    bottom: 0;
     left: 19px;
+    right: 0;
   }
   padding : {
+    top: 0;
+    bottom: 0;
     left: 8px;
+    right: 0;
   }
   width: 80%;   /* If "calc()" is not supported */
 
