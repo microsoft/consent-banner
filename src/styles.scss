@@ -174,6 +174,7 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
 
 .closeModalIcon {
   float: right;
+  z-index: 1;
   margin: 2px;
   padding: 12px;
   border: none;
@@ -192,6 +193,7 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
 }
 
 .modalBody {
+  position: static;
   margin : {
     top: 36px;
     left: 36px;
