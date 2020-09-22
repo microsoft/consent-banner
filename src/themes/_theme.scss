@@ -40,14 +40,14 @@ $primary-button-disabled-text-color: rgba(0, 0, 0, 0.2);
   border: $secondary-button-border;
   color: $secondary-button-text-color;
   
-  &:hover {
+  &:enabled:hover {
     color: $secondary-button-text-color;
     background-color: $secondary-button-hover-color;
     box-shadow: $secondary-button-hover-shadow;
     border: $secondary-button-hover-border;
   }
   
-  &:focus {
+  &:enabled:focus {
     background-color: $secondary-button-hover-color;
     box-shadow: $secondary-button-hover-shadow;
     border: 2px solid $secondary-button-focus-border-color;
@@ -66,14 +66,14 @@ $primary-button-disabled-text-color: rgba(0, 0, 0, 0.2);
   background-color: $primary-button-color;
   color: $primary-button-text-color;
   
-  &:hover {
+  &:enabled:hover {
     color: $primary-button-text-color;
     background-color: $primary-button-hover-color;
     box-shadow: $primary-button-hover-shadow;
     border: $primary-button-hover-border;
   }
   
-  &:focus {
+  &:enabled:focus {
     background-color: $primary-button-hover-color;
     box-shadow: $primary-button-hover-shadow;
     border: 2px solid $primary-button-focus-border-color;

@@ -224,7 +224,7 @@ export class ThemesController {
         }`;
         newStyles += newSecondaryBtnStyle;
 
-        let newSecondaryBtnHoverStyle = `.${ styles.secondaryButtonTheme }:hover {
+        let newSecondaryBtnHoverStyle = `.${ styles.secondaryButtonTheme }:enabled:hover {
             color: ${ theme["secondary-button-text-color"] } !important;
             background-color: ${ theme["secondary-button-hover-color"] } !important;
             box-shadow: ${ theme["secondary-button-hover-shadow"] } !important;
@@ -232,7 +232,7 @@ export class ThemesController {
         }`;
         newStyles += newSecondaryBtnHoverStyle;
 
-        let newSecondaryBtnFocusStyle = `.${ styles.secondaryButtonTheme }:focus {
+        let newSecondaryBtnFocusStyle = `.${ styles.secondaryButtonTheme }:enabled:focus {
             background-color: ${ theme["secondary-button-hover-color"] } !important;
             box-shadow: ${ theme["secondary-button-hover-shadow"] } !important;
             border: 2px solid ${ theme["secondary-button-focus-border-color"] } !important;
@@ -265,7 +265,7 @@ export class ThemesController {
         }`;
         newStyles += newPrimaryBtnStyle;
 
-        let newPrimaryBtnHoverStyle = `.${ styles.primaryButtonTheme }:hover {
+        let newPrimaryBtnHoverStyle = `.${ styles.primaryButtonTheme }:enabled:hover {
             color: ${ theme["primary-button-text-color"] } !important;
             background-color: ${ theme["primary-button-hover-color"] } !important;
             box-shadow: ${ theme["primary-button-hover-shadow"] } !important;
@@ -273,7 +273,7 @@ export class ThemesController {
         }`;
         newStyles += newPrimaryBtnHoverStyle;
 
-        let newPrimaryBtnFocusStyle = `.${ styles.primaryButtonTheme }:focus {
+        let newPrimaryBtnFocusStyle = `.${ styles.primaryButtonTheme }:enabled:focus {
             background-color: ${ theme["primary-button-hover-color"] } !important;
             box-shadow: ${ theme["primary-button-hover-shadow"] } !important;
             border: 2px solid ${ theme["primary-button-focus-border-color"] } !important;
