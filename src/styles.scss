@@ -203,6 +203,7 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
 
 .modalTitle {
   margin : {
+    top: 0;
     bottom: 12px;
   }
 
@@ -525,10 +526,6 @@ input[type="radio"].cookieItemRadioBtn {
 
     width: 100%;
   }
-  
-  .closeModalIcon {
-    padding:3%;
-  }
 
   .cookieModal {
     overflow: hidden;
@@ -543,11 +540,55 @@ input[type="radio"].cookieItemRadioBtn {
     overflow: hidden;
   }
 
-  .modalTitle {
-    margin: {
-      top: 3%;
-      bottom: 3%;
+  .modalBody {
+    margin : {
+      top: 24px;
+      left: 24px;
+      right: 24px;
     }
+
+    height: 100%;
+  }
+
+  .modalContent {
+    height: 62%;   /* If "calc()" is not supported */
+   
+    height: calc(100% - 188px);
+    min-height: 50%;
+  }
+
+  .modalButtonReset {
+    width: 100%;
+  }
+
+  .modalButtonSave {
+    margin : {
+      bottom: 12px;
+      left: 0;
+    }
+
+    width: 100%;
+
+    @include rtlDesign(0 0 12px 0, 0);
+  }
+}
+
+/* For landscape orientation: */
+@media only screen and (max-width: 768px) and (orientation: landscape), only screen and (max-height: 260px), only screen and (max-width: 340px) {
+  .modalContainer {
+    overflow: auto;
+  }
+}
+
+/* For large zoom in: */
+@media only screen and (max-height: 260px), only screen and (max-width: 340px) {
+
+  .bannerButton {
+    min-width: 0;
+  }
+  
+  .closeModalIcon {
+    padding: 3%;
   }
 
   .modalBody {
@@ -555,45 +596,31 @@ input[type="radio"].cookieItemRadioBtn {
       top: 3%;
       left: 3%;
       right: 3%;
-      bottom: 3%;
     }
-
-    height: 100%;
   }
 
-  .modalBody > div:first-child {
-    max-height: 25%;
-    overflow: hidden;
+  .modalTitle {
+    margin: {
+      bottom: 3%;
+    }
   }
 
   .modalContent {
-    height: 62%;   /* If "calc()" is not supported */
-   
-    height: calc(100% - 225px);
-    min-height: 40%;
+    height: calc(79% - 64px);
   }
 
   .modalButtonGroup {
     margin: {
-      top: 2%;
-      bottom: 2%;
+      top: 5%;
+      bottom: 10%;
     }
-  }
-
-  .modalButtonReset {
-    width: 100%;
-    max-height: 28px;
   }
 
   .modalButtonSave {
     margin : {
-      bottom: 1%;
-      left: 0;
+      bottom: 3%;
     }
 
-    width: 100%;
-    max-height: 28px;
-
-    @include rtlDesign(0 0 1% 0, 0);
+    @include rtlDesign(0 0 3% 0, 0);
   }
 }
