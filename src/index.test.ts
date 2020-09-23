@@ -468,6 +468,7 @@ describe("Test show and hide banner", () => {
                                                     cookieCategoriePreferences, 
                                                     insert, 
                                                     "ltr", 
+                                                    { changed: false }, 
                                                     () => { cc.preferencesCtrl = null; });
 
         cc.hideBanner();
@@ -748,6 +749,7 @@ describe("Test show and hide preferences dialog", () => {
                                                     cookieCategoriePreferences, 
                                                     insert, 
                                                     "ltr", 
+                                                    { changed: false }, 
                                                     () => { cc.preferencesCtrl = null; });
         
         cc.hidePreferences();
@@ -839,5 +841,66 @@ describe("Test containerElement", () => {
 
         expect(() => cc.setContainerElement("")).toThrowError('Container not found error');
         expect(() => cc.setContainerElement(<HTMLElement> document.getElementById("test"))).toThrowError('Container not found error');
+    });
+});
+
+describe("Test onPreferencesChanged(...)", () => {
+    let testId: string = "app";
+
+    beforeEach(() => {
+        let newDiv = document.createElement("div");
+        newDiv.setAttribute("id", testId);
+        document.body.appendChild(newDiv);
+    });
+
+    afterEach(() => {
+        let child = document.getElementById(testId);
+        if (child) {
+            let parent = child.parentNode;
+
+            if (parent) {
+                parent.removeChild(child);
+            }
+            else {
+                throw new Error("Parent not found error");
+            }
+        }
+    });
+    
+    test("Click 'More info' button, click any unchecked radio buttons, and click 'Save changes' button. 'onPreferencesChanged(...)' should be called.", () => {
+        let callBack = jest.fn();
+        let cc = new ConsentControl(testId, "en", callBack);
+        
+        let cookieCategoriePreferences = { "c2": undefined, "c3": false };
+        cc.showBanner(cookieCategoriePreferences);
+
+        let cookieInfo = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[1];
+        cookieInfo.click();
+
+        let cookieItemRadioBtn: HTMLInputElement[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
+        cookieItemRadioBtn[1].click();
+        cookieItemRadioBtn[4].click();
+        
+        let saveChangesBtn = <HTMLInputElement> document.getElementsByClassName(styles.modalButtonSave)[0];
+        saveChangesBtn.click();
+
+        expect(callBack).toHaveBeenCalled();
+    });
+
+    test("Call showPreferences(...), click any unchecked radio buttons, and click 'Save changes' button. 'onPreferencesChanged(...)' should be called.", () => {
+        let callBack = jest.fn();
+        let cc = new ConsentControl(testId, "en", callBack);
+        
+        let cookieCategoriePreferences = { "c2": undefined, "c3": false };
+        cc.showPreferences(cookieCategoriePreferences);
+
+        let cookieItemRadioBtn: HTMLInputElement[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
+        cookieItemRadioBtn[1].click();
+        cookieItemRadioBtn[4].click();
+        
+        let saveChangesBtn = <HTMLInputElement> document.getElementsByClassName(styles.modalButtonSave)[0];
+        saveChangesBtn.click();
+
+        expect(callBack).toHaveBeenCalled();
     });
 });
