@@ -27,6 +27,7 @@ export class ConsentControl {
 
     preferencesCtrl: PreferencesControl | null = null;
     private direction: string = 'ltr';
+    private isDirty: { changed: boolean } = { changed: false };
 
     // All categories should be replaced with the passed ones in the control
     defaultCookieCategories: ICookieCategory[] =
@@ -264,6 +265,7 @@ export class ConsentControl {
                                                       cookieCategoriesPreferences, 
                                                       <HTMLElement> this.containerElement, 
                                                       this.direction, 
+                                                      this.isDirty, 
                                                       () => this.onPreferencesClosed());
         
         this.preferencesCtrl.createPreferencesDialog();

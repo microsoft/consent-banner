@@ -245,6 +245,74 @@ describe("Test radio buttons and 'Reset all' button", () => {
     });
 });
 
+describe("Test 'Save changes' button", () => {
+    let testId: string = "app";
+
+    beforeEach(() => {
+        let newDiv = document.createElement("div");
+        newDiv.setAttribute("id", testId);
+        document.body.appendChild(newDiv);
+    });
+
+    afterEach(() => {
+        let child = document.getElementById(testId);
+        if (child) {
+            let parent = child.parentNode;
+
+            if (parent) {
+                parent.removeChild(child);
+            }
+            else {
+                throw new Error("Parent not found error");
+            }
+        }
+    });
+
+    test("Click 'More info' button, click any unchecked radio buttons, and close the dialog. Open dialog and 'Save changes' button will be enabled", () => {
+        let callBack = function() { return; };
+        let cc = new ConsentControl(testId, "en", callBack);
+        
+        let cookieCategoriePreferences = { "c2": true };
+        cc.showBanner(cookieCategoriePreferences);
+
+        let cookieInfo = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[1];
+        cookieInfo.click();
+
+        let cookieItemRadioBtn: HTMLInputElement[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
+        cookieItemRadioBtn[1].click();
+        cookieItemRadioBtn[4].click();
+
+        let closeModalIcon: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.closeModalIcon)[0];
+        closeModalIcon.click();
+
+        cookieInfo.click();
+        expect(cookieCategoriePreferences).toEqual({ "c1": false, "c2": true, "c3": true });
+        
+        let saveChangesBtn = <HTMLInputElement> document.getElementsByClassName(styles.modalButtonSave)[0];
+        expect(saveChangesBtn.disabled).toBeFalsy();
+    });
+    
+    test("Call showPreferences(...), click any unchecked radio buttons, and close the dialog. Open dialog and 'Save changes' button will be enabled", () => {
+        let callBack = function() { return; };
+        let cc = new ConsentControl(testId, "en", callBack);
+        
+        let cookieCategoriePreferences = { "c2": undefined, "c3": false };
+        cc.showPreferences(cookieCategoriePreferences);
+
+        let cookieItemRadioBtn: HTMLInputElement[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
+        cookieItemRadioBtn[0].click();
+        cookieItemRadioBtn[3].click();
+
+        cc.hidePreferences();
+
+        cc.showPreferences(cookieCategoriePreferences);
+        expect(cookieCategoriePreferences).toEqual({ "c1": true, "c2": false, "c3": false });
+
+        let saveChangesBtn = <HTMLInputElement> document.getElementsByClassName(styles.modalButtonSave)[0];
+        expect(saveChangesBtn.disabled).toBeFalsy();
+    });
+});
+
 describe("Test 'Accept all' button", () => {
     let testId: string = "app";
 

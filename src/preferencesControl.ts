@@ -12,6 +12,7 @@ export class PreferencesControl {
 
     private containerElement: HTMLElement;
     private direction: string = 'ltr';
+    private isDirty: { changed: boolean };
     private onPreferencesClosed: () => void;
     private previousFocusElementBeforePopup: HTMLElement | null = null;
 
@@ -20,6 +21,7 @@ export class PreferencesControl {
                 cookieCategoriesPreferences: ICookieCategoriesPreferences, 
                 containerElement: HTMLElement, 
                 direction: string,
+                isDirty: { changed: boolean },
                 onPreferencesClosed: () => void) {
 
         this.cookieCategories = cookieCategories;
@@ -27,6 +29,7 @@ export class PreferencesControl {
         this.cookieCategoriesPreferences = cookieCategoriesPreferences;
         this.containerElement = containerElement;
         this.direction = direction;
+        this.isDirty = isDirty;
         this.onPreferencesClosed = onPreferencesClosed;
     }
 
@@ -209,6 +212,7 @@ export class PreferencesControl {
                     // Enable "Save changes" button
                     if (oldCategValue !== this.cookieCategoriesPreferences[categId]) {
                         modalButtonSave.disabled = false;
+                        this.isDirty.changed = true;
                     }
                 }
             });
@@ -223,9 +227,15 @@ export class PreferencesControl {
                 }
             }
 
+            this.isDirty.changed = false;
+
             // Reset UI
             this.setRadioBtnState();
         });
+
+        if (this.isDirty.changed) {
+            modalButtonSave.disabled = false;
+        }
     }
 
     /**
