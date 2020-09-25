@@ -1,4 +1,5 @@
 import { ConsentControl } from "./index";
+import { ICookieCategoriesPreferences } from './interfaces/CookieCategoriesPreferences'
 import * as styles from "./styles.scss";
 
 describe("Test radio buttons and 'Reset all' button", () => {
@@ -47,8 +48,6 @@ describe("Test radio buttons and 'Reset all' button", () => {
         cookieInfo.click();
 
         expect(cc.preferencesCtrl).toBeTruthy();
-        let cookieModal: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.cookieModal)[0];
-        expect(cookieModal.style.display).toBe("block");
 
         let cookieItemRadioBtn: HTMLInputElement[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
         cookieItemRadioBtn[1].click();
@@ -87,8 +86,6 @@ describe("Test radio buttons and 'Reset all' button", () => {
         cc.showPreferences(cookieCategoriePreferences);
 
         expect(cc.preferencesCtrl).toBeTruthy();
-        let cookieModal: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.cookieModal)[0];
-        expect(cookieModal.style.display).toBe("block");
 
         let cookieItemRadioBtn: HTMLInputElement[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
         cookieItemRadioBtn[1].click();
@@ -127,8 +124,6 @@ describe("Test radio buttons and 'Reset all' button", () => {
         cc.showPreferences(cookieCategoriePreferences);
 
         expect(cc.preferencesCtrl).toBeTruthy();
-        let cookieModal: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.cookieModal)[0];
-        expect(cookieModal.style.display).toBe("block");
 
         let cookieItemRadioBtn: HTMLInputElement[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
         cookieItemRadioBtn[1].click();
@@ -170,8 +165,6 @@ describe("Test radio buttons and 'Reset all' button", () => {
         cookieInfo.click();
 
         expect(cc.preferencesCtrl).toBeTruthy();
-        let cookieModal: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.cookieModal)[0];
-        expect(cookieModal.style.display).toBe("block");
 
         let cookieItemRadioBtn: HTMLInputElement[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
         cookieItemRadioBtn[0].click();
@@ -211,8 +204,6 @@ describe("Test radio buttons and 'Reset all' button", () => {
         cc.showPreferences(cookieCategoriePreferences);
 
         expect(cc.preferencesCtrl).toBeTruthy();
-        let cookieModal: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.cookieModal)[0];
-        expect(cookieModal.style.display).toBe("block");
 
         let cookieItemRadioBtn: HTMLInputElement[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
         cookieItemRadioBtn[0].click();
@@ -340,7 +331,7 @@ describe("Test 'Accept all' button", () => {
         let callBack = function() { return; };
         let cc = new ConsentControl(testId, "en", callBack);
         
-        let cookieCategoriePreferences = { "c2": undefined, "c3": false };
+        let cookieCategoriePreferences: ICookieCategoriesPreferences = { "c2": undefined, "c3": false };
         cc.showBanner(cookieCategoriePreferences);
 
         let acceptAllBtn = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[0];
@@ -348,13 +339,8 @@ describe("Test 'Accept all' button", () => {
 
         for (let cookieCategory of cc.cookieCategories) {
             if (!cookieCategory.isUnswitchable) {
-                if (cc.preferencesCtrl) {
-                    let id = cookieCategory.id;
-                    expect(cc.preferencesCtrl.cookieCategoriesPreferences[id]).toBeTruthy();
-                }
-                else {
-                    throw new Error("Preference dialog not found error");
-                }
+                let id = cookieCategory.id;
+                expect(cookieCategoriePreferences[id]).toBeTruthy();
             }
         }
     });
@@ -363,7 +349,7 @@ describe("Test 'Accept all' button", () => {
         let callBack = function() { return; };
         let cc = new ConsentControl(testId, "en", callBack);
         
-        let cookieCategoriePreferences = { "c0": true, "c2": undefined, "c3": false };
+        let cookieCategoriePreferences: ICookieCategoriesPreferences = { "c0": true, "c2": undefined, "c3": false };
         cc.showBanner(cookieCategoriePreferences);
 
         let acceptAllBtn = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[0];
@@ -371,13 +357,8 @@ describe("Test 'Accept all' button", () => {
 
         for (let cookieCategory of cc.cookieCategories) {
             if (!cookieCategory.isUnswitchable) {
-                if (cc.preferencesCtrl) {
-                    let id = cookieCategory.id;
-                    expect(cc.preferencesCtrl.cookieCategoriesPreferences[id]).toBeTruthy();
-                }
-                else {
-                    throw new Error("Preference dialog not found error");
-                }
+                let id = cookieCategory.id;
+                expect(cookieCategoriePreferences[id]).toBeTruthy();
             }
         }
     });

@@ -18,27 +18,7 @@ function testShowingBanner(dir: string): void {
     expect(document.getElementsByClassName(styles.bannerButton).length).toBe(2);
 }
 
-function testShowingPreferences(cc: ConsentControl, cookieCategoriePreferences: ICookieCategoriesPreferences, display: string): void {
-    expect(document.getElementsByClassName(styles.cookieModal)).toBeTruthy();
-
-    let cookieModal: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.cookieModal)[0];
-    expect(cookieModal.getAttribute("dir")).toBe(cc.getDirection());
-    expect(cookieModal.style.display).toBe(display);
-
-    expect(document.getElementsByClassName(styles.modalContainer).length).toBe(1);
-    expect(document.getElementsByClassName(styles.closeModalIcon).length).toBe(1);
-    expect(document.getElementsByClassName(styles.modalBody).length).toBe(1);
-
-    expect(document.getElementsByClassName(styles.modalTitle).length).toBe(1);
-    expect(document.getElementsByClassName(styles.modalContent).length).toBe(1);
-
-    expect(document.getElementsByClassName(styles.cookieStatement).length).toBe(1);
-    expect(document.getElementsByClassName(styles.cookieOrderedList).length).toBe(1);
-
-    expect(document.getElementsByClassName(styles.cookieListItem).length).toBe(cc.cookieCategories.length);
-    expect(document.getElementsByClassName(styles.cookieListItemTitle).length).toBe(cc.cookieCategories.length);
-    expect(document.getElementsByClassName(styles.cookieListItemDescription).length).toBe(cc.cookieCategories.length);
-
+function testRadioBtnState(cc: ConsentControl, cookieCategoriePreferences: ICookieCategoriesPreferences): number {
     // test: 
     // c1: true => accept radio button should be checked
     // c2: false => reject radio button should be checked
@@ -58,6 +38,31 @@ function testShowingPreferences(cc: ConsentControl, cookieCategoriePreferences: 
             i++;
         }
     }
+
+    return i;
+}
+
+function testShowingPreferences(cc: ConsentControl, cookieCategoriePreferences: ICookieCategoriesPreferences): void {
+    expect(document.getElementsByClassName(styles.cookieModal)).toBeTruthy();
+
+    let cookieModal: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.cookieModal)[0];
+    expect(cookieModal.getAttribute("dir")).toBe(cc.getDirection());
+
+    expect(document.getElementsByClassName(styles.modalContainer).length).toBe(1);
+    expect(document.getElementsByClassName(styles.closeModalIcon).length).toBe(1);
+    expect(document.getElementsByClassName(styles.modalBody).length).toBe(1);
+
+    expect(document.getElementsByClassName(styles.modalTitle).length).toBe(1);
+    expect(document.getElementsByClassName(styles.modalContent).length).toBe(1);
+
+    expect(document.getElementsByClassName(styles.cookieStatement).length).toBe(1);
+    expect(document.getElementsByClassName(styles.cookieOrderedList).length).toBe(1);
+
+    expect(document.getElementsByClassName(styles.cookieListItem).length).toBe(cc.cookieCategories.length);
+    expect(document.getElementsByClassName(styles.cookieListItemTitle).length).toBe(cc.cookieCategories.length);
+    expect(document.getElementsByClassName(styles.cookieListItemDescription).length).toBe(cc.cookieCategories.length);
+
+    let i = testRadioBtnState(cc, cookieCategoriePreferences);
 
     expect(document.getElementsByClassName(styles.cookieListItemGroup).length).toBe(i);
     expect(document.getElementsByClassName(styles.cookieItemRadioBtnGroup).length).toBe(i);
@@ -260,30 +265,6 @@ describe("Test show and hide banner", () => {
         }
     });
 
-    test("Pass string in constructor, and preferences dialog will be inserted when showBanner(...) is called", () => {
-        let callBack = function() { return; };
-        let cc = new ConsentControl(testId, "en", callBack);
-        
-        let cookieCategoriePreferences = { "c1": true, "c2": undefined, "c3": false };
-        cc.showBanner(cookieCategoriePreferences);
-
-        testShowingPreferences(cc, cookieCategoriePreferences, "");
-    });
-
-    test("Pass HTMLElement in constructor, and preferences dialog will be inserted when showBanner(...) is called", () => {
-        let callBack = function() { return; };
-        let insert = document.getElementById(testId);
-
-        if (insert) {
-            let cc = new ConsentControl(insert, "en", callBack);
-            
-            let cookieCategoriePreferences = { "c1": true, "c2": undefined, "c3": false };
-            cc.showBanner(cookieCategoriePreferences);
-    
-            testShowingPreferences(cc, cookieCategoriePreferences, "");
-        }
-    });
-
     test("Call showBanner(...) many times, only keep last one", () => {
         let callBack = function() { return; };
         let cc = new ConsentControl(testId, "en", callBack);
@@ -291,19 +272,12 @@ describe("Test show and hide banner", () => {
         cc.showBanner({ "c1": true, "c2": false,"c3": undefined });
         cc.showBanner({ "c1": false, "c2": true,"c3": undefined });
         cc.showBanner({ "c1": true, "c2": false,"c3": false });
+
+        let cookieInfo: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[1];
+        cookieInfo.click();
         
         testShowingBanner(cc.getDirection());
-        testShowingPreferences(cc, { "c1": true, "c2": false,"c3": false }, "");
-    });
-
-    test("If switchable id is not in cookieCategoriePreferences, the category in preferences dialog will not be set", () => {
-        let callBack = function() { return; };
-        let cc = new ConsentControl(testId, "en", callBack);
-
-        let cookieCategoriePreferences = { "c2": true, "c3": undefined };
-        cc.showBanner(cookieCategoriePreferences);
-
-        testShowingPreferences(cc, cookieCategoriePreferences, "");
+        testShowingPreferences(cc, { "c1": true, "c2": false,"c3": false });
     });
 
     test("Preferences dialog will appear when 'More info' button is clicked", () => {
@@ -316,100 +290,7 @@ describe("Test show and hide banner", () => {
         let cookieInfo: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[1];
         cookieInfo.click();
 
-        testShowingPreferences(cc, cookieCategoriePreferences, "block");
-    });
-
-    test("'Reset all' and 'Save changes' will be enabled when any radio buttons are clicked", () => {
-        let callBack = function() { return; };
-        let cc = new ConsentControl(testId, "en", callBack);
-
-        cc.showBanner({ "c1": true, "c2": false,"c3": undefined });
-
-        let cookieItemRadioBtnLength = document.getElementsByClassName(styles.cookieItemRadioBtn).length;
-        for (let i = 0; i < cookieItemRadioBtnLength; i++) {
-            let container = document.getElementById(testId);
-            if (container) {
-                container.innerHTML = "";
-                
-                let otherCallBack = function() { return; };
-                let otherCc = new ConsentControl(testId, "en", otherCallBack);
-
-                let cookieCategoriePreferences = { "c1": true, "c2": false, "c3": undefined };
-                let cookiePreferencesBtnArray = [0, 3];
-                
-                otherCc.showBanner(cookieCategoriePreferences);
-                testModalSaveButton(i, cookiePreferencesBtnArray);
-            }
-            else {
-                throw new Error("Container not found error");
-            }
-        }
-    });
-
-    test("'Reset all' will be enabled when any cookieCategoriesPreferences is defined", () => {
-        let callBack = function() { return; };
-
-        let cc = new ConsentControl(testId, "en", callBack);
-        let cookieCategoriesPreferences: ICookieCategoriesPreferences = { };
-        cc.showBanner(cookieCategoriesPreferences);
-        expect((<HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0]).disabled).toBeTruthy();
-
-        cc.hideBanner();
-
-        cc = new ConsentControl(testId, "en", callBack);
-        cookieCategoriesPreferences = { "c1": true };
-        cc.showBanner(cookieCategoriesPreferences);
-        expect((<HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0]).disabled).toBeFalsy();
-
-        cc.hideBanner();
-
-        cc = new ConsentControl(testId, "en", callBack);
-        cookieCategoriesPreferences = { "c1": false };
-        cc.showBanner(cookieCategoriesPreferences);
-        expect((<HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0]).disabled).toBeFalsy();
-
-        cc.hideBanner();
-
-        cc = new ConsentControl(testId, "en", callBack);
-        cookieCategoriesPreferences = { "c2": true };
-        cc.showBanner(cookieCategoriesPreferences);
-        expect((<HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0]).disabled).toBeFalsy();
-
-        cc.hideBanner();
-
-        cc = new ConsentControl(testId, "en", callBack);
-        cookieCategoriesPreferences = { "c2": false };
-        cc.showBanner(cookieCategoriesPreferences);
-        expect((<HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0]).disabled).toBeFalsy();
-
-        cc.hideBanner();
-
-        cc = new ConsentControl(testId, "en", callBack);
-        cookieCategoriesPreferences = { "c3": true };
-        cc.showBanner(cookieCategoriesPreferences);
-        expect((<HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0]).disabled).toBeFalsy();
-
-        cc.hideBanner();
-
-        cc = new ConsentControl(testId, "en", callBack);
-        cookieCategoriesPreferences = { "c3": false };
-        cc.showBanner(cookieCategoriesPreferences);
-        expect((<HTMLInputElement> document.getElementsByClassName(styles.modalButtonReset)[0]).disabled).toBeFalsy();
-
-        cc.hideBanner();
-    });
-
-    test("Preferences dialog will be removed from DOM when 'X' button is clicked", () => {
-        let callBack = function() { return; };
-        let cc = new ConsentControl(testId, "en", callBack);
-
-        cc.showBanner({ "c1": true, "c2": false,"c3": undefined });
-
-        let closeModalIcon: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.closeModalIcon)[0];
-        closeModalIcon.click();
-        
-        expect(cc.preferencesCtrl).toBeNull();
-        testRemovingPreferences();
+        testShowingPreferences(cc, cookieCategoriePreferences);
     });
 
     test("'X' button is clicked, and then click 'More info' button. Preferences dialog should appear", () => {
@@ -419,17 +300,19 @@ describe("Test show and hide banner", () => {
         let cc = new ConsentControl(testId, "en", callBack);
         cc.showBanner(cookieCategoriePreferences);
 
+        let cookieInfo: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[1];
+        cookieInfo.click();
+        
         let closeModalIcon: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.closeModalIcon)[0];
         closeModalIcon.click();
         
-        let cookieInfo: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[1];
         cookieInfo.click();
 
-        testShowingPreferences(cc, cookieCategoriePreferences, "block");
+        testShowingPreferences(cc, cookieCategoriePreferences);
 
         closeModalIcon.click();
         cookieInfo.click();
-        testShowingPreferences(cc, cookieCategoriePreferences, "block");
+        testShowingPreferences(cc, cookieCategoriePreferences);
     });
 
     test("Banner will be removed from DOM when hideBanner() is called", () => {
@@ -605,7 +488,7 @@ describe("Test show and hide preferences dialog", () => {
         cc.showPreferences(cookieCategoriePreferences);
 
         testShowingBanner("ltr");
-        testShowingPreferences(cc, cookieCategoriePreferences, "block");
+        testShowingPreferences(cc, cookieCategoriePreferences);
     });
 
     test("Pass HTMLElement in constructor, and preferences dialog will be inserted when showPreferences(...) is called", () => {
@@ -619,7 +502,7 @@ describe("Test show and hide preferences dialog", () => {
             cc.showPreferences(cookieCategoriePreferences);
     
             testShowingBanner("ltr");
-            testShowingPreferences(cc, cookieCategoriePreferences, "block");
+            testShowingPreferences(cc, cookieCategoriePreferences);
         }
     });
 
@@ -631,7 +514,7 @@ describe("Test show and hide preferences dialog", () => {
         cc.showPreferences(cookieCategoriePreferences);
 
         testShowingBanner("ltr");
-        testShowingPreferences(cc, cookieCategoriePreferences, "block");
+        testShowingPreferences(cc, cookieCategoriePreferences);
     });
 
     test("'Reset all' and 'Save changes' will be enabled when any radio buttons are clicked", () => {
@@ -866,26 +749,6 @@ describe("Test onPreferencesChanged(...)", () => {
             }
         }
     });
-    
-    test("Click 'More info' button, click any unchecked radio buttons, and click 'Save changes' button. 'onPreferencesChanged(...)' should be called.", () => {
-        let callBack = jest.fn();
-        let cc = new ConsentControl(testId, "en", callBack);
-        
-        let cookieCategoriePreferences = { "c2": undefined, "c3": false };
-        cc.showBanner(cookieCategoriePreferences);
-
-        let cookieInfo = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[1];
-        cookieInfo.click();
-
-        let cookieItemRadioBtn: HTMLInputElement[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
-        cookieItemRadioBtn[1].click();
-        cookieItemRadioBtn[4].click();
-        
-        let saveChangesBtn = <HTMLInputElement> document.getElementsByClassName(styles.modalButtonSave)[0];
-        saveChangesBtn.click();
-
-        expect(callBack).toHaveBeenCalled();
-    });
 
     test("Call showPreferences(...), click any unchecked radio buttons, and click 'Save changes' button. 'onPreferencesChanged(...)' should be called.", () => {
         let callBack = jest.fn();
@@ -902,5 +765,45 @@ describe("Test onPreferencesChanged(...)", () => {
         saveChangesBtn.click();
 
         expect(callBack).toHaveBeenCalled();
+    });
+});
+
+describe("Test setRadioBtnState()", () => {
+    let testId: string = "app";
+
+    beforeEach(() => {
+        let newDiv = document.createElement("div");
+        newDiv.setAttribute("id", testId);
+        document.body.appendChild(newDiv);
+    });
+
+    afterEach(() => {
+        let child = document.getElementById(testId);
+        if (child) {
+            let parent = child.parentNode;
+
+            if (parent) {
+                parent.removeChild(child);
+            }
+            else {
+                throw new Error("Parent not found error");
+            }
+        }
+    });
+    
+    test("setRadioBtnState() will set radio buttons state according to cookieCategoriesPreferences.", () => {
+        let callBack = function() { return; };
+        let cc = new ConsentControl(testId, "en", callBack);
+        
+        let cookieCategoriePreferences: ICookieCategoriesPreferences = { "c2": undefined, "c3": false };
+        cc.showPreferences(cookieCategoriePreferences);
+
+        cc.preferencesCtrl!.cookieCategoriesPreferences["c1"] = false;
+        cc.preferencesCtrl!.cookieCategoriesPreferences["c2"] = true;
+        cc.preferencesCtrl!.cookieCategoriesPreferences["c3"] = undefined;
+
+        cc.preferencesCtrl?.setRadioBtnState();
+
+        testRadioBtnState(cc, cc.preferencesCtrl!.cookieCategoriesPreferences);
     });
 });
