@@ -202,15 +202,10 @@ export class ConsentControl {
 
         this.containerElement?.appendChild(banner);
 
-        if (!this.preferencesCtrl) {
-            this.initPreferencesCtrl(cookieCategoriesPreferences);
+        let cookieInfo = document.getElementsByClassName(styles.bannerButton)[1];
+        cookieInfo?.addEventListener('click', () => this.showPreferences(cookieCategoriesPreferences));
 
-            // Add event handler to show preferences dialog (from hidden state) when "More info" button is clicked
-            let cookieInfo = document.getElementsByClassName(styles.bannerButton)[1];
-            cookieInfo?.addEventListener('click', () => this.showPreferences(cookieCategoriesPreferences));
-        }
-
-        let acceptAllBtn = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[0];
+        let acceptAllBtn = document.getElementsByClassName(styles.bannerButton)[0];
         acceptAllBtn?.addEventListener('click', () => this.onAcceptAllClicked(cookieCategoriesPreferences));
     }
 
@@ -238,7 +233,7 @@ export class ConsentControl {
             this.initPreferencesCtrl(cookieCategoriesPreferences);
         }
 
-        this.preferencesCtrl?.showPreferencesDialog();
+        this.preferencesCtrl?.onPreferencesDialogShowing();
     }
 
     /**

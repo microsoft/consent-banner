@@ -141,17 +141,20 @@ export class PreferencesControl {
     }
 
     /**
-     * Show preferences dialog (from hidden state)
+     * Handle event when preferences dialog is created.
      */
-    public showPreferencesDialog(): void {
-        let modal: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.cookieModal)[0];
-        if (modal) {
-            this.previousFocusElementBeforePopup = <HTMLElement> document.activeElement;
-            modal.style.display = 'block';
+    public onPreferencesDialogShowing(): void {
+        let dialogPresent = false;
+        if (this.previousFocusElementBeforePopup) {
+            dialogPresent = true;
+        }
 
-            let dialog: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.modalContainer)[0];
-            dialog.focus();
+        this.previousFocusElementBeforePopup = <HTMLElement> document.activeElement;
+        
+        let dialog: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.modalContainer)[0];
+        dialog.focus();
 
+        if (!dialogPresent) {
             dialog.addEventListener('keydown', (event) => {
                 if (event.key == 'Escape' || event.key == 'Esc') {
                     event.preventDefault();

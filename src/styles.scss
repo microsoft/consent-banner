@@ -139,7 +139,7 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
 }
 
 .cookieModal {
-  display: none;
+  display: block;
   position: fixed;
   z-index: 10000;   /* on top of the page */
   top: 0;
