@@ -153,7 +153,7 @@ export class PreferencesControl {
             dialog.focus();
 
             dialog.addEventListener('keydown', (event) => {
-                if (event.key == 'Escape') {
+                if (event.key == 'Escape' || event.key == 'Esc') {
                     event.preventDefault();
                     this.hidePreferencesDialog();
                 }
