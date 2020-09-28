@@ -41,7 +41,15 @@ const config = {
       {
         test: /\.scss$/,
         use: [
-          "style-loader",
+          {
+            loader: "style-loader",
+            options: { 
+              attributes: {
+                id: "ms-consent-banner-main-styles",
+                nonce: "q1dKEaB2445gM4C39XQmM" 
+              } 
+            }
+          },
           {
             loader: "css-loader",
             options: {

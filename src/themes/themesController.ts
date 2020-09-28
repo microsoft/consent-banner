@@ -100,6 +100,8 @@ export class ThemesController {
         themesStyles.type = 'text/css';
         themesStyles.id = 'ms-consent-banner-theme-styles';
 
+        themesStyles.setAttribute('nonce', 'q1dKEaB2445gM4C39XQmM');
+
         document.head.appendChild(themesStyles);
     }
 
@@ -132,7 +134,7 @@ export class ThemesController {
         newStyles += this.buildSecondaryBtnStyle(theme);
         newStyles += this.buildRadioBtnStyle(theme);
 
-        document.getElementById('ms-consent-banner-theme-styles')!.innerHTML = newStyles;
+        document.getElementById('ms-consent-banner-theme-styles')!.textContent = newStyles;
     }
 
     /**

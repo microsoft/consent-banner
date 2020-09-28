@@ -249,6 +249,33 @@ export class ConsentControl {
     }
 
     /**
+     * Set "nonce" attribute to all the <style> tags
+     */
+    public setNonceAttribute(nonce?: string): void {
+        if (!nonce) {
+            return;
+        }
+
+        let allConsentBannerStyles = this.getConsentBannerStyles();
+
+        for (let styleElement of allConsentBannerStyles) {
+            styleElement.setAttribute('nonce', nonce);
+        }
+    }
+
+    /**
+     * Get all consent banner styles
+     */
+    private getConsentBannerStyles(): HTMLElement[] {
+        let allConsentBannerStyles: HTMLElement[] = [];
+
+        allConsentBannerStyles.push(document.getElementById('ms-consent-banner-main-styles')!);
+        allConsentBannerStyles.push(document.getElementById('ms-consent-banner-theme-styles')!);
+
+        return allConsentBannerStyles;
+    }
+
+    /**
      * The method is used to initialize the preferences dialog.
      * 
      * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences object that indicates cookie categories preferences
