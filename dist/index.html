@@ -11,7 +11,7 @@
     <h1>aaabcdef</h1>
     <script src="consent-banner.js"></script>
     <script type="text/javascript">
-        let options = { initialTheme: "light" };
+        let options = { initialTheme: "light", stylesNonce: "test1" };
         let func = function(obj) { console.log(obj); };
         let cc = new ConsentControl.ConsentControl("app", "en", func, undefined, options);
         cc.showBanner({});

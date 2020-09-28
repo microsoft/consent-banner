@@ -1,5 +1,5 @@
 import { ConsentControl } from "./index";
-import { ICookieCategoriesPreferences } from './interfaces/CookieCategoriesPreferences'
+import { ICookieCategoriesPreferences } from "./interfaces/CookieCategoriesPreferences";
 import * as styles from "./styles.scss";
 
 describe("Test radio buttons and 'Reset all' button", () => {

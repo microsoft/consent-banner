@@ -9,6 +9,13 @@ const config = {
     libraryTarget: 'umd',
     library: 'ConsentControl'
   },
+  devServer: {
+    contentBase: "./dist",
+    watchContentBase: true,
+    headers: {
+      "Content-Security-Policy": "style-src 'nonce-test1'"
+    }
+  },
   module: {
     rules: [
       {

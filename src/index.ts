@@ -106,6 +106,7 @@ export class ConsentControl {
             this.applyTheme(options.initialTheme);
         }
 
+        this.setNonceAttribute(options?.stylesNonce);
         this.setDirection();
     }
 
@@ -251,7 +252,7 @@ export class ConsentControl {
     /**
      * Set "nonce" attribute to all the <style> tags
      */
-    public setNonceAttribute(nonce?: string): void {
+    private setNonceAttribute(nonce?: string): void {
         if (!nonce) {
             return;
         }
