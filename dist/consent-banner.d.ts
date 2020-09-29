@@ -56,7 +56,8 @@ declare interface ITextResources {
 declare interface IOptions {
     textResources?: ITextResources;
     themes?: IThemes;
-    initialTheme?: string
+    initialTheme?: string;
+    stylesNonce?: string;
 }
 declare interface ICookieCategory {
     id: string;
@@ -79,6 +80,7 @@ export declare class ConsentControl {
     themes: IThemes;
     preferencesCtrl: PreferencesControl | null;
     private direction;
+    private isDirty;
     defaultCookieCategories: ICookieCategory[];
     defaultTextResources: ITextResources;
     constructor(containerElementOrId: string | HTMLElement, culture: string, onPreferencesChanged: (cookieCategoriesPreferences: ICookieCategoriesPreferences) => void, cookieCategories?: ICookieCategory[], options?: IOptions);
@@ -124,6 +126,14 @@ export declare class ConsentControl {
      * Removes all HTML elements of the Preferences Dialog from the DOM. Leaves banner state unchanged
      */
     hidePreferences(): void;
+    /**
+     * Set "nonce" attribute to all the <style> tags
+     */
+    private setNonceAttribute;
+    /**
+     * Get all consent banner styles
+     */
+    private getConsentBannerStyles;
     /**
      * The method is used to initialize the preferences dialog.
      *

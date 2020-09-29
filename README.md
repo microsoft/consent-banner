@@ -93,7 +93,13 @@ let textResources: ITextResources = {
 };
 
 let callBack = function(obj: any) { console.log(obj); };
-let options: IOptions = { "textResources": textResources, "initialTheme": "dark" };
+
+// If you want to set 'nonce: test1' in style tag, add "stylesNonce: 'test1'"
+let options: IOptions = { 
+    textResources: textResources, 
+    initialTheme: "dark", 
+    stylesNonce: "test1" 
+};
 
 let cc = new ConsentControl("app", "en", callBack, cookieCategories, options);
 let cookieCategoriePreferences: ICookieCategoriesPreferences = { 
@@ -238,13 +244,15 @@ There are six data types: `ICookieCategory`, `ITextResources`, `ICookieCategorie
 
 + `ICookieCategoriesPreferences` is used to store the preferences in each cookie categories.
 
-+ `IOptions` is the options for the banner. It contains three parts, `textResources`, `themes`, and `initialTheme`.
++ `IOptions` is the options for the banner. It contains four parts, `textResources`, `themes`, `initialTheme`, and `stylesNonce`.
 
     `textResources` is the initial text resources for texts.
 
     `themes` is a collections of themes that can be applied to the banner and preferences dialog.
 
     `initialTheme` is the initial theme that you want to applied before you call `applyTheme(themeName: string)`.
+
+    `stylesNonce` is the `nonce` attribute for `style` tag.
 
 + `IThemes` is a collections of themes. The properties names are the names of each themes, and the values are the theme objects.
 
@@ -284,7 +292,8 @@ interface ICookieCategoriesPreferences {
 interface IOptions {
     textResources?: ITextResources;
     themes?: IThemes;
-    initialTheme?: string
+    initialTheme?: string;
+    stylesNonce?: string;
 }
 
 interface IThemes {
@@ -357,7 +366,7 @@ cc.showBanner(
 cc.hideBanner();
 
 // Shows Preferences Dialog. Leaves banner state unchanged. 
-// If there is a preferences dialog, it will show the dialog instead of creating a new one.
+// It is used to insert HTML code for the preferences dialog.
 cc.showPreferences(
     cookieCategoriesPreferences: ICookieCategoriesPreferences
 );
