@@ -9,6 +9,13 @@ const config = {
     libraryTarget: 'umd',
     library: 'ConsentControl'
   },
+  devServer: {
+    contentBase: "./dist",
+    watchContentBase: true,
+    headers: {
+      "Content-Security-Policy": "style-src 'nonce-test1'"
+    }
+  },
   module: {
     rules: [
       {
@@ -41,7 +48,15 @@ const config = {
       {
         test: /\.scss$/,
         use: [
-          "style-loader",
+          {
+            loader: "style-loader",
+            options: { 
+              attributes: {
+                id: "ms-consent-banner-main-styles",
+                nonce: "q1dKEaB2445gM4C39XQmM" 
+              } 
+            }
+          },
           {
             loader: "css-loader",
             options: {
