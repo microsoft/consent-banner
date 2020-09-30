@@ -6,15 +6,8 @@ const config = {
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "consent-banner.js",
-    libraryTarget: 'umd',
-    library: 'ConsentControl'
-  },
-  devServer: {
-    contentBase: "./dist",
-    watchContentBase: true,
-    headers: {
-      "Content-Security-Policy": "style-src 'nonce-test1'"
-    }
+    libraryTarget: "umd",
+    library: "ConsentControl"
   },
   module: {
     rules: [
@@ -63,7 +56,7 @@ const config = {
               importLoaders: 1,
               modules: {
                 exportGlobals: true,
-                localIdentName: "[hash:base64]"
+                localIdentName: "[path][name]__[local]--[hash:base64:5]"  // use '[hash:base64]' for production
               }
             }
           },
@@ -97,10 +90,6 @@ const config = {
       ".ts",
       ".js"
     ]
-  },
-  devServer: {
-    contentBase: "./dist",
-    watchContentBase: true
   }
 };
 

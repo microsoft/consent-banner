@@ -21,9 +21,9 @@
   },
   "scripts": {
     "prepare": "npm run build-prod",
-    "build": "webpack -d --mode development",
-    "build-prod": "webpack -p --mode production --config ./webpack.production.config.js",
-    "start": "webpack-dev-server --open",
+    "build": "webpack -d --mode development --config ./webpack.dev.js",
+    "build-prod": "webpack -p --mode production --config ./webpack.prod.js",
+    "start": "webpack-dev-server --open --config ./webpack.dev.js",
     "test": "jest --watchAll",
     "test-coverage": "jest --coverage",
     "test-ci": "jest",
@@ -50,7 +50,8 @@
     "typescript": "^3.8.3",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^3.11.0",
+    "webpack-merge": "^5.1.4"
   },
   "jest": {
     "moduleNameMapper": {
