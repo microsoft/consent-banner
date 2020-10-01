@@ -131,10 +131,6 @@ export declare class ConsentControl {
      */
     private setNonceAttribute;
     /**
-     * Get all consent banner styles
-     */
-    private getConsentBannerStyles;
-    /**
      * The method is used to initialize the preferences dialog.
      *
      * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences object that indicates cookie categories preferences

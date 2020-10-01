@@ -95,12 +95,17 @@ export class ThemesController {
     /**
      * Create theme elements for applying the theme
      */
-    public static createThemeStyle(): void {
+    public static createThemeStyle(nonce?: string): void {
         let themesStyles = document.createElement('style');
         themesStyles.type = 'text/css';
         themesStyles.id = 'ms-consent-banner-theme-styles';
 
-        themesStyles.setAttribute('nonce', 'q1dKEaB2445gM4C39XQmM');
+        if (nonce) {
+            themesStyles.setAttribute('nonce', nonce);
+        }
+        else {
+            themesStyles.setAttribute('nonce', 'q1dKEaB2445gM4C39XQmM');
+        }
 
         document.head.appendChild(themesStyles);
     }

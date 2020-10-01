@@ -79,6 +79,7 @@ export class ConsentControl {
         this.setContainerElement(containerElementOrId);
 
         this.culture = culture;
+        this.setNonceAttribute(options?.stylesNonce);
         this.onPreferencesChanged = onPreferencesChanged;
 
         if (cookieCategories) {
@@ -101,12 +102,11 @@ export class ConsentControl {
             }
         }
 
-        ThemesController.createThemeStyle();
+        ThemesController.createThemeStyle(options?.stylesNonce);
         if (options?.initialTheme) {
             this.applyTheme(options.initialTheme);
         }
 
-        this.setNonceAttribute(options?.stylesNonce);
         this.setDirection();
     }
 
@@ -250,30 +250,23 @@ export class ConsentControl {
     }
 
     /**
-     * Set "nonce" attribute to all the <style> tags
+     * Set "nonce" attribute to <style> tags
      */
     private setNonceAttribute(nonce?: string): void {
         if (!nonce) {
             return;
         }
+        
+        let origin = document.getElementById("ms-consent-banner-main-styles")!;
+        let cssContent = origin.textContent;
+        document.head.removeChild(origin);
 
-        let allConsentBannerStyles = this.getConsentBannerStyles();
+        let cssStyles = document.createElement('style');
+        cssStyles.id = "ms-consent-banner-main-styles";
+        cssStyles.setAttribute('nonce', nonce);
+        cssStyles.textContent = cssContent;
 
-        for (let styleElement of allConsentBannerStyles) {
-            styleElement.setAttribute('nonce', nonce);
-        }
-    }
-
-    /**
-     * Get all consent banner styles
-     */
-    private getConsentBannerStyles(): HTMLElement[] {
-        let allConsentBannerStyles: HTMLElement[] = [];
-
-        allConsentBannerStyles.push(document.getElementById('ms-consent-banner-main-styles')!);
-        allConsentBannerStyles.push(document.getElementById('ms-consent-banner-theme-styles')!);
-
-        return allConsentBannerStyles;
+        document.head.appendChild(cssStyles);
     }
 
     /**
