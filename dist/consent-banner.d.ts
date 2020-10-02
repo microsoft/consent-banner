@@ -127,26 +127,6 @@ export declare class ConsentControl {
      */
     hidePreferences(): void;
     /**
-     * Set "nonce" attribute to all the <style> tags
-     */
-    private setNonceAttribute;
-    /**
-     * The method is used to initialize the preferences dialog.
-     *
-     * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences object that indicates cookie categories preferences
-     */
-    private initPreferencesCtrl;
-    /**
-     * Function that will be called when "Accept all" button is clicked
-     *
-     * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences object that indicates cookie categories preferences
-     */
-    private onAcceptAllClicked;
-    /**
-     * Function that is used to set preferencesCtrl property to null
-     */
-    private onPreferencesClosed;
-    /**
      * Set the container that will be used for the banner
      *
      * @param {string | HTMLElement} containerElementOrId here the banner will be inserted

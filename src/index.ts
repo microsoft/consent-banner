@@ -82,17 +82,21 @@ export class ConsentControl {
         
         this.setContainerElement(containerElementOrId);
 
-        let nonceAttr = "q1dKEaB2445gM4C39XQmM";
         if (options?.stylesNonce) {
-            nonceAttr = options.stylesNonce;
-        };
-
-        injectStylesIntoStyleTag(rawStyles, {
-            attributes: {
-                id: "ms-consent-banner-main-styles",
-                nonce: nonceAttr
-            }
-        });
+            injectStylesIntoStyleTag(rawStyles, {
+                attributes: {
+                    id: "ms-consent-banner-main-styles",
+                    nonce: options.stylesNonce
+                }
+            });
+        }
+        else {
+            injectStylesIntoStyleTag(rawStyles, {
+                attributes: {
+                    id: "ms-consent-banner-main-styles"
+                }
+            });
+        }
 
         this.culture = culture;
         this.onPreferencesChanged = onPreferencesChanged;
