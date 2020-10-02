@@ -1,4 +1,6 @@
-import * as styles from './styles.scss';
+import * as rawStyles from './styles.scss';
+import * as injectStylesIntoStyleTag from 'style-loader/dist/runtime/injectStylesIntoStyleTag';
+
 import { PreferencesControl } from './preferencesControl';
 import { HtmlTools } from './htmlTools';
 import { ThemesController } from './themes/themesController';
@@ -9,6 +11,8 @@ import { DEFAULT_THEMES } from './themes/theme-styles';
 import { ICookieCategory } from './interfaces/CookieCategories';
 import { ITextResources, IOptions, IThemes, ITheme } from './interfaces/Options';
 import { ICookieCategoriesPreferences } from './interfaces/CookieCategoriesPreferences';
+
+const styles = rawStyles.locals;
 
 export class ConsentControl {
     private containerElement: HTMLElement | null = null;   // here the banner will be inserted
@@ -78,8 +82,19 @@ export class ConsentControl {
         
         this.setContainerElement(containerElementOrId);
 
+        let nonceAttr = "q1dKEaB2445gM4C39XQmM";
+        if (options?.stylesNonce) {
+            nonceAttr = options.stylesNonce;
+        };
+
+        injectStylesIntoStyleTag(rawStyles, {
+            attributes: {
+                id: "ms-consent-banner-main-styles",
+                nonce: nonceAttr
+            }
+        });
+
         this.culture = culture;
-        this.setNonceAttribute(options?.stylesNonce);
         this.onPreferencesChanged = onPreferencesChanged;
 
         if (cookieCategories) {
@@ -247,26 +262,6 @@ export class ConsentControl {
         }
 
         this.preferencesCtrl.hidePreferencesDialog();
-    }
-
-    /**
-     * Set "nonce" attribute to <style> tags
-     */
-    private setNonceAttribute(nonce?: string): void {
-        if (!nonce) {
-            return;
-        }
-        
-        let origin = document.getElementById("ms-consent-banner-main-styles")!;
-        let cssContent = origin.textContent;
-        document.head.removeChild(origin);
-
-        let cssStyles = document.createElement('style');
-        cssStyles.id = "ms-consent-banner-main-styles";
-        cssStyles.setAttribute('nonce', nonce);
-        cssStyles.textContent = cssContent;
-
-        document.head.appendChild(cssStyles);
     }
 
     /**

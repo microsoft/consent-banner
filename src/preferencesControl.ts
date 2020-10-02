@@ -1,9 +1,11 @@
-import * as styles from "./styles.scss";
+import * as rawStyles from './styles.scss';
 import { HtmlTools } from './htmlTools';
 
 import { ICookieCategory } from './interfaces/CookieCategories';
 import { ITextResources } from './interfaces/Options';
 import { ICookieCategoriesPreferences } from './interfaces/CookieCategoriesPreferences';
+
+const styles = rawStyles.locals;
 
 export class PreferencesControl {
     cookieCategories: ICookieCategory[];

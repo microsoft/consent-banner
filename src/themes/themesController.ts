@@ -1,5 +1,7 @@
-import * as styles from '../styles.scss';
+import * as rawStyles from '../styles.scss';
 import { ITheme } from '../interfaces/Options';
+
+const styles = rawStyles.locals;
 
 export class ThemesController {
     /**
@@ -102,9 +104,6 @@ export class ThemesController {
 
         if (nonce) {
             themesStyles.setAttribute('nonce', nonce);
-        }
-        else {
-            themesStyles.setAttribute('nonce', 'q1dKEaB2445gM4C39XQmM');
         }
 
         document.head.appendChild(themesStyles);
