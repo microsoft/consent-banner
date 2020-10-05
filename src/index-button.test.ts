@@ -1,8 +1,6 @@
 import { ConsentControl } from "./index";
 import { ICookieCategoriesPreferences } from "./interfaces/CookieCategoriesPreferences";
-import * as rawStyles from "./styles.scss";
-
-const styles = rawStyles;
+import * as styles from "./styles.scss";
 
 describe("Test radio buttons and 'Reset all' button", () => {
     let testId: string = "app";

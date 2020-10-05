@@ -1,10 +1,8 @@
 import { ConsentControl } from "./index";
-import * as rawStyles from "./styles.scss";
+import * as styles from "./styles.scss";
 
 import { IOptions, IThemes, ITheme } from "./interfaces/Options";
 import { ThemesController } from "./themes/themesController";
-
-const styles = rawStyles;
 
 describe("Test themes in constructor", () => {
     let testId: string = "app";

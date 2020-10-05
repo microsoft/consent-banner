@@ -4,6 +4,9 @@ const common = require("./webpack.common.js");
 module.exports = merge(common, {
   devServer: {
     contentBase: "./dist",
-    watchContentBase: true
+    watchContentBase: true,
+    headers: {
+      "Content-Security-Policy": "style-src 'nonce-test1'"
+    }
   }
 });
