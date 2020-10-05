@@ -56,7 +56,8 @@ declare interface ITextResources {
 declare interface IOptions {
     textResources?: ITextResources;
     themes?: IThemes;
-    initialTheme?: string
+    initialTheme?: string;
+    stylesNonce?: string;
 }
 declare interface ICookieCategory {
     id: string;
@@ -79,6 +80,7 @@ export declare class ConsentControl {
     themes: IThemes;
     preferencesCtrl: PreferencesControl | null;
     private direction;
+    private isDirty;
     defaultCookieCategories: ICookieCategory[];
     defaultTextResources: ITextResources;
     constructor(containerElementOrId: string | HTMLElement, culture: string, onPreferencesChanged: (cookieCategoriesPreferences: ICookieCategoriesPreferences) => void, cookieCategories?: ICookieCategory[], options?: IOptions);
@@ -124,22 +126,6 @@ export declare class ConsentControl {
      * Removes all HTML elements of the Preferences Dialog from the DOM. Leaves banner state unchanged
      */
     hidePreferences(): void;
-    /**
-     * The method is used to initialize the preferences dialog.
-     *
-     * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences object that indicates cookie categories preferences
-     */
-    private initPreferencesCtrl;
-    /**
-     * Function that will be called when "Accept all" button is clicked
-     *
-     * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences object that indicates cookie categories preferences
-     */
-    private onAcceptAllClicked;
-    /**
-     * Function that is used to set preferencesCtrl property to null
-     */
-    private onPreferencesClosed;
     /**
      * Set the container that will be used for the banner
      *

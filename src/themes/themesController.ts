@@ -1,5 +1,7 @@
-import * as styles from '../styles.scss';
+import * as rawStyles from '../styles.scss';
 import { ITheme } from '../interfaces/Options';
+
+const styles = rawStyles.locals;
 
 export class ThemesController {
     /**
@@ -95,10 +97,14 @@ export class ThemesController {
     /**
      * Create theme elements for applying the theme
      */
-    public static createThemeStyle(): void {
+    public static createThemeStyle(nonce?: string): void {
         let themesStyles = document.createElement('style');
         themesStyles.type = 'text/css';
         themesStyles.id = 'ms-consent-banner-theme-styles';
+
+        if (nonce) {
+            themesStyles.setAttribute('nonce', nonce);
+        }
 
         document.head.appendChild(themesStyles);
     }
@@ -132,7 +138,7 @@ export class ThemesController {
         newStyles += this.buildSecondaryBtnStyle(theme);
         newStyles += this.buildRadioBtnStyle(theme);
 
-        document.getElementById('ms-consent-banner-theme-styles')!.innerHTML = newStyles;
+        document.getElementById('ms-consent-banner-theme-styles')!.textContent = newStyles;
     }
 
     /**

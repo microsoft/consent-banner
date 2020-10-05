@@ -11,7 +11,7 @@ module.exports = {
     "html"
   ],
   moduleNameMapper: {
-    "^.+\\.(css|scss)$": "identity-obj-proxy"
+    "^.+\\.(css|scss)$": "<rootDir>/styleMock.js"
   },  
   resolver: "jest-pnp-resolver",
   testMatch: [

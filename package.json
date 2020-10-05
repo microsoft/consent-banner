@@ -1,6 +1,6 @@
 {
   "name": "consent-banner",
-  "version": "2.1.5",
+  "version": "2.1.6",
   "description": "The library which will generate a banner at the specified position for asking the cookie preferences.",
   "main": "dist/consent-banner.js",
   "types": "dist/consent-banner.d.ts",
@@ -21,15 +21,17 @@
   },
   "scripts": {
     "prepare": "npm run build-prod",
-    "build": "webpack -d --mode development",
-    "build-prod": "webpack -p --mode production --config ./webpack.production.config.js",
-    "start": "webpack-dev-server --open",
-    "test": "jest --watchAll",
-    "test-coverage": "jest --coverage",
-    "test-ci": "jest",
+    "build": "webpack -d --mode development --config ./webpack.dev.js",
+    "build-prod": "webpack -p --mode production --config ./webpack.prod.js",
+    "start": "webpack-dev-server --open --config ./webpack.dev.js",
+    "test": "jest --watchAll --config ./jest.config.js",
+    "test-coverage": "jest --coverage --config ./jest.config.js",
+    "test-ci": "jest --config ./jest.config.js",
     "lint": "tslint -p tsconfig.json -t stylish"
   },
-  "dependencies": {},
+  "dependencies": {
+    "style-loader": "^1.1.4"
+  },
   "devDependencies": {
     "@types/jest": "^25.2.1",
     "@types/node-sass": "^4.11.0",
@@ -43,19 +45,14 @@
     "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^6.7.0",
     "sass-loader": "^8.0.2",
-    "style-loader": "^1.1.4",
     "ts-jest": "^25.3.1",
     "tslint": "^6.1.1",
     "tslint-microsoft-contrib": "^6.2.0",
     "typescript": "^3.8.3",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.11.0"
-  },
-  "jest": {
-    "moduleNameMapper": {
-      "\\.(s?css|less)$": "identity-obj-proxy"
-    }
+    "webpack-dev-server": "^3.11.0",
+    "webpack-merge": "^5.1.4"
   },
   "browserslist": [
     ">0.2%",

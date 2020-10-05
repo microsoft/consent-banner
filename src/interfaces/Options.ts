@@ -1,7 +1,8 @@
 export interface IOptions {
     textResources?: ITextResources;
     themes?: IThemes;
-    initialTheme?: string
+    initialTheme?: string;
+    stylesNonce?: string;
 }
 
 export interface IThemes {

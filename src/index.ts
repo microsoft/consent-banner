@@ -1,4 +1,6 @@
-import * as styles from './styles.scss';
+import * as rawStyles from './styles.scss';
+import * as injectStylesIntoStyleTag from 'style-loader/dist/runtime/injectStylesIntoStyleTag';
+
 import { PreferencesControl } from './preferencesControl';
 import { HtmlTools } from './htmlTools';
 import { ThemesController } from './themes/themesController';
@@ -9,6 +11,8 @@ import { DEFAULT_THEMES } from './themes/theme-styles';
 import { ICookieCategory } from './interfaces/CookieCategories';
 import { ITextResources, IOptions, IThemes, ITheme } from './interfaces/Options';
 import { ICookieCategoriesPreferences } from './interfaces/CookieCategoriesPreferences';
+
+const styles = rawStyles.locals;
 
 export class ConsentControl {
     private containerElement: HTMLElement | null = null;   // here the banner will be inserted
@@ -78,6 +82,22 @@ export class ConsentControl {
         
         this.setContainerElement(containerElementOrId);
 
+        if (options?.stylesNonce) {
+            injectStylesIntoStyleTag(rawStyles, {
+                attributes: {
+                    id: "ms-consent-banner-main-styles",
+                    nonce: options.stylesNonce
+                }
+            });
+        }
+        else {
+            injectStylesIntoStyleTag(rawStyles, {
+                attributes: {
+                    id: "ms-consent-banner-main-styles"
+                }
+            });
+        }
+
         this.culture = culture;
         this.onPreferencesChanged = onPreferencesChanged;
 
@@ -101,7 +121,7 @@ export class ConsentControl {
             }
         }
 
-        ThemesController.createThemeStyle();
+        ThemesController.createThemeStyle(options?.stylesNonce);
         if (options?.initialTheme) {
             this.applyTheme(options.initialTheme);
         }
@@ -202,15 +222,10 @@ export class ConsentControl {
 
         this.containerElement?.appendChild(banner);
 
-        if (!this.preferencesCtrl) {
-            this.initPreferencesCtrl(cookieCategoriesPreferences);
+        let cookieInfo = document.getElementsByClassName(styles.bannerButton)[1];
+        cookieInfo?.addEventListener('click', () => this.showPreferences(cookieCategoriesPreferences));
 
-            // Add event handler to show preferences dialog (from hidden state) when "More info" button is clicked
-            let cookieInfo = document.getElementsByClassName(styles.bannerButton)[1];
-            cookieInfo?.addEventListener('click', () => this.showPreferences(cookieCategoriesPreferences));
-        }
-
-        let acceptAllBtn = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[0];
+        let acceptAllBtn = document.getElementsByClassName(styles.bannerButton)[0];
         acceptAllBtn?.addEventListener('click', () => this.onAcceptAllClicked(cookieCategoriesPreferences));
     }
 
@@ -238,7 +253,7 @@ export class ConsentControl {
             this.initPreferencesCtrl(cookieCategoriesPreferences);
         }
 
-        this.preferencesCtrl?.showPreferencesDialog();
+        this.preferencesCtrl?.onPreferencesDialogShowing();
     }
 
     /**

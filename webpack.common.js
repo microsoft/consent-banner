@@ -6,8 +6,8 @@ const config = {
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "consent-banner.js",
-    libraryTarget: 'umd',
-    library: 'ConsentControl'
+    libraryTarget: "umd",
+    library: "ConsentControl"
   },
   module: {
     rules: [
@@ -41,7 +41,6 @@ const config = {
       {
         test: /\.scss$/,
         use: [
-          "style-loader",
           {
             loader: "css-loader",
             options: {
@@ -82,10 +81,6 @@ const config = {
       ".ts",
       ".js"
     ]
-  },
-  devServer: {
-    contentBase: "./dist",
-    watchContentBase: true
   }
 };
 

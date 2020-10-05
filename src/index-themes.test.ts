@@ -1090,7 +1090,10 @@ describe("Test themes in constructor", () => {
         options.themes = themes;
 
         let cc = new ConsentControl(testId, "en", callBack, undefined, options);
-        cc.showBanner({});
+        let cookieCategoriePreferences = { };
+
+        cc.showBanner(cookieCategoriePreferences);
+        cc.showPreferences(cookieCategoriePreferences);
 
         let bannerBody = document.querySelector(`.${ styles.bannerBody }`)!;
         expect(getComputedStyle(bannerBody).backgroundColor).toBe("rgb(36, 36, 36)");
