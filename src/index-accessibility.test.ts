@@ -1,5 +1,7 @@
 import { ConsentControl } from "./index";
-import * as styles from "./styles.scss";
+import * as rawStyles from "./styles.scss";
+
+const styles = rawStyles;
 
 describe("Test accessibility when closing event occurs", () => {
     let testId: string = "app";

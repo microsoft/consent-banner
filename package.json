@@ -24,9 +24,9 @@
     "build": "webpack -d --mode development --config ./webpack.dev.js",
     "build-prod": "webpack -p --mode production --config ./webpack.prod.js",
     "start": "webpack-dev-server --open --config ./webpack.dev.js",
-    "test": "jest --watchAll",
-    "test-coverage": "jest --coverage",
-    "test-ci": "jest",
+    "test": "jest --watchAll --config ./jest.config.js",
+    "test-coverage": "jest --coverage --config ./jest.config.js",
+    "test-ci": "jest --config ./jest.config.js",
     "lint": "tslint -p tsconfig.json -t stylish"
   },
   "dependencies": {
@@ -53,11 +53,6 @@
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.11.0",
     "webpack-merge": "^5.1.4"
-  },
-  "jest": {
-    "moduleNameMapper": {
-      "\\.(s?css|less)$": "identity-obj-proxy"
-    }
   },
   "browserslist": [
     ">0.2%",

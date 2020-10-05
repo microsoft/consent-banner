@@ -1,6 +1,8 @@
 import { ConsentControl } from "./index";
 import { ICookieCategoriesPreferences } from "./interfaces/CookieCategoriesPreferences";
-import * as styles from "./styles.scss";
+import * as rawStyles from "./styles.scss";
+
+const styles = rawStyles;
 
 describe("Test radio buttons and 'Reset all' button", () => {
     let testId: string = "app";
@@ -37,47 +39,6 @@ describe("Test radio buttons and 'Reset all' button", () => {
         }
     });
     
-    test("Click 'More info' button and then click radio buttons. All cookieCategoriePreferences will be reset to undefined when 'Reset all' is clicked", () => {
-        let callBack = function() { return; };
-        let cc = new ConsentControl(testId, "en", callBack);
-        
-        let cookieCategoriePreferences = { "c1": true, "c2": undefined, "c3": false };
-        cc.showBanner(cookieCategoriePreferences);
-
-        let cookieInfo = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[1];
-        cookieInfo.click();
-
-        expect(cc.preferencesCtrl).toBeTruthy();
-
-        let cookieItemRadioBtn: HTMLInputElement[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
-        cookieItemRadioBtn[1].click();
-        cookieItemRadioBtn[2].click();
-        cookieItemRadioBtn[4].click();
-
-        testRadioBtnState(["unchecked", "checked", "checked", "unchecked", "checked", "unchecked"]);
-
-        if (cc.preferencesCtrl) {
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences).toEqual({ "c1": false, "c2": true, "c3": true });
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences).toEqual(cookieCategoriePreferences);
-        }
-        else {
-            throw new Error("Preference dialog not found error");
-        }
-
-        let resetAllBtn = <HTMLElement> document.getElementsByClassName(styles.modalButtonReset)[0];
-        resetAllBtn.click();
-        
-        testRadioBtnState(["unchecked", "unchecked", "unchecked", "unchecked", "unchecked", "unchecked"]);
-
-        if (cc.preferencesCtrl) {
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences).toEqual({ "c1": undefined, "c2": undefined, "c3": undefined });
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences).toEqual(cookieCategoriePreferences);
-        }
-        else {
-            throw new Error("Preference dialog not found error");
-        }
-    });
-
     test("Call showPreferences(...) and then click radio buttons. All cookieCategoriePreferences will be reset to undefined when 'Reset all' is clicked", () => {
         let callBack = function() { return; };
         let cc = new ConsentControl(testId, "en", callBack);
@@ -96,7 +57,6 @@ describe("Test radio buttons and 'Reset all' button", () => {
 
         if (cc.preferencesCtrl) {
             expect(cc.preferencesCtrl.cookieCategoriesPreferences).toEqual({ "c1": false, "c2": true, "c3": true });
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences).toEqual(cookieCategoriePreferences);
         }
         else {
             throw new Error("Preference dialog not found error");
@@ -109,7 +69,6 @@ describe("Test radio buttons and 'Reset all' button", () => {
 
         if (cc.preferencesCtrl) {
             expect(cc.preferencesCtrl.cookieCategoriesPreferences).toEqual({ "c1": undefined, "c2": undefined, "c3": undefined });
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences).toEqual(cookieCategoriePreferences);
         }
         else {
             throw new Error("Preference dialog not found error");
@@ -134,7 +93,6 @@ describe("Test radio buttons and 'Reset all' button", () => {
 
         if (cc.preferencesCtrl) {
             expect(cc.preferencesCtrl.cookieCategoriesPreferences).toEqual({ "c0": true, "c1": false, "c2": true, "c3": true });
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences).toEqual(cookieCategoriePreferences);
         }
         else {
             throw new Error("Preference dialog not found error");
@@ -147,49 +105,6 @@ describe("Test radio buttons and 'Reset all' button", () => {
 
         if (cc.preferencesCtrl) {
             expect(cc.preferencesCtrl.cookieCategoriesPreferences).toEqual({ "c0": true, "c1": undefined, "c2": undefined, "c3": undefined });
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences).toEqual(cookieCategoriePreferences);
-        }
-        else {
-            throw new Error("Preference dialog not found error");
-        }
-    });
-
-    test("Click 'More info' button and then click radio buttons. cookieCategoriePreferences will be set", () => {
-        let callBack = function() { return; };
-        let cc = new ConsentControl(testId, "en", callBack);
-        
-        let cookieCategoriePreferences = { "c1": true, "c2": undefined, "c3": false };
-        cc.showBanner(cookieCategoriePreferences);
-
-        let cookieInfo = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[1];
-        cookieInfo.click();
-
-        expect(cc.preferencesCtrl).toBeTruthy();
-
-        let cookieItemRadioBtn: HTMLInputElement[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
-        cookieItemRadioBtn[0].click();
-        cookieItemRadioBtn[3].click();
-        cookieItemRadioBtn[5].click();
-
-        testRadioBtnState(["checked", "unchecked", "unchecked", "checked", "unchecked", "checked"]);
-
-        if (cc.preferencesCtrl) {
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences).toEqual({ "c1": true, "c2": false, "c3": false });
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences).toEqual(cookieCategoriePreferences);
-        }
-        else {
-            throw new Error("Preference dialog not found error");
-        }
-        
-        cookieItemRadioBtn[1].click();
-        cookieItemRadioBtn[2].click();
-        cookieItemRadioBtn[4].click();
-
-        testRadioBtnState(["unchecked", "checked", "checked", "unchecked", "checked", "unchecked"]);
-
-        if (cc.preferencesCtrl) {
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences).toEqual({ "c1": false, "c2": true, "c3": true });
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences).toEqual(cookieCategoriePreferences);
         }
         else {
             throw new Error("Preference dialog not found error");
@@ -214,7 +129,6 @@ describe("Test radio buttons and 'Reset all' button", () => {
 
         if (cc.preferencesCtrl) {
             expect(cc.preferencesCtrl.cookieCategoriesPreferences).toEqual({ "c1": true, "c2": false, "c3": false });
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences).toEqual(cookieCategoriePreferences);
         }
         else {
             throw new Error("Preference dialog not found error");
@@ -228,7 +142,6 @@ describe("Test radio buttons and 'Reset all' button", () => {
 
         if (cc.preferencesCtrl) {
             expect(cc.preferencesCtrl.cookieCategoriesPreferences).toEqual({ "c1": false, "c2": true, "c3": true });
-            expect(cc.preferencesCtrl.cookieCategoriesPreferences).toEqual(cookieCategoriePreferences);
         }
         else {
             throw new Error("Preference dialog not found error");
@@ -259,30 +172,6 @@ describe("Test 'Save changes' button", () => {
         }
     });
 
-    test("Click 'More info' button, click any unchecked radio buttons, and close the dialog. Open dialog and 'Save changes' button will be enabled", () => {
-        let callBack = function() { return; };
-        let cc = new ConsentControl(testId, "en", callBack);
-        
-        let cookieCategoriePreferences = { "c2": true };
-        cc.showBanner(cookieCategoriePreferences);
-
-        let cookieInfo = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[1];
-        cookieInfo.click();
-
-        let cookieItemRadioBtn: HTMLInputElement[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
-        cookieItemRadioBtn[1].click();
-        cookieItemRadioBtn[4].click();
-
-        let closeModalIcon: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.closeModalIcon)[0];
-        closeModalIcon.click();
-
-        cookieInfo.click();
-        expect(cookieCategoriePreferences).toEqual({ "c1": false, "c2": true, "c3": true });
-        
-        let saveChangesBtn = <HTMLInputElement> document.getElementsByClassName(styles.modalButtonSave)[0];
-        expect(saveChangesBtn.disabled).toBeFalsy();
-    });
-    
     test("Call showPreferences(...), click any unchecked radio buttons, and close the dialog. Open dialog and 'Save changes' button will be enabled", () => {
         let callBack = function() { return; };
         let cc = new ConsentControl(testId, "en", callBack);

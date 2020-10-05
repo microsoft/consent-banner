@@ -1,8 +1,10 @@
 import { ConsentControl } from "./index";
-import * as styles from "./styles.scss";
-import { PreferencesControl } from './preferencesControl';
+import * as rawStyles from "./styles.scss";
+import { PreferencesControl } from "./preferencesControl";
 
 import { ICookieCategoriesPreferences } from "./interfaces/CookieCategoriesPreferences";
+
+const styles = rawStyles;
 
 function testShowingBanner(dir: string): void {
     let bannerBody = document.getElementsByClassName(styles.bannerBody);
