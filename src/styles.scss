@@ -499,13 +499,13 @@ input[type="radio"].cookieItemRadioBtn {
   @include rtlDesign(0, 0, left);
 }
 
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 768px) {
   /* For mobile phones: */
   
   .buttonGroup, .bannerInform {
     margin : {
-      top: 8px;
-      bottom: 8px;
+      top: 0;
+      bottom: 16px;
       left: 3.75%;
       right: 3.75%;
     }
