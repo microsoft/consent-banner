@@ -74,6 +74,8 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
 
 .bannerBody svg {
   fill: none;
+  max-width: none;
+  max-height: none;
 }
 
 .infoIcon {
@@ -91,6 +93,7 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
 .bannerInformBody {
   display: table-cell;
   vertical-align: middle;
+  padding: 0;
   
   @include bannerFont(normal, 13px);
   line-height: 16px;
