@@ -63,13 +63,14 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
 }
 
 .bannerInform {
-  margin : {
+  margin: 0;
+  padding : {
     left: 5%;
     top: 8px;
     bottom: 8px;
   }
   
-  @include rtlDesign(8px 5% 8px 0, 0);
+  @include rtlDesign(0, 8px 5% 8px 0);
 }
 
 .bannerBody svg {
@@ -87,7 +88,7 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
   @include bannerFont(normal, 24px);
   
   /* identical to box height */
-  line-height: 24px;
+  line-height: 0;
 }
 
 .bannerInformBody {
@@ -506,12 +507,13 @@ input[type="radio"].cookieItemRadioBtn {
   /* For mobile phones: */
   
   .buttonGroup, .bannerInform {
-    margin : {
-      top: 0;
-      bottom: 16px;
+    padding : {
+      top: 8px;
+      bottom: 12px;
       left: 3.75%;
       right: 3.75%;
     }
+    margin: 0;
 
     width: 92.5%;
   }
