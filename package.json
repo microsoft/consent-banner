@@ -41,7 +41,7 @@
     "jest": "^25.3.0",
     "jest-junit-reporter": "^1.1.0",
     "jest-pnp-resolver": "^1.2.1",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^6.7.0",
     "sass-loader": "^8.0.2",
