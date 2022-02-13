@@ -33,7 +33,7 @@ describe("Test accessibility when closing event occurs", () => {
         let cc = new ConsentControl("app", "en", callBack);
         cc.showBanner({});
 
-        let cookieInfo = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[1];
+        let cookieInfo = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[2];
         cookieInfo.focus();
         cookieInfo.click();
 
@@ -108,7 +108,7 @@ describe("Test accessibility when radio buttons are clicked", () => {
         let cc = new ConsentControl("app", "en", callBack);
         cc.showBanner({});
 
-        let cookieInfo = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[1];
+        let cookieInfo = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[2];
         cookieInfo.click();
 
         let cookieItemRadioBtn: HTMLInputElement[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
@@ -126,7 +126,7 @@ describe("Test accessibility when radio buttons are clicked", () => {
         let cc = new ConsentControl("app", "en", callBack);
         cc.showBanner({});
 
-        let cookieInfo = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[1];
+        let cookieInfo = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[2];
         cookieInfo.click();
 
         let cookieItemRadioBtn: HTMLInputElement[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
@@ -143,7 +143,7 @@ describe("Test accessibility when radio buttons are clicked", () => {
         let cc = new ConsentControl("app", "en", callBack);
         cc.showBanner({});
 
-        let cookieInfo = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[1];
+        let cookieInfo = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[2];
         cookieInfo.click();
 
         let cookieItemRadioBtn: HTMLInputElement[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));

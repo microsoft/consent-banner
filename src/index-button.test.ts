@@ -250,3 +250,63 @@ describe("Test 'Accept all' button", () => {
         }
     });
 });
+
+describe("Test 'Reject all' button", () => {
+    let testId: string = "app";
+
+    beforeEach(() => {
+        let newDiv = document.createElement("div");
+        newDiv.setAttribute("id", testId);
+        document.body.appendChild(newDiv);
+    });
+
+    afterEach(() => {
+        let child = document.getElementById(testId);
+        if (child) {
+            let parent = child.parentNode;
+
+            if (parent) {
+                parent.removeChild(child);
+            }
+            else {
+                throw new Error("Parent not found error");
+            }
+        }
+    });
+    
+    test("Click 'Reject all' button and all cookieCategoriePreferences will be set to 'false'", () => {
+        let callBack = function() { return; };
+        let cc = new ConsentControl(testId, "en", callBack);
+        
+        let cookieCategoriePreferences: ICookieCategoriesPreferences = { "c2": undefined, "c3": false };
+        cc.showBanner(cookieCategoriePreferences);
+
+        let rejectAllBtn = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[1];
+        rejectAllBtn.click();
+
+        for (let cookieCategory of cc.cookieCategories) {
+            if (!cookieCategory.isUnswitchable) {
+                let id = cookieCategory.id;
+                expect(cookieCategoriePreferences[id]).toBeFalsy();
+            }
+        }
+    });
+
+    test("Initialize cookieCategoriesPreferences with unswitchable id and click 'Reject all' button. All cookieCategoriePreferences will be set to 'false'", () => {
+        let callBack = function() { return; };
+        let cc = new ConsentControl(testId, "en", callBack);
+        
+        let cookieCategoriePreferences: ICookieCategoriesPreferences = { "c0": true, "c2": undefined, "c3": false };
+        cc.showBanner(cookieCategoriePreferences);
+
+        let rejectAllBtn = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[1];
+        rejectAllBtn.click();
+
+        for (let cookieCategory of cc.cookieCategories) {
+            if (!cookieCategory.isUnswitchable) {
+                let id = cookieCategory.id;
+                expect(cookieCategoriePreferences[id]).toBeFalsy();
+            }
+        }
+    });
+});

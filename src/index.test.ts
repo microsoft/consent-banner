@@ -15,7 +15,7 @@ function testShowingBanner(dir: string): void {
     expect(document.getElementsByClassName(styles.bannerInformBody).length).toBe(1);
 
     expect(document.getElementsByClassName(styles.buttonGroup).length).toBe(1);
-    expect(document.getElementsByClassName(styles.bannerButton).length).toBe(2);
+    expect(document.getElementsByClassName(styles.bannerButton).length).toBe(3);
 }
 
 function testRadioBtnState(cc: ConsentControl, cookieCategoriePreferences: ICookieCategoriesPreferences): number {
@@ -128,6 +128,7 @@ describe("Test show and hide banner", () => {
 
             <div class="${styles.buttonGroup}">
                 <button type="button" class="${styles.bannerButton}">Accept all</button>
+                <button type="button" class="${styles.bannerButton}">Reject all</button>
                 <button type="button" class="${styles.bannerButton}">More info</button>
             </div>
         </div>
@@ -273,7 +274,7 @@ describe("Test show and hide banner", () => {
         cc.showBanner({ "c1": false, "c2": true,"c3": undefined });
         cc.showBanner({ "c1": true, "c2": false,"c3": false });
 
-        let cookieInfo: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[1];
+        let cookieInfo: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[2];
         cookieInfo.click();
         
         testShowingBanner(cc.getDirection());
@@ -287,7 +288,7 @@ describe("Test show and hide banner", () => {
         let cookieCategoriePreferences = { "c1": true, "c2": false, "c3": undefined };
         cc.showBanner(cookieCategoriePreferences);
 
-        let cookieInfo: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[1];
+        let cookieInfo: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[2];
         cookieInfo.click();
 
         testShowingPreferences(cc, cookieCategoriePreferences);
@@ -300,7 +301,7 @@ describe("Test show and hide banner", () => {
         let cc = new ConsentControl(testId, "en", callBack);
         cc.showBanner(cookieCategoriePreferences);
 
-        let cookieInfo: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[1];
+        let cookieInfo: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.bannerButton)[2];
         cookieInfo.click();
         
         let closeModalIcon: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.closeModalIcon)[0];
@@ -372,6 +373,7 @@ describe("Test show and hide preferences dialog", () => {
 
             <div class="${styles.buttonGroup}">
                 <button type="button" class="${styles.bannerButton}">Accept all</button>
+                <button type="button" class="${styles.bannerButton}">Reject all</button>
                 <button type="button" class="${styles.bannerButton}">More info</button>
             </div>
         </div>
