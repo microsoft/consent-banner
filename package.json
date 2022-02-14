@@ -1,7 +1,7 @@
 {
   "name": "consent-banner",
   "version": "2.2.0",
-  "description": "Add reject button on the main banner.",
+  "description": "The library which will generate a banner at the specified position for asking the cookie preferences.",
   "main": "dist/consent-banner.js",
   "types": "dist/consent-banner.d.ts",
   "keywords": [
