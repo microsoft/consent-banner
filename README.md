@@ -4,7 +4,7 @@
 
 Consent banner is the library which will generate a banner at the specified position for asking the cookie preferences. 
 
-It contains two buttons, `accept all` and `more info`. If the user clicks `more info` button, A dialog will pop up so that the user can set the cookie categories that he/she wants to share with us.
+It contains three buttons, `accept all`, `reject all` and `more info`. If the user clicks `more info` button, A dialog will pop up so that the user can set the cookie categories that he/she wants to share with us.
 
 ## Building and running on localhost
 
@@ -82,6 +82,7 @@ let cookieCategories: ICookieCategory[] =
 let textResources: ITextResources = {
     bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
     acceptAllLabel: "Accept all",
+    rejectAllLabel: "Reject all",
     moreInfoLabel: "More info",
     preferencesDialogCloseLabel: "Close",
     preferencesDialogTitle: "Manage cookie preferences",
@@ -148,7 +149,7 @@ var cc = new ConsentControl(
     // Based on language RTL should be applied (https://www.w3.org/International/questions/qa-scripts.en)
     culture: string,
 
-    // callback function, called on preferences changes (via "Accept All" or "Save changes"), 
+    // callback function, called on preferences changes (via "Accept All", "Reject All" or "Save changes"), 
     // must pass cookieCategoriePreferences, see ICookieCategoriesPreferences in Data types
     onPreferencesChanged: (cookieCategoriesPreferences: ICookieCategoriesPreferences) => void,
 
@@ -277,6 +278,7 @@ interface ICookieCategory {
 interface ITextResources {
     bannerMessageHtml?: string;
     acceptAllLabel?: string;
+    rejectAllLabel?: string;
     moreInfoLabel?: string;
     preferencesDialogCloseLabel?: string;
     preferencesDialogTitle?: string;

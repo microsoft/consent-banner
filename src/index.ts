@@ -64,6 +64,7 @@ export class ConsentControl {
     defaultTextResources: ITextResources = {
         bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
         acceptAllLabel: "Accept all",
+        rejectAllLabel: "Reject all",
         moreInfoLabel: "More info",
         preferencesDialogCloseLabel: "Close",
         preferencesDialogTitle: "Manage cookie preferences",
@@ -209,6 +210,7 @@ export class ConsentControl {
 
         <div class="${ styles.buttonGroup }">
             <button type="button" class="${ styles.bannerButton } ${ styles.secondaryButtonTheme }">${ HtmlTools.escapeHtml(this.textResources.acceptAllLabel) }</button>
+            <button type="button" class="${ styles.bannerButton } ${ styles.secondaryButtonTheme }">${ HtmlTools.escapeHtml(this.textResources.rejectAllLabel) }</button>
             <button type="button" class="${ styles.bannerButton } ${ styles.secondaryButtonTheme }">${ HtmlTools.escapeHtml(this.textResources.moreInfoLabel) }</button>
         </div>
         `;
@@ -222,11 +224,14 @@ export class ConsentControl {
 
         this.containerElement?.appendChild(banner);
 
-        let cookieInfo = document.getElementsByClassName(styles.bannerButton)[1];
+        let cookieInfo = document.getElementsByClassName(styles.bannerButton)[2];
         cookieInfo?.addEventListener('click', () => this.showPreferences(cookieCategoriesPreferences));
 
         let acceptAllBtn = document.getElementsByClassName(styles.bannerButton)[0];
         acceptAllBtn?.addEventListener('click', () => this.onAcceptAllClicked(cookieCategoriesPreferences));
+
+        let rejectAllBtn = document.getElementsByClassName(styles.bannerButton)[1];
+        rejectAllBtn?.addEventListener('click', () => this.onRejectAllClicked(cookieCategoriesPreferences));
     }
 
     /**
@@ -298,6 +303,21 @@ export class ConsentControl {
         for (let cookieCategory of this.cookieCategories) {
             if (!cookieCategory.isUnswitchable) {
                 cookieCategoriesPreferences[cookieCategory.id] = true;
+            }
+        }
+
+        this.onPreferencesChanged(cookieCategoriesPreferences);
+    }
+
+     /**
+     * Function that will be called when "Reject all" button is clicked
+     * 
+     * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences object that indicates cookie categories preferences
+     */
+      private onRejectAllClicked(cookieCategoriesPreferences: ICookieCategoriesPreferences): void {
+        for (let cookieCategory of this.cookieCategories) {
+            if (!cookieCategory.isUnswitchable) {
+                cookieCategoriesPreferences[cookieCategory.id] = false;
             }
         }
 
