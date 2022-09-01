@@ -90,7 +90,8 @@ let textResources: ITextResources = {
     acceptLabel: "Accept",
     rejectLabel: "Reject",
     saveLabel: "Save changes",
-    resetLabel: "Reset all"
+    resetLabel: "Reset all",
+    bannerCloseLabel: "Close banner"
 };
 
 let callBack = function(obj: any) { console.log(obj); };

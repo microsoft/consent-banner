@@ -69,6 +69,13 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
     top: 8px;
     bottom: 8px;
   }
+ 
+  @include rtlDesign(0, 8px 5% 8px 0);
+}
+
+.bannerClose {
+  
+  padding-bottom: 5%;
   
   @include rtlDesign(0, 8px 5% 8px 0);
 }
@@ -192,6 +199,26 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
   text-align: center;
   color: $close-button-color;
   background-color: $dialog-background-color;
+
+  @include rtlDesign(2px, 12px, left);
+}
+
+.closeBannerIcon  
+{
+  float: right;
+  z-index: 1;
+  border: none;
+  cursor: pointer;
+  @include bannerFont(normal, 13px);
+  line-height: 22px;
+  width: 22px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: $close-button-color;
+  background-color: transparent;
+  position: absolute;
+  right: 5%;
 
   @include rtlDesign(2px, 12px, left);
 }
@@ -593,6 +620,10 @@ input[type="radio"].cookieItemRadioBtn {
   }
   
   .closeModalIcon {
+    padding: 3%;
+  }
+
+  .closeBannerIcon {
     padding: 3%;
   }
 

@@ -65,4 +65,5 @@ export interface ITextResources {
     rejectLabel?: string;
     saveLabel?: string;
     resetLabel?: string;
+    bannerCloseLabel?: string;
 }
