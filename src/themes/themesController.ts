@@ -92,6 +92,11 @@ export class ThemesController {
             destTheme["secondary-button-focus-border-color"] = secondaryBtnBorderElement[secondaryBtnBorderElement.length - 1];
         }
 
+        //determined by 
+        if (!srcTheme["banner-close-button-color"]) {
+            destTheme["banner-close-button-color"] = srcTheme["text-color"];
+        }
+
     }
 
     /**
@@ -131,12 +136,18 @@ export class ThemesController {
         let newHyperLinkStyle = `.${ styles.hyperLinkTheme } a {
             color: ${ theme["hyperlink-font-color"] } !important;
         }`;
+
+        let newBannerCloseStyle = `.${ styles.closeBannerIcon } {
+            color: ${ theme["banner-close-button-color"] } !important;
+        }`;
         newStyles += newHyperLinkStyle;
         
         newStyles += this.buildDialogStyle(theme);
         newStyles += this.buildPrimaryBtnStyle(theme);
         newStyles += this.buildSecondaryBtnStyle(theme);
         newStyles += this.buildRadioBtnStyle(theme);
+
+        newStyles += newBannerCloseStyle;
 
         document.getElementById('ms-consent-banner-theme-styles')!.textContent = newStyles;
     }

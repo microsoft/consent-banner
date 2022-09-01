@@ -21,6 +21,8 @@ $radio-button-hover-background-color: rgba(0, 0, 0, 0.8);
 $radio-button-disabled-color: rgba(0, 0, 0, 0.2);
 $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
 
+$banner-close-button-color: #000000;
+
 @mixin bannerFont($weight, $size, $style: normal) {
   font : {
     family: Segoe UI, SegoeUI, Arial, sans-serif;
@@ -60,6 +62,11 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
   @at-root div[dir="rtl"]#{ & } {
     text-align: right;
   }
+  
+  padding: {
+    top: 15px;
+    bottom: 15px;
+  };
 }
 
 .bannerInform {
@@ -69,14 +76,15 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
     top: 8px;
     bottom: 8px;
   }
+  align-self: center;
  
   @include rtlDesign(0, 8px 5% 8px 0);
 }
 
 .bannerClose {
-  
-  padding-bottom: 5%;
-  
+  padding : {
+    bottom: 110px;
+  }
   @include rtlDesign(0, 8px 5% 8px 0);
 }
 
@@ -215,7 +223,7 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
   text-align: center;
-  color: $close-button-color;
+  color: $banner-close-button-color;
   background-color: transparent;
   position: absolute;
   right: 5%;
@@ -603,6 +611,11 @@ input[type="radio"].cookieItemRadioBtn {
 
     @include rtlDesign(0 0 12px 0, 0);
   }
+
+  .bannerClose{
+    padding-bottom: 40px;
+    padding-top: 10px;
+  }
 }
 
 /* For landscape orientation: */
@@ -627,6 +640,10 @@ input[type="radio"].cookieItemRadioBtn {
     padding: 3%;
   }
 
+  .bannerClose {
+    padding-bottom: 40px;
+    padding-top: 10px;
+  }
   .modalBody {
     margin : {
       top: 3%;

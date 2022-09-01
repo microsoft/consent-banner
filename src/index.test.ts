@@ -214,18 +214,6 @@ describe("Test show and hide banner", () => {
         </div>
     `;
 
-    function testRemovingBanner(): void {
-        let bannerBody = document.getElementsByClassName(styles.bannerBody);
-        expect(bannerBody.length).toBe(0);
-        
-        expect(document.getElementsByClassName(styles.bannerInform).length).toBe(0);
-        expect(document.getElementsByClassName(styles.infoIcon).length).toBe(0);
-        expect(document.getElementsByClassName(styles.bannerInformBody).length).toBe(0);
-
-        expect(document.getElementsByClassName(styles.buttonGroup).length).toBe(0);
-        expect(document.getElementsByClassName(styles.bannerButton).length).toBe(0);
-    }
-
     beforeEach(() => {
         let newDiv = document.createElement("div");
         newDiv.setAttribute("id", testId);
@@ -361,6 +349,18 @@ describe("Test show and hide banner", () => {
         testRemovingPreferences();
     });
 });
+
+function testRemovingBanner(): void {
+    let bannerBody = document.getElementsByClassName(styles.bannerBody);
+    expect(bannerBody.length).toBe(0);
+    
+    expect(document.getElementsByClassName(styles.bannerInform).length).toBe(0);
+    expect(document.getElementsByClassName(styles.infoIcon).length).toBe(0);
+    expect(document.getElementsByClassName(styles.bannerInformBody).length).toBe(0);
+
+    expect(document.getElementsByClassName(styles.buttonGroup).length).toBe(0);
+    expect(document.getElementsByClassName(styles.bannerButton).length).toBe(0);
+}
 
 describe("Test show and hide preferences dialog", () => {
     let testId: string = "app";
@@ -807,5 +807,16 @@ describe("Test setRadioBtnState()", () => {
         cc.preferencesCtrl?.setRadioBtnState();
 
         testRadioBtnState(cc, cc.preferencesCtrl!.cookieCategoriesPreferences);
+    });
+
+    test("Test if the banner close button is present",()=>{
+        expect(document.getElementsByClassName(styles.closeBannerIcon).length).toBe(1);
+    });
+    
+    test("Test the banner removal after close banner is clicked",()=>{
+        let closeBannerIcon: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.closeBannerIcon)[0];
+        closeBannerIcon.click();
+
+        testRemovingBanner();
     });
 });

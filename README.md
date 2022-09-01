@@ -324,6 +324,8 @@ interface ITheme {
     "secondary-button-color": string;
     "secondary-button-disabled-color": string;
     "secondary-button-border": string;
+    "banner-close-button-color": string;
+}
 
     // All optional properties
     "background-color-between-page-and-dialog"?: string;
@@ -347,7 +349,6 @@ interface ITheme {
     "radio-button-hover-background-color"?: string;
     "radio-button-disabled-color"?: string;
     "radio-button-disabled-border-color"?: string;
-}
 ```
 
 ### Provided methods

@@ -8,24 +8,26 @@ $primary-button-hover-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
 $primary-button-color: #0067B8;
 $secondary-button-color: #EBEBEB;
 $secondary-button-disabled-color: rgba(0, 0, 0, 0.2);
-$secondary-button-border: none;
+$secondary-button-border: 2px solid #0067B8 ;
 
 $text-color: #000000;
 $hyperlink-font-color: #0067B8;
 
 $secondary-button-hover-color: #DBDBDB;
-$secondary-button-hover-border: none;
+$secondary-button-hover-border: 2px solid #0067B8;
 $secondary-button-disabled-border: none;
 $secondary-button-focus-border-color: #000000;
-$secondary-button-text-color: #000000;
+$secondary-button-text-color: #0067B8;
 $secondary-button-disabled-text-color: rgba(0, 0, 0, 0.2);
 
 $primary-button-hover-color: #0067B8;
 $primary-button-disabled-color: rgba(0, 120, 215, 0.2);
-$primary-button-border: none;
+$primary-button-border: 2px solid #0067B8;
 $primary-button-focus-border-color: #000000;
 $primary-button-text-color: #FFFFFF;
 $primary-button-disabled-text-color: rgba(0, 0, 0, 0.2);
+
+$banner-close-button-color: #000000;
 
 .textColorTheme {
   color: $text-color;
