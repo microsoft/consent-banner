@@ -22,6 +22,7 @@ $radio-button-disabled-color: rgba(0, 0, 0, 0.2);
 $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
 
 $banner-close-button-color: #000000;
+$banner-shadow: 6px -5px 6px #0000001C;
 
 @mixin bannerFont($weight, $size, $style: normal) {
   font : {
@@ -50,7 +51,7 @@ $banner-close-button-color: #000000;
 }
 
 .bannerBody {
-  position: relative;
+  position: fixed;
   display: flex;
   z-index: 9999;          /* on top of the page */
   width: 100%;
@@ -58,7 +59,7 @@ $banner-close-button-color: #000000;
 
   justify-content: space-between;
   text-align: left;
-
+  
   @at-root div[dir="rtl"]#{ & } {
     text-align: right;
   }
@@ -67,6 +68,9 @@ $banner-close-button-color: #000000;
     top: 15px;
     bottom: 15px;
   };
+
+  bottom: .5%;
+  box-shadow: $banner-shadow;
 }
 
 .bannerInform {
@@ -206,7 +210,7 @@ $banner-close-button-color: #000000;
   align-items: center;
   text-align: center;
   color: $close-button-color;
-  background-color: $dialog-background-color;
+  background-color: $banner-background-color;
 
   @include rtlDesign(2px, 12px, left);
 }
