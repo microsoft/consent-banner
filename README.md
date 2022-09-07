@@ -288,6 +288,7 @@ interface ITextResources {
     rejectLabel?: string;
     saveLabel?: string;
     resetLabel?: string;
+    bannerCloseLabel?: string;
 }
 
 interface ICookieCategoriesPreferences {
