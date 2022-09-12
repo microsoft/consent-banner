@@ -1,0 +1,18 @@
+name: Node.js Package Unpublish
+on:
+  release:
+    types: [created]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    # Setup .npmrc file to publish to npm
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+        registry-url: 'https://registry.npmjs.org'
+    - run: npm install
+    - run: npm unpublish consent-banner@2.3.0-beta.0
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN_NEW }}
