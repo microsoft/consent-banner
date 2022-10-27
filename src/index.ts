@@ -13,6 +13,7 @@ import { ITextResources, IOptions, IThemes, ITheme } from './interfaces/Options'
 import { ICookieCategoriesPreferences } from './interfaces/CookieCategoriesPreferences';
 
 const styles = rawStyles.locals;
+const bottomPadding=10;
 
 export class ConsentControl {
     private containerElement: HTMLElement | null = null;   // here the banner will be inserted
@@ -248,6 +249,9 @@ export class ConsentControl {
 
         let bannerCloseBtn = document.getElementsByClassName(styles.closeBannerIcon)[0];
         bannerCloseBtn?.addEventListener('click', () => this.onBannerCloseClicked());
+        
+        //Subscribe to scroll event.
+        this.addScrollListener();
     }
 
     /**
@@ -257,9 +261,19 @@ export class ConsentControl {
     public hideBanner(): void {
         if (document.getElementsByClassName(styles.bannerBody)) {
             let bannerArray = [].slice.call(document.getElementsByClassName(styles.bannerBody));
+            
+            var banner=this.getBannerElement();
+            if(banner!=null)
+            {
+                var bottomStyle=  parseFloat(document.body.style.marginBottom.replace("px","")) - 
+                (banner!.getBoundingClientRect().height - bottomPadding) + "px"; //This is a style update set with string
+                document.body.style.marginBottom=bottomStyle;
+            }
+
             for (let singleBanner of bannerArray) {
                 this.containerElement?.removeChild(singleBanner);
             }
+            
             this.hidePreferences();
         }
     }
@@ -422,5 +436,28 @@ export class ConsentControl {
      */
     public getDirection(): string {
         return this.direction;
+    }
+
+    public getBannerElement(): HTMLElement | null{
+        if (document.getElementsByClassName(styles.bannerBody)) {
+            let bannerArray = [].slice.call(document.getElementsByClassName(styles.bannerBody));
+            for (let singleBanner of bannerArray) {
+               return singleBanner;
+            }
+        }
+        return null;
+    }
+
+    //This method will allow the page to be extended when the scroll is near to bottom and banner hides the content behind.
+    public addScrollListener():void {document.addEventListener('scroll', (e) =>  {
+        const lastElement= this.getBannerElement();
+        if(lastElement!=null)
+        {
+            var scrollTop = window.scrollY;
+            if (document.body.clientHeight - window.innerHeight - scrollTop < lastElement.offsetHeight) {
+                document.body.style.marginBottom=(lastElement.offsetHeight + bottomPadding) + "px"; //Add bottom margin to the page
+            }
+        }
+      })
     }
 }
