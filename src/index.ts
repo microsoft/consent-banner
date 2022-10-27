@@ -252,6 +252,7 @@ export class ConsentControl {
         
         //Subscribe to scroll event.
         this.addScrollListener();
+        this.addMarginToClientBody();
     }
 
     /**
@@ -265,8 +266,8 @@ export class ConsentControl {
             var banner=this.getBannerElement();
             if(banner!=null)
             {
-                var bottomStyle=  parseFloat(document.body.style.marginBottom.replace("px","")) - 
-                (banner!.getBoundingClientRect().height - bottomPadding) + "px"; //This is a style update set with string
+                var bottomStyle=  parseInt(document.body.style.marginBottom.replace("px","")) - 
+                Math.round(banner!.getBoundingClientRect().height + bottomPadding) + "px"; //This is a style update set with string
                 document.body.style.marginBottom=bottomStyle;
             }
 
@@ -450,6 +451,11 @@ export class ConsentControl {
 
     //This method will allow the page to be extended when the scroll is near to bottom and banner hides the content behind.
     public addScrollListener():void {document.addEventListener('scroll', (e) =>  {
+        this.addMarginToClientBody();
+      })
+    }
+
+    public addMarginToClientBody() : void {
         const lastElement= this.getBannerElement();
         if(lastElement!=null)
         {
@@ -458,6 +464,5 @@ export class ConsentControl {
                 document.body.style.marginBottom=(lastElement.offsetHeight + bottomPadding) + "px"; //Add bottom margin to the page
             }
         }
-      })
     }
 }
