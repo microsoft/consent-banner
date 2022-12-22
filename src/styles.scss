@@ -71,6 +71,9 @@ $banner-shadow: 6px -5px 6px #0000001C;
 
   bottom: .5%;
   box-shadow: $banner-shadow;
+  max-height: 90%;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .bannerInform {
@@ -144,6 +147,27 @@ $banner-shadow: 6px -5px 6px #0000001C;
   padding: 5px;
 
   min-width: $bannerBtnWidth;
+  min-height: $bannerBtnHeight;
+  vertical-align: top;
+  
+  cursor: pointer;
+  @include bannerFont(normal, 15px);
+  line-height: 20px;
+  text-align: center;
+
+  &:focus {
+    box-sizing: border-box;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.bannerCloseButton {
+  margin: 4px;
+  padding: 5px;
+
   min-height: $bannerBtnHeight;
   vertical-align: top;
   

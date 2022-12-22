@@ -254,11 +254,28 @@ export class PreferencesControl {
 
         let acceptRejectButtons: Element[] = [].slice.call(document.getElementsByClassName(styles.cookieItemRadioBtn));
 
-        let lastAcceptRadioBtn: HTMLElement | null = null;
-        let lastRejectRadioBtn: HTMLElement | null = null;
+        let lastAcceptRadioBtn: HTMLInputElement | null = null;
+        let lastRejectRadioBtn: HTMLInputElement | null = null;
         if (acceptRejectButtons.length) {
-            lastAcceptRadioBtn = <HTMLElement> acceptRejectButtons[acceptRejectButtons.length - 2];
-            lastRejectRadioBtn = <HTMLElement> acceptRejectButtons[acceptRejectButtons.length - 1];
+            lastAcceptRadioBtn = <HTMLInputElement> acceptRejectButtons[acceptRejectButtons.length - 2];
+            lastRejectRadioBtn = <HTMLInputElement> acceptRejectButtons[acceptRejectButtons.length - 1];
+
+            lastAcceptRadioBtn.addEventListener('keydown', (event) => {
+                if (event.key == 'Tab' && !event.shiftKey) {
+                    event.preventDefault();
+                    
+                tabToggleButtons(modalButtonReset,modalButtonSave, modalButtonReset,modalButtonSave);
+                }
+            });
+
+            lastRejectRadioBtn.addEventListener('keydown', (event) => {
+                if (event.key == 'Tab' && !event.shiftKey) {
+                    event.preventDefault();
+                    
+                tabToggleButtons(modalButtonReset,modalButtonSave, modalButtonReset,modalButtonSave);
+                }
+            });
+
         }
 
         let lastElementTab = function(event: KeyboardEvent): void {
@@ -276,14 +293,51 @@ export class PreferencesControl {
         let closeIconShiftTab2Reset = function(event: KeyboardEvent): void {
             if (event.key == 'Tab' && event.shiftKey) {
                 event.preventDefault();
-                modalButtonReset.focus();
+                
+            tabToggleButtons(modalButtonReset,modalButtonSave,modalButtonSave,modalButtonReset);       
             }
         }
 
         modalButtonReset.addEventListener('keydown', (event) => {
             if (event.key == 'Tab' && !event.shiftKey) {
                 event.preventDefault();
-                closeModalIcon.focus();
+            
+            tabToggleButtons(modalButtonReset,modalButtonSave, modalButtonSave,closeModalIcon);
+            }
+
+            if (event.key == 'Tab' && event.shiftKey) {
+                event.preventDefault();
+                if(modalButtonSave.offsetTop != modalButtonReset.offsetTop)
+                {
+                    modalButtonSave.focus();
+                }
+                else
+                {
+                    if(lastAcceptRadioBtn?.checked)
+                    {
+                        lastAcceptRadioBtn?.focus();
+                    }
+                    else
+                    {
+                        lastRejectRadioBtn?.focus();
+                    }
+                }
+            }
+        });
+
+        modalButtonSave.addEventListener('keydown', (event) => {
+            if (event.key == 'Tab' && !event.shiftKey) {
+                event.preventDefault();
+            
+            tabToggleButtons(modalButtonSave,modalButtonReset,closeModalIcon,modalButtonReset)
+            }
+
+            if (event.key == 'Tab' && event.shiftKey) {
+                if(modalButtonSave.offsetTop == modalButtonReset.offsetTop)
+                {
+                    event.preventDefault();
+                    modalButtonReset.focus();
+                }
             }
         });
 
@@ -401,5 +455,17 @@ export class PreferencesControl {
                 i++;
             }
         }
+    }
+}
+
+function tabToggleButtons(compareLeft:HTMLElement,compareRight:HTMLElement, firstButton:HTMLElement,secondButton:HTMLElement){
+    //Check if elements displayed on the same level of above and below
+    if(compareLeft.offsetTop == compareRight.offsetTop)
+    {
+        firstButton.focus();
+    }
+    else
+    {
+        secondButton.focus();
     }
 }
