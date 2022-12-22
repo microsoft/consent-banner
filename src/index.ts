@@ -126,7 +126,7 @@ export class ConsentControl {
 
         ThemesController.createThemeStyle(options?.stylesNonce);
         if (options?.initialTheme) {
-            this.applyTheme(options.initialTheme);
+            //this.applyTheme(options.initialTheme);
         }
 
         this.setDirection();
