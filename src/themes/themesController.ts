@@ -329,6 +329,7 @@ export class ThemesController {
 
         let newRadioBtnCheckedStyle = `input[type="radio"].${ styles.cookieItemRadioBtn }:checked + label::after {
             background-color: ${ theme["radio-button-checked-background-color"] } !important;
+            filter: contrast(50%);
         }`;
         newStyles += newRadioBtnCheckedStyle;
 
@@ -339,6 +340,7 @@ export class ThemesController {
 
         let newRadioBtnHoverAfterStyle = `input[type="radio"].${ styles.cookieItemRadioBtn } + label:hover::after {
             background-color: ${ theme["radio-button-hover-background-color"] } !important;
+            filter: contrast(50%);
         }`;
         newStyles += newRadioBtnHoverAfterStyle;
         
@@ -349,6 +351,7 @@ export class ThemesController {
         
         let newRadioBtnFocusAfterStyle = `input[type="radio"].${ styles.cookieItemRadioBtn } + label:focus::after {
             background-color: ${ theme["radio-button-checked-background-color"] } !important;
+            filter: contrast(50%);
         }`;
         newStyles += newRadioBtnFocusAfterStyle;
         

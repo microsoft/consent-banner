@@ -123,6 +123,7 @@ export class PreferencesControl {
                             </div>
                         </div>
                     </div>
+                    <dd>${ HtmlTools.escapeHtml(cookieCategory.name) }</dd>
                 </dt>
                 `;
 
