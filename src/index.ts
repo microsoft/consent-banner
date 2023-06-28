@@ -462,6 +462,7 @@ export class ConsentControl {
             var scrollTop = window.scrollY;
             if (document.body.clientHeight - window.innerHeight - scrollTop < lastElement.offsetHeight) {
                 document.body.style.marginBottom=(lastElement.offsetHeight + bottomPadding) + "px"; //Add bottom margin to the page
+                document.body.style.height = "auto"; //This is to avoid banner overlapping pages where the page body is set to 100% and it does not capture entrie height.
             }
         }
     }
