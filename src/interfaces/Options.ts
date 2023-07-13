@@ -29,6 +29,7 @@ export interface ITheme {
     "secondary-button-color": string;
     "secondary-button-disabled-color": string;
     "secondary-button-border": string;
+    "banner-close-button-color": string;
 
     "background-color-between-page-and-dialog"?: string;
     "dialog-border-color"?: string;
@@ -65,4 +66,5 @@ export interface ITextResources {
     rejectLabel?: string;
     saveLabel?: string;
     resetLabel?: string;
+    bannerCloseLabel?: string;
 }

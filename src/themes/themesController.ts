@@ -92,6 +92,11 @@ export class ThemesController {
             destTheme["secondary-button-focus-border-color"] = secondaryBtnBorderElement[secondaryBtnBorderElement.length - 1];
         }
 
+        //determined by 
+        if (!srcTheme["banner-close-button-color"]) {
+            destTheme["banner-close-button-color"] = srcTheme["text-color"];
+        }
+
     }
 
     /**
@@ -131,12 +136,18 @@ export class ThemesController {
         let newHyperLinkStyle = `.${ styles.hyperLinkTheme } a {
             color: ${ theme["hyperlink-font-color"] } !important;
         }`;
+
+        let newBannerCloseStyle = `.${ styles.closeBannerIcon } {
+            color: ${ theme["banner-close-button-color"] } !important;
+        }`;
         newStyles += newHyperLinkStyle;
         
         newStyles += this.buildDialogStyle(theme);
         newStyles += this.buildPrimaryBtnStyle(theme);
         newStyles += this.buildSecondaryBtnStyle(theme);
         newStyles += this.buildRadioBtnStyle(theme);
+
+        newStyles += newBannerCloseStyle;
 
         document.getElementById('ms-consent-banner-theme-styles')!.textContent = newStyles;
     }
@@ -318,6 +329,7 @@ export class ThemesController {
 
         let newRadioBtnCheckedStyle = `input[type="radio"].${ styles.cookieItemRadioBtn }:checked + label::after {
             background-color: ${ theme["radio-button-checked-background-color"] } !important;
+            filter: contrast(50%);
         }`;
         newStyles += newRadioBtnCheckedStyle;
 
@@ -328,6 +340,7 @@ export class ThemesController {
 
         let newRadioBtnHoverAfterStyle = `input[type="radio"].${ styles.cookieItemRadioBtn } + label:hover::after {
             background-color: ${ theme["radio-button-hover-background-color"] } !important;
+            filter: contrast(50%);
         }`;
         newStyles += newRadioBtnHoverAfterStyle;
         
@@ -338,6 +351,7 @@ export class ThemesController {
         
         let newRadioBtnFocusAfterStyle = `input[type="radio"].${ styles.cookieItemRadioBtn } + label:focus::after {
             background-color: ${ theme["radio-button-checked-background-color"] } !important;
+            filter: contrast(50%);
         }`;
         newStyles += newRadioBtnFocusAfterStyle;
         

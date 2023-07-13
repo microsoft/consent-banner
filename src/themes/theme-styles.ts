@@ -14,15 +14,15 @@ export const DEFAULT_THEMES = {
         "text-color": "#000000",
         "secondary-button-color": "#EBEBEB",
         "secondary-button-disabled-color": "rgba(0, 0, 0, 0.2)",
-        "secondary-button-border": "none",
+        "secondary-button-border": "2px solid #0067B8",
         "background-color-between-page-and-dialog": "rgba(255, 255, 255, 0.6)",
         "dialog-border-color": "#0067B8",
         "hyperlink-font-color": "#0067B8",
         "secondary-button-hover-color": "#DBDBDB",
-        "secondary-button-hover-border": "none",
+        "secondary-button-hover-border": "2px solid #0067B8",
         "secondary-button-disabled-border": "none",
         "secondary-button-focus-border-color": "#000000",
-        "secondary-button-text-color": "#000000",
+        "secondary-button-text-color": "#0067B8",
         "secondary-button-disabled-text-color": "rgba(0, 0, 0, 0.2)",
         "primary-button-hover-color": "#0067B8",
         "primary-button-disabled-color": "rgba(0, 120, 215, 0.2)",
@@ -35,7 +35,8 @@ export const DEFAULT_THEMES = {
         "radio-button-hover-border-color": "#0067B8",
         "radio-button-hover-background-color": "rgba(0, 0, 0, 0.8)",
         "radio-button-disabled-color": "rgba(0, 0, 0, 0.2)",
-        "radio-button-disabled-border-color": "rgba(0, 0, 0, 0.2)"
+        "radio-button-disabled-border-color": "rgba(0, 0, 0, 0.2)",
+        "banner-close-button-color": "#000000"
     },
 
     darkTheme: {
@@ -73,7 +74,8 @@ export const DEFAULT_THEMES = {
         "radio-button-hover-border-color": "#4DB2FF",
         "radio-button-hover-background-color": "rgba(227, 227, 227, 0.8)",
         "radio-button-disabled-color": "rgba(227, 227, 227, 0.2)",
-        "radio-button-disabled-border-color": "rgba(227, 227, 227, 0.2)"
+        "radio-button-disabled-border-color": "rgba(227, 227, 227, 0.2)",
+        "banner-close-button-color": "#E3E3E3"
     },
 
     highContrast: {
@@ -111,7 +113,8 @@ export const DEFAULT_THEMES = {
         "radio-button-hover-border-color": "yellow",
         "radio-button-hover-background-color": "rgba(255, 255, 255, 0.8)",
         "radio-button-disabled-color": "rgba(255, 255, 255, 0.2)",
-        "radio-button-disabled-border-color": "rgba(255, 255, 255, 0.2)"
+        "radio-button-disabled-border-color": "rgba(255, 255, 255, 0.2)",
+        "banner-close-button-color": "#E3E3E3"
     }
     
 };

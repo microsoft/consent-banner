@@ -21,6 +21,9 @@ $radio-button-hover-background-color: rgba(0, 0, 0, 0.8);
 $radio-button-disabled-color: rgba(0, 0, 0, 0.2);
 $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
 
+$banner-close-button-color: #000000;
+$banner-shadow: 6px -5px 6px #0000001C;
+
 @mixin bannerFont($weight, $size, $style: normal) {
   font : {
     family: Segoe UI, SegoeUI, Arial, sans-serif;
@@ -48,7 +51,7 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
 }
 
 .bannerBody {
-  position: relative;
+  position: fixed;
   display: flex;
   z-index: 9999;          /* on top of the page */
   width: 100%;
@@ -56,10 +59,21 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
 
   justify-content: space-between;
   text-align: left;
-
+  
   @at-root div[dir="rtl"]#{ & } {
     text-align: right;
   }
+  
+  padding: {
+    top: 15px;
+    bottom: 15px;
+  };
+
+  bottom: .5%;
+  box-shadow: $banner-shadow;
+  max-height: 90%;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .bannerInform {
@@ -69,7 +83,15 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
     top: 8px;
     bottom: 8px;
   }
-  
+  align-self: center;
+ 
+  @include rtlDesign(0, 8px 5% 8px 0);
+}
+
+.bannerClose {
+  padding : {
+    bottom: 110px;
+  }
   @include rtlDesign(0, 8px 5% 8px 0);
 }
 
@@ -142,6 +164,27 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
   }
 }
 
+.bannerCloseButton {
+  margin: 4px;
+  padding: 5px;
+
+  min-height: $bannerBtnHeight;
+  vertical-align: top;
+  
+  cursor: pointer;
+  @include bannerFont(normal, 15px);
+  line-height: 20px;
+  text-align: center;
+
+  &:focus {
+    box-sizing: border-box;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
 .cookieModal {
   display: block;
   position: fixed;
@@ -191,7 +234,27 @@ $radio-button-disabled-border-color: rgba(0, 0, 0, 0.2);
   align-items: center;
   text-align: center;
   color: $close-button-color;
-  background-color: $dialog-background-color;
+  background-color: $banner-background-color;
+
+  @include rtlDesign(2px, 12px, left);
+}
+
+.closeBannerIcon  
+{
+  float: right;
+  z-index: 1;
+  border: none;
+  cursor: pointer;
+  @include bannerFont(normal, 13px);
+  line-height: 22px;
+  width: 22px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: $banner-close-button-color;
+  background-color: transparent;
+  position: absolute;
+  right: 5%;
 
   @include rtlDesign(2px, 12px, left);
 }
@@ -576,6 +639,11 @@ input[type="radio"].cookieItemRadioBtn {
 
     @include rtlDesign(0 0 12px 0, 0);
   }
+
+  .bannerClose{
+    padding-bottom: 40px;
+    padding-top: 10px;
+  }
 }
 
 /* For landscape orientation: */
@@ -596,6 +664,14 @@ input[type="radio"].cookieItemRadioBtn {
     padding: 3%;
   }
 
+  .closeBannerIcon {
+    padding: 3%;
+  }
+
+  .bannerClose {
+    padding-bottom: 40px;
+    padding-top: 10px;
+  }
   .modalBody {
     margin : {
       top: 3%;

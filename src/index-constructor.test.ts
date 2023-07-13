@@ -50,7 +50,8 @@ describe("Test constructor", () => {
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
+            resetLabel: "This is reset all",
+            bannerCloseLabel: "This is close banner"
         };
 
         let options: IOptions = {};
@@ -103,7 +104,8 @@ describe("Test constructor", () => {
             acceptLabel: "Accept",
             rejectLabel: "Reject",
             saveLabel: "Save changes",
-            resetLabel: "Reset all"
+            resetLabel: "Reset all",
+            bannerCloseLabel: "Close banner"
         });
     });
 
@@ -126,7 +128,8 @@ describe("Test constructor", () => {
             complex: {
                 id: "c",
                 name: "1. Essential"
-            }
+            },
+            bannerCloseLabel: "This is close banner"
         };
     
         let callBack = function() { return; };
@@ -171,7 +174,8 @@ describe("Test constructor", () => {
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
+            resetLabel: "This is reset all",
+            bannerCloseLabel: "This is close banner"
         });
     });
 
@@ -187,7 +191,9 @@ describe("Test constructor", () => {
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
+            resetLabel: "This is reset all",
+            bannerCloseLabel: "This is close banner"
+            
         };
 
         let callBack = function() { return; };
@@ -255,7 +261,8 @@ describe("Test constructor", () => {
             acceptLabel: "Accept",
             rejectLabel: "Reject",
             saveLabel: "Save changes",
-            resetLabel: "Reset all"
+            resetLabel: "Reset all",
+            bannerCloseLabel: "Close banner"
         });
     });
 
@@ -270,7 +277,8 @@ describe("Test constructor", () => {
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
+            resetLabel: "This is reset all",
+            bannerCloseLabel: "This is close banner"
         };
 
         let callBack = function() { return; };
@@ -314,7 +322,8 @@ describe("Test constructor", () => {
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
+            resetLabel: "This is reset all",
+            bannerCloseLabel: "This is close banner"
         });
     });
 
@@ -328,7 +337,8 @@ describe("Test constructor", () => {
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
+            resetLabel: "This is reset all",
+            bannerCloseLabel: "This is close banner"
         };
 
         let callBack = function() { return; };
@@ -348,7 +358,8 @@ describe("Test constructor", () => {
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
+            resetLabel: "This is reset all",
+            bannerCloseLabel: "This is close banner"
         });
     });
 
@@ -363,7 +374,8 @@ describe("Test constructor", () => {
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
+            resetLabel: "This is reset all",
+            bannerCloseLabel: "This is close banner"
         };
 
         let callBack = function() { return; };
@@ -383,7 +395,8 @@ describe("Test constructor", () => {
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
+            resetLabel: "This is reset all",
+            bannerCloseLabel: "This is close banner"
         });
     });
 
@@ -398,7 +411,8 @@ describe("Test constructor", () => {
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
+            resetLabel: "This is reset all",
+            bannerCloseLabel: "This is close banner"
         };
 
         let callBack = function() { return; };
@@ -418,7 +432,8 @@ describe("Test constructor", () => {
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
+            resetLabel: "This is reset all",
+            bannerCloseLabel: "This is close banner"
         });
     });
 
@@ -433,7 +448,8 @@ describe("Test constructor", () => {
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
+            resetLabel: "This is reset all",
+            bannerCloseLabel: "This is close banner"
         };
 
         let callBack = function() { return; };
@@ -453,7 +469,8 @@ describe("Test constructor", () => {
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
+            resetLabel: "This is reset all",
+            bannerCloseLabel: "This is close banner"
         });
     });
 
@@ -468,7 +485,8 @@ describe("Test constructor", () => {
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
+            resetLabel: "This is reset all",
+            bannerCloseLabel: "This is close banner"
         };
 
         let callBack = function() { return; };
@@ -488,7 +506,8 @@ describe("Test constructor", () => {
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
+            resetLabel: "This is reset all",
+            bannerCloseLabel: "This is close banner"
         });
     });
 
@@ -503,7 +522,8 @@ describe("Test constructor", () => {
             preferencesDialogDescHtml: "This is preferences dialog text",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
+            resetLabel: "This is reset all",
+            bannerCloseLabel: "This is close banner"
         };
 
         let callBack = function() { return; };
@@ -523,7 +543,8 @@ describe("Test constructor", () => {
             acceptLabel: "Accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
+            resetLabel: "This is reset all",
+            bannerCloseLabel: "This is close banner"
         });
     });
 
@@ -538,7 +559,8 @@ describe("Test constructor", () => {
             preferencesDialogDescHtml: "This is preferences dialog text",
             acceptLabel: "This is accept",
             saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
+            resetLabel: "This is reset all",
+            bannerCloseLabel: "This is close banner"
         };
 
         let callBack = function() { return; };
@@ -558,7 +580,8 @@ describe("Test constructor", () => {
             acceptLabel: "This is accept",
             rejectLabel: "Reject",
             saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
+            resetLabel: "This is reset all",
+            bannerCloseLabel: "This is close banner"
         });
     });
 
@@ -573,7 +596,8 @@ describe("Test constructor", () => {
             preferencesDialogDescHtml: "This is preferences dialog text",
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
-            resetLabel: "This is reset all"
+            resetLabel: "This is reset all",
+            bannerCloseLabel: "This is close banner"
         };
 
         let callBack = function() { return; };
@@ -593,7 +617,8 @@ describe("Test constructor", () => {
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "Save changes",
-            resetLabel: "This is reset all"
+            resetLabel: "This is reset all",
+            bannerCloseLabel: "This is close banner"
         });
     });
 
@@ -609,6 +634,7 @@ describe("Test constructor", () => {
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
+            bannerCloseLabel: "This is close banner"
         };
 
         let callBack = function() { return; };
@@ -628,7 +654,8 @@ describe("Test constructor", () => {
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
-            resetLabel: "Reset all"
+            resetLabel: "Reset all",
+            bannerCloseLabel: "This is close banner"
         });
     });
 
@@ -641,7 +668,8 @@ describe("Test constructor", () => {
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
+            resetLabel: "This is reset all",
+            bannerCloseLabel: "This is close banner"
         };
 
         let callBack = function() { return; };
@@ -685,7 +713,8 @@ describe("Test constructor", () => {
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
+            resetLabel: "This is reset all",
+            bannerCloseLabel: "This is close banner"
         });
     });
 
@@ -699,7 +728,8 @@ describe("Test constructor", () => {
             preferencesDialogDescHtml: "This is preferences dialog text",
             acceptLabel: "This is accept",
             saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
+            resetLabel: "This is reset all",
+            bannerCloseLabel: "This is close banner"
         };
 
         let callBack = function() { return; };
@@ -719,7 +749,45 @@ describe("Test constructor", () => {
             acceptLabel: "This is accept",
             rejectLabel: "Reject",
             saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
+            resetLabel: "This is reset all",
+            bannerCloseLabel: "This is close banner"
+        });
+    });
+
+    test("No close banner, textResources without bannerCloseLabel", () => {
+        let textResources = {
+            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
+            acceptAllLabel: "This is accept all",
+            rejectAllLabel: "This is reject all",
+            moreInfoLabel: "This is more info",
+            preferencesDialogCloseLabel: "This is Close",
+            preferencesDialogTitle: "This is preferences dialog title",
+            preferencesDialogDescHtml: "This is preferences dialog text",
+            acceptLabel: "This is accept",
+            rejectLabel: "This is reject",
+            saveLabel: "This is save changes",
+            resetLabel: "This is reset all",
+        };
+
+        let callBack = function() { return; };
+        let options: IOptions = { };
+        options.textResources = textResources;
+
+        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
+
+        expect(cc.textResources).toEqual({
+            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
+            acceptAllLabel: "This is accept all",
+            rejectAllLabel: "This is reject all",
+            moreInfoLabel: "This is more info",
+            preferencesDialogCloseLabel: "This is Close",
+            preferencesDialogTitle: "This is preferences dialog title",
+            preferencesDialogDescHtml: "This is preferences dialog text",
+            acceptLabel: "This is accept",
+            rejectLabel: "This is reject",
+            saveLabel: "This is save changes",
+            resetLabel: "This is reset all",
+            bannerCloseLabel: "Close banner"
         });
     });
 });

@@ -16,6 +16,7 @@ function testShowingBanner(dir: string): void {
 
     expect(document.getElementsByClassName(styles.buttonGroup).length).toBe(1);
     expect(document.getElementsByClassName(styles.bannerButton).length).toBe(3);
+    expect(document.getElementsByClassName(styles.closeBannerIcon).length).toBe(1);
 }
 
 function testRadioBtnState(cc: ConsentControl, cookieCategoriePreferences: ICookieCategoriesPreferences): number {
@@ -121,6 +122,9 @@ describe("Test show and hide banner", () => {
     let testId: string = "app";
     let testElementString = `
         <div class="${styles.bannerBody}" dir=ltr role="alert">
+        <div class="${ styles.bannerClose }">
+            <button aria-label="Close banner" class="${ styles.closeBannerIcon }" tabindex="-1">&#x2715;</button>
+        </div>
             <div class="${styles.bannerInform}">
                 <span class="${styles.infoIcon}" aria-label="Information message"></span> <!--  used for icon  -->
                 <p class="${styles.bannerInformBody}">We use </p>
@@ -136,7 +140,7 @@ describe("Test show and hide banner", () => {
         <!-- The Modal -->
         <div class="${styles.cookieModal}" dir=ltr>
             <div role="presentation" tabindex="-1"></div>
-            <div role="dialog" aria-modal="true" aria-label="Flow scroll" class="${styles.modalContainer}" tabindex="-1">
+            <div role="dialog" aria-modal="true" aria-label="Flow scroll" class="${styles.modalContainer}" tabindex="0">
                 <button aria-label="Close dialog" class="${styles.closeModalIcon}" tabindex="0">&#x2715;</button>
                 <div role="document" class="${styles.modalBody}">
                     <div>
@@ -213,18 +217,6 @@ describe("Test show and hide banner", () => {
             </div>
         </div>
     `;
-
-    function testRemovingBanner(): void {
-        let bannerBody = document.getElementsByClassName(styles.bannerBody);
-        expect(bannerBody.length).toBe(0);
-        
-        expect(document.getElementsByClassName(styles.bannerInform).length).toBe(0);
-        expect(document.getElementsByClassName(styles.infoIcon).length).toBe(0);
-        expect(document.getElementsByClassName(styles.bannerInformBody).length).toBe(0);
-
-        expect(document.getElementsByClassName(styles.buttonGroup).length).toBe(0);
-        expect(document.getElementsByClassName(styles.bannerButton).length).toBe(0);
-    }
 
     beforeEach(() => {
         let newDiv = document.createElement("div");
@@ -360,12 +352,27 @@ describe("Test show and hide banner", () => {
         expect(cc.preferencesCtrl).toBeNull();
         testRemovingPreferences();
     });
+
+    function testRemovingBanner(): void {
+        let bannerBody = document.getElementsByClassName(styles.bannerBody);
+        expect(bannerBody.length).toBe(0);
+        
+        expect(document.getElementsByClassName(styles.bannerInform).length).toBe(0);
+        expect(document.getElementsByClassName(styles.infoIcon).length).toBe(0);
+        expect(document.getElementsByClassName(styles.bannerInformBody).length).toBe(0);
+    
+        expect(document.getElementsByClassName(styles.buttonGroup).length).toBe(0);
+        expect(document.getElementsByClassName(styles.bannerButton).length).toBe(0);
+    }
 });
 
 describe("Test show and hide preferences dialog", () => {
     let testId: string = "app";
     let testElementBanner = `
         <div class="${styles.bannerBody}" dir=ltr role="alert">
+        <div class="${ styles.bannerClose }">
+            <button aria-label="Close banner" class="${ styles.closeBannerIcon }" tabindex="">&#x2715;</button>
+        </div>
             <div class="${styles.bannerInform}">
                 <span class="${styles.infoIcon}" aria-label="Information message"></span> <!--  used for icon  -->
                 <p class="${styles.bannerInformBody}">We use </p>
@@ -643,6 +650,44 @@ describe("Test show and hide preferences dialog", () => {
         expect(cc.preferencesCtrl).toBeNull();
         testRemovingPreferences();
     });
+
+    test("Test if the banner close button is present",()=>{
+        expect(document.getElementsByClassName(styles.closeBannerIcon).length).toBe(1);
+    });
+    
+    test("Test the banner removal after close banner is clicked",()=>{
+        let callBack = function() { return; };
+        let cc = new ConsentControl(testId, "en", callBack);
+
+        let insert = document.getElementById(testId);
+        if (insert) {
+            insert.innerHTML = testElementBanner;
+        }
+        else {
+            throw new Error("Insert point not found error");
+        }
+
+        
+        
+        let closeBannerBtn: HTMLElement = <HTMLElement> document.getElementsByClassName(styles.closeBannerIcon)[0];
+        console.info(closeBannerBtn);
+        closeBannerBtn.click();
+        cc.hideBanner();
+        testRemovingBanner();
+    });
+
+    function testRemovingBanner(): void {
+        let bannerBody = document.getElementsByClassName(styles.bannerBody);
+        expect(bannerBody.length).toBe(0);
+        
+        expect(document.getElementsByClassName(styles.bannerInform).length).toBe(0);
+        expect(document.getElementsByClassName(styles.infoIcon).length).toBe(0);
+        expect(document.getElementsByClassName(styles.bannerInformBody).length).toBe(0);
+    
+        expect(document.getElementsByClassName(styles.buttonGroup).length).toBe(0);
+        expect(document.getElementsByClassName(styles.bannerButton).length).toBe(0);
+    }
+
 });
 
 describe("Test containerElement", () => {
@@ -808,4 +853,6 @@ describe("Test setRadioBtnState()", () => {
 
         testRadioBtnState(cc, cc.preferencesCtrl!.cookieCategoriesPreferences);
     });
+
+   
 });

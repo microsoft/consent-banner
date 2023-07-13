@@ -90,7 +90,8 @@ let textResources: ITextResources = {
     acceptLabel: "Accept",
     rejectLabel: "Reject",
     saveLabel: "Save changes",
-    resetLabel: "Reset all"
+    resetLabel: "Reset all",
+    bannerCloseLabel: "Close banner"
 };
 
 let callBack = function(obj: any) { console.log(obj); };
@@ -287,6 +288,7 @@ interface ITextResources {
     rejectLabel?: string;
     saveLabel?: string;
     resetLabel?: string;
+    bannerCloseLabel?: string;
 }
 
 interface ICookieCategoriesPreferences {
@@ -323,6 +325,8 @@ interface ITheme {
     "secondary-button-color": string;
     "secondary-button-disabled-color": string;
     "secondary-button-border": string;
+    "banner-close-button-color": string;
+}
 
     // All optional properties
     "background-color-between-page-and-dialog"?: string;
@@ -346,7 +350,6 @@ interface ITheme {
     "radio-button-hover-background-color"?: string;
     "radio-button-disabled-color"?: string;
     "radio-button-disabled-border-color"?: string;
-}
 ```
 
 ### Provided methods
