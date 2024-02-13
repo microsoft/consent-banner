@@ -59,9 +59,9 @@ export class PreferencesControl {
                     </dl>
                 </form>
                 
-                <div class="${ styles.modalButtonGroup }">
-                    <button type="button" aria-label="${ HtmlTools.escapeHtml(this.textResources.saveLabel) }" class="${ styles.modalButtonSave } ${ styles.primaryButtonTheme }" disabled>${ HtmlTools.escapeHtml(this.textResources.saveLabel) }</button>
-                    <button type="button" aria-label="${ HtmlTools.escapeHtml(this.textResources.resetLabel) }" class="${ styles.modalButtonReset } ${ styles.secondaryButtonTheme }" disabled>${ HtmlTools.escapeHtml(this.textResources.resetLabel) }</button>
+                    <div class="${ styles.modalButtonGroup }">
+                        <button type="button" aria-label="${HtmlTools.escapeHtml(this.textResources.resetLabel)}" class="${styles.modalButtonReset} ${styles.secondaryButtonTheme}" disabled>${HtmlTools.escapeHtml(this.textResources.resetLabel)}</button>
+                        <button type="button" aria-label="${HtmlTools.escapeHtml(this.textResources.saveLabel)}" class="${styles.modalButtonSave} ${styles.primaryButtonTheme}" disabled>${HtmlTools.escapeHtml(this.textResources.saveLabel)}</button>
                 </div>
             </div>
         </div>
@@ -273,14 +273,15 @@ export class PreferencesControl {
                 lastRejectRadioBtn?.focus();
             }
         };
-        let closeIconShiftTab2Reset = function(event: KeyboardEvent): void {
+
+        let closeIconShiftTab2Save = function(event: KeyboardEvent): void {
             if (event.key == 'Tab' && event.shiftKey) {
                 event.preventDefault();
-                modalButtonReset.focus();
+                modalButtonSave.focus()
             }
         }
 
-        modalButtonReset.addEventListener('keydown', (event) => {
+        modalButtonSave.addEventListener('keydown', (event) => {
             if (event.key == 'Tab' && !event.shiftKey) {
                 event.preventDefault();
                 closeModalIcon.focus();
@@ -296,7 +297,7 @@ export class PreferencesControl {
             }
         }
         else {
-            closeModalIcon.addEventListener('keydown', closeIconShiftTab2Reset);
+            closeModalIcon.addEventListener('keydown', closeIconShiftTab2Save);
         }
 
         for (let radio of acceptRejectButtons) {
@@ -310,7 +311,7 @@ export class PreferencesControl {
                     lastRejectRadioBtn?.removeEventListener('keydown', lastElementTab);
                     
                     closeModalIcon.removeEventListener('keydown', firstElementShiftTab);
-                    closeModalIcon.addEventListener('keydown', closeIconShiftTab2Reset);
+                    closeModalIcon.addEventListener('keydown', closeIconShiftTab2Save);
                 }
             });
         }
