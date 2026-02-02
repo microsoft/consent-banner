@@ -30,9 +30,11 @@
     "lint": "tslint -p tsconfig.json -t stylish"
   },
   "dependencies": {
+    "dompurify": "^2.4.7",
     "style-loader": "^1.1.4"
   },
   "devDependencies": {
+    "@types/dompurify": "^2.4.0",
     "@types/jest": "^25.2.1",
     "@types/node-sass": "^4.11.0",
     "awesome-typescript-loader": "^5.2.1",

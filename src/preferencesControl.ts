@@ -1,5 +1,6 @@
 import * as rawStyles from './styles.scss';
 import { HtmlTools } from './htmlTools';
+import * as DOMPurify from 'dompurify';
 
 import { ICookieCategory } from './interfaces/CookieCategories';
 import { ITextResources } from './interfaces/Options';
@@ -71,7 +72,7 @@ export class PreferencesControl {
         cookieModal.setAttribute('id','wcpCookiePreferenceCtrl');
         cookieModal.setAttribute('class', styles.cookieModal);
         cookieModal.setAttribute('dir', this.direction);
-        cookieModal.innerHTML = cookieModalInnerHtml;
+        cookieModal.innerHTML = DOMPurify.sanitize(cookieModalInnerHtml, { RETURN_TRUSTED_TYPE: true }) as unknown as string;
 
         this.containerElement.appendChild(cookieModal);
         
@@ -88,7 +89,7 @@ export class PreferencesControl {
                 `;
 
                 let cookieOrderedList = document.getElementsByClassName(styles.cookieOrderedList)[0];
-                cookieOrderedList.innerHTML += item;
+                cookieOrderedList.innerHTML = DOMPurify.sanitize(cookieOrderedList.innerHTML + item, { RETURN_TRUSTED_TYPE: true }) as unknown as string;
             }
             else {
                 if (this.cookieCategoriesPreferences[cookieCategory.id] !== undefined) {
@@ -127,7 +128,7 @@ export class PreferencesControl {
                 `;
 
                 let cookieOrderedList = document.getElementsByClassName(styles.cookieOrderedList)[0];
-                cookieOrderedList.innerHTML += item;
+                cookieOrderedList.innerHTML = DOMPurify.sanitize(cookieOrderedList.innerHTML + item, { RETURN_TRUSTED_TYPE: true }) as unknown as string;
             }
         }
 

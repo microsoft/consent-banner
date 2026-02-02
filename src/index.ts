@@ -1,5 +1,6 @@
 import * as rawStyles from './styles.scss';
 import * as injectStylesIntoStyleTag from 'style-loader/dist/runtime/injectStylesIntoStyleTag';
+import * as DOMPurify from 'dompurify';
 
 import { PreferencesControl } from './preferencesControl';
 import { HtmlTools } from './htmlTools';
@@ -220,7 +221,7 @@ export class ConsentControl {
         banner.setAttribute('class', styles.bannerBody);
         banner.setAttribute('dir', this.direction);
         banner.setAttribute('role', 'alert');
-        banner.innerHTML = bannerInnerHtml;
+        banner.innerHTML = DOMPurify.sanitize(bannerInnerHtml, { RETURN_TRUSTED_TYPE: true }) as unknown as string;
 
         this.containerElement?.appendChild(banner);
 
