@@ -1,6 +1,6 @@
 {
   "name": "consent-banner",
-  "version": "2.2.0",
+  "version": "2.2.2",
   "description": "The library which will generate a banner at the specified position for asking the cookie preferences.",
   "main": "dist/consent-banner.js",
   "types": "dist/consent-banner.d.ts",
@@ -30,10 +30,18 @@
     "lint": "tslint -p tsconfig.json -t stylish"
   },
   "dependencies": {
-    "style-loader": "^1.1.4"
+    "dompurify": "2.4.7",
+    "style-loader": "1.1.4"
   },
   "devDependencies": {
-    "@types/jest": "^25.2.1",
+    "@types/babel__core": "7.1.14",
+    "@types/babel__generator": "7.6.2",
+    "@types/babel__template": "7.4.0",
+    "@types/babel__traverse": "7.11.1",
+    "@types/dompurify": "2.4.0",
+    "@types/jest": "^25.2.3",
+    "@types/minimatch": "3.0.5",
+    "@types/node": "14.18.63",
     "@types/node-sass": "^4.11.0",
     "awesome-typescript-loader": "^5.2.1",
     "css-loader": "^3.5.2",
@@ -41,13 +49,13 @@
     "jest": "^25.3.0",
     "jest-junit-reporter": "^1.1.0",
     "jest-pnp-resolver": "^1.2.1",
-    "node-sass": "^4.14.1",
     "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^6.7.0",
+    "sass": "1.32.13",
     "sass-loader": "^8.0.2",
     "ts-jest": "^25.3.1",
-    "tslint": "^6.1.1",
-    "tslint-microsoft-contrib": "^6.2.0",
+    "tslint": "^5.20.1",
+    "tslint-microsoft-contrib": "6.2.0",
     "typescript": "^3.8.3",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
