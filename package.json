@@ -1,6 +1,6 @@
 {
   "name": "consent-banner",
-  "version": "2.4.0-beta.3",
+  "version": "2.4.0-beta.4",
   "description": "The library which will generate a banner at the specified position for asking the cookie preferences.",
   "main": "dist/consent-banner.js",
   "types": "dist/consent-banner.d.ts",
@@ -62,7 +62,7 @@
   },
   "browserslist": [
     ">0.2%",
-    "not ie <= 9",
+    "not ie <= 11",
     "not dead",
     "not op_mini all"
   ]
