@@ -3,7 +3,8 @@ import * as styles from "./styles.scss";
 import { PreferencesControl } from "./preferencesControl";
 
 import { ICookieCategoriesPreferences } from "./interfaces/CookieCategoriesPreferences";
-
+import { setElementHtml } from "./domHelper";
+    
 function testShowingBanner(dir: string): void {
     let bannerBody = document.getElementsByClassName(styles.bannerBody);
     expect(bannerBody).toBeTruthy();
@@ -322,7 +323,7 @@ describe("Test show and hide banner", () => {
 
         let insert = document.getElementById(testId);
         if (insert) {
-            insert.innerHTML = testElementString;
+            setElementHtml(insert, testElementString);
         }
         else {
             throw new Error("Insert point not found error");
@@ -339,7 +340,7 @@ describe("Test show and hide banner", () => {
 
         let insert = document.getElementById(testId);
         if (insert) {
-            insert.innerHTML = testElementString;
+            setElementHtml(insert, testElementString);
         }
         else {
             throw new Error("Insert point not found error");
@@ -463,7 +464,7 @@ describe("Test show and hide preferences dialog", () => {
     beforeEach(() => {
         let newDiv = document.createElement("div");
         newDiv.setAttribute("id", testId);
-        newDiv.innerHTML = testElementBanner;
+        setElementHtml(newDiv, testElementBanner);
 
         document.body.appendChild(newDiv);
     });
@@ -530,7 +531,7 @@ describe("Test show and hide preferences dialog", () => {
         for (let i = 0; i < cookieItemRadioBtnLength; i++) {
             let container = document.getElementById(testId);
             if (container) {
-                container.innerHTML = "";
+                setElementHtml(container, "");
 
                 let otherCallBack = function() { return; };
                 let otherCc = new ConsentControl(testId, "en", otherCallBack);
@@ -621,7 +622,7 @@ describe("Test show and hide preferences dialog", () => {
 
         let insert = document.getElementById(testId);
         if (insert) {
-            insert.innerHTML = testElementBanner + testElementString;
+            setElementHtml(insert, testElementBanner + testElementString);
         }
         else {
             throw new Error("Insert point not found error");

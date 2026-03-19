@@ -15,8 +15,11 @@ export class HtmlTools {
     /**
      * Safely set HTML content on an element without triggering Trusted Types violations.
      * Uses Range.createContextualFragment which is not a Trusted Types sink.
-     * Falls back to a detached element for environments that lack
-     * createRange/createContextualFragment support (e.g., jsdom in unit tests).
+     * All browsers that enforce Trusted Types support createRange/createContextualFragment,
+     * so no innerHTML fallback is needed.
+     * 
+     * In test environments (jsdom) where createRange may not exist, a setup file
+     * should polyfill document.createRange before tests run.
      * 
      * @param element target element to set content on
      * @param html HTML string to parse and insert (site-owner provided, may contain <a> tags)
@@ -27,20 +30,8 @@ export class HtmlTools {
             return;
         }
 
-        if (typeof document.createRange === 'function') {
-            let range = document.createRange();
-            if (typeof range.createContextualFragment === 'function') {
-                let fragment = range.createContextualFragment(html);
-                element.appendChild(fragment);
-                return;
-            }
-        }
-
-        // Fallback for environments without createRange/createContextualFragment (e.g., jsdom)
-        let temp = document.createElement('span');
-        temp.innerHTML = html;
-        while (temp.firstChild) {
-            element.appendChild(temp.firstChild);
-        }
+        let range = document.createRange();
+        let fragment = range.createContextualFragment(html);
+        element.appendChild(fragment);
     }
 }

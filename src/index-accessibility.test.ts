@@ -1,5 +1,6 @@
 import { ConsentControl } from "./index";
 import * as styles from "./styles.scss";
+import { appendElementHtml } from "./domHelper";
 
 describe("Test accessibility when closing event occurs", () => {
     let testId: string = "app";
@@ -40,11 +41,11 @@ describe("Test accessibility when closing event occurs", () => {
         let closeModalIcon = <HTMLElement> document.getElementsByClassName(styles.closeModalIcon)[0];
         closeModalIcon.click();
 
-        expect(document.activeElement?.innerHTML).toBe("More info");
+        expect(document.activeElement?.textContent).toBe("More info");
     });
 
     test("Call showBanner() and showPreferences(). Focus should be on anchor element after we click on close button", () => {
-        document.body.innerHTML += testElementString;
+        appendElementHtml(document.body, testElementString);
 
         let callBack = function () { return; };
         let cc = new ConsentControl("app", "en", callBack);
@@ -62,7 +63,7 @@ describe("Test accessibility when closing event occurs", () => {
         let closeModalIcon = <HTMLElement> document.getElementsByClassName(styles.closeModalIcon)[0];
         closeModalIcon.click();
 
-        expect(document.activeElement?.innerHTML).toBe("Click me");
+        expect(document.activeElement?.textContent).toBe("Click me");
     });
 });
 
