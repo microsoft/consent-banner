@@ -13,13 +13,12 @@ export class HtmlTools {
     }
 
     /**
-     * Safely set HTML content on an element without triggering Trusted Types violations.
-     * Uses Range.createContextualFragment which is not a Trusted Types sink.
-     * All browsers that enforce Trusted Types support createRange/createContextualFragment,
-     * so no innerHTML fallback is needed.
+     * Safely set HTML content on an element using only non-sink DOM APIs.
+     * Parses simple HTML containing text and <a> tags without using any
+     * Trusted Types sinks (no innerHTML, no createContextualFragment, no DOMParser).
      * 
-     * In test environments (jsdom) where createRange may not exist, a setup file
-     * should polyfill document.createRange before tests run.
+     * Supports: plain text, <a href="...">text</a> links.
+     * Any unrecognized tags are escaped as plain text for security.
      * 
      * @param element target element to set content on
      * @param html HTML string to parse and insert (site-owner provided, may contain <a> tags)
@@ -30,8 +29,46 @@ export class HtmlTools {
             return;
         }
 
-        let range = document.createRange();
-        let fragment = range.createContextualFragment(html);
-        element.appendChild(fragment);
+        // Clear existing children
+        while (element.firstChild) {
+            element.removeChild(element.firstChild);
+        }
+
+        // Regex to match <a ...>...</a> tags
+        let linkRegex = /<a\s+([^>]*)>(.*?)<\/a>/gi;
+        let lastIndex = 0;
+        let match: RegExpExecArray | null;
+
+        while ((match = linkRegex.exec(html)) !== null) {
+            // Add text before this match
+            if (match.index > lastIndex) {
+                element.appendChild(document.createTextNode(html.substring(lastIndex, match.index)));
+            }
+
+            // Parse the <a> tag
+            let attrsString = match[1];
+            let linkText = match[2];
+
+            let anchor = document.createElement('a');
+            anchor.textContent = linkText;
+
+            // Extract href attribute safely
+            let hrefMatch = /href\s*=\s*(?:"([^"]*)"|'([^']*)')/i.exec(attrsString);
+            if (hrefMatch) {
+                let href = hrefMatch[1] !== undefined ? hrefMatch[1] : hrefMatch[2];
+                // Only allow safe URL schemes
+                if (href && !href.toLowerCase().startsWith('javascript:')) {
+                    anchor.setAttribute('href', href);
+                }
+            }
+
+            element.appendChild(anchor);
+            lastIndex = linkRegex.lastIndex;
+        }
+
+        // Add remaining text after last match
+        if (lastIndex < html.length) {
+            element.appendChild(document.createTextNode(html.substring(lastIndex)));
+        }
     }
 }
