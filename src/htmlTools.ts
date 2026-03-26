@@ -56,8 +56,8 @@ export class HtmlTools {
             let hrefMatch = /href\s*=\s*(?:"([^"]*)"|'([^']*)')/i.exec(attrsString);
             if (hrefMatch) {
                 let href = hrefMatch[1] !== undefined ? hrefMatch[1] : hrefMatch[2];
-                // Only allow safe URL schemes
-                if (href && !href.toLowerCase().startsWith('javascript:')) {
+                // Only allow safe URL schemes (allowlist approach)
+                if (href && this.isSafeUrl(href)) {
                     anchor.setAttribute('href', href);
                 }
             }
@@ -70,5 +70,35 @@ export class HtmlTools {
         if (lastIndex < html.length) {
             element.appendChild(document.createTextNode(html.substring(lastIndex)));
         }
+    }
+
+    /**
+     * Checks if a URL uses a safe scheme.
+     * Uses an allowlist approach to only permit known-safe protocols.
+     * Blocks javascript:, data:, vbscript:, and any other dangerous schemes.
+     * 
+     * @param url the URL string to validate
+     * @returns true if the URL is safe, false otherwise
+     */
+    private static isSafeUrl(url: string): boolean {
+        let trimmed = url.replace(/\s/g, '').toLowerCase();
+        
+        // Allow relative URLs (no scheme)
+        if (trimmed.startsWith('/') || trimmed.startsWith('.') || trimmed.startsWith('#')) {
+            return true;
+        }
+
+        // Allow only known safe schemes
+        if (trimmed.startsWith('https://') || trimmed.startsWith('http://') || trimmed.startsWith('mailto:')) {
+            return true;
+        }
+
+        // Block if it contains any scheme (has colon before first slash)
+        if (trimmed.indexOf(':') < trimmed.indexOf('/') && trimmed.indexOf(':') !== -1) {
+            return false;
+        }
+
+        // Allow scheme-less URLs (e.g., "example.com/page")
+        return true;
     }
 }
