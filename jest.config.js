@@ -14,6 +14,9 @@ module.exports = {
     "^.+\\.(css|scss)$": "<rootDir>/styleMock.js"
   },  
   resolver: "jest-pnp-resolver",
+  setupFiles: [
+    "<rootDir>/src/testSetup.ts"
+  ],
   testMatch: [
     "<rootDir>/src/**/*.test.ts?(x)"
   ],
@@ -27,4 +30,5 @@ module.exports = {
   ],
   testPathIgnorePatterns: [
   ],
+  //testResultsProcessor: "<rootDir>/node_modules/jest-junit-reporter",
 };
