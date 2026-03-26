@@ -1,6 +1,5 @@
 import * as rawStyles from './styles.scss';
 import * as injectStylesIntoStyleTag from 'style-loader/dist/runtime/injectStylesIntoStyleTag';
-import * as DOMPurify from 'dompurify';
 
 import { PreferencesControl } from './preferencesControl';
 import { HtmlTools } from './htmlTools';
@@ -193,46 +192,91 @@ export class ConsentControl {
         // Remove existing banner and preference dialog
         this.hideBanner();
 
-        let infoIcon = `
-        <svg xmlns="http://www.w3.org/2000/svg" x='0px' y='0px' viewBox='0 0 44 44' width='24px' height='24px' fill='none' stroke='currentColor'>
-          <circle cx='22' cy='22' r='20' stroke-width='2'></circle>
-          <line x1='22' x2='22' y1='18' y2='33' stroke-width='3'></line>
-          <line x1='22' x2='22' y1='12' y2='15' stroke-width='3'></line>
-        </svg>
-        `;
-
-        const bannerInnerHtml = `
-        <div class="${ styles.bannerInform }">
-            <span class="${ styles.infoIcon } ${ styles.textColorTheme }">${ infoIcon }</span> <!--  used for icon  -->
-            <p class="${ styles.bannerInformBody } ${ styles.hyperLinkTheme } ${ styles.textColorTheme }">
-                ${ this.textResources.bannerMessageHtml }
-            </p>
-        </div>
-
-        <div class="${ styles.buttonGroup }">
-            <button type="button" class="${ styles.bannerButton } ${ styles.secondaryButtonTheme }">${ HtmlTools.escapeHtml(this.textResources.acceptAllLabel) }</button>
-            <button type="button" class="${ styles.bannerButton } ${ styles.secondaryButtonTheme }">${ HtmlTools.escapeHtml(this.textResources.rejectAllLabel) }</button>
-            <button type="button" class="${ styles.bannerButton } ${ styles.secondaryButtonTheme }">${ HtmlTools.escapeHtml(this.textResources.moreInfoLabel) }</button>
-        </div>
-        `;
-
+        // Build banner using DOM APIs to avoid innerHTML (Trusted Types safe)
         const banner = document.createElement('div');
-        banner.setAttribute('id','wcpConsentBannerCtrl');
+        banner.setAttribute('id', 'wcpConsentBannerCtrl');
         banner.setAttribute('class', styles.bannerBody);
         banner.setAttribute('dir', this.direction);
         banner.setAttribute('role', 'alert');
-        banner.innerHTML = DOMPurify.sanitize(bannerInnerHtml, { RETURN_TRUSTED_TYPE: true }) as unknown as string;
+
+        // Banner inform section
+        let bannerInform = document.createElement('div');
+        bannerInform.setAttribute('class', styles.bannerInform);
+
+        let iconSpan = document.createElement('span');
+        iconSpan.setAttribute('class', `${ styles.infoIcon } ${ styles.textColorTheme }`);
+
+        let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('x', '0px');
+        svg.setAttribute('y', '0px');
+        svg.setAttribute('viewBox', '0 0 44 44');
+        svg.setAttribute('width', '24px');
+        svg.setAttribute('height', '24px');
+        svg.setAttribute('fill', 'none');
+        svg.setAttribute('stroke', 'currentColor');
+
+        let circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', '22');
+        circle.setAttribute('cy', '22');
+        circle.setAttribute('r', '20');
+        circle.setAttribute('stroke-width', '2');
+        svg.appendChild(circle);
+
+        let line1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line1.setAttribute('x1', '22');
+        line1.setAttribute('x2', '22');
+        line1.setAttribute('y1', '18');
+        line1.setAttribute('y2', '33');
+        line1.setAttribute('stroke-width', '3');
+        svg.appendChild(line1);
+
+        let line2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line2.setAttribute('x1', '22');
+        line2.setAttribute('x2', '22');
+        line2.setAttribute('y1', '12');
+        line2.setAttribute('y2', '15');
+        line2.setAttribute('stroke-width', '3');
+        svg.appendChild(line2);
+
+        iconSpan.appendChild(svg);
+        bannerInform.appendChild(iconSpan);
+
+        let bannerInformBody = document.createElement('p');
+        bannerInformBody.setAttribute('class', `${ styles.bannerInformBody } ${ styles.hyperLinkTheme } ${ styles.textColorTheme }`);
+        HtmlTools.setHtmlContent(bannerInformBody, this.textResources.bannerMessageHtml);
+        bannerInform.appendChild(bannerInformBody);
+
+        banner.appendChild(bannerInform);
+
+        // Button group
+        let buttonGroup = document.createElement('div');
+        buttonGroup.setAttribute('class', styles.buttonGroup);
+
+        let acceptAllBtn = document.createElement('button');
+        acceptAllBtn.setAttribute('type', 'button');
+        acceptAllBtn.setAttribute('class', `${ styles.bannerButton } ${ styles.secondaryButtonTheme }`);
+        acceptAllBtn.textContent = this.textResources.acceptAllLabel || '';
+
+        let rejectAllBtn = document.createElement('button');
+        rejectAllBtn.setAttribute('type', 'button');
+        rejectAllBtn.setAttribute('class', `${ styles.bannerButton } ${ styles.secondaryButtonTheme }`);
+        rejectAllBtn.textContent = this.textResources.rejectAllLabel || '';
+
+        let moreInfoBtn = document.createElement('button');
+        moreInfoBtn.setAttribute('type', 'button');
+        moreInfoBtn.setAttribute('class', `${ styles.bannerButton } ${ styles.secondaryButtonTheme }`);
+        moreInfoBtn.textContent = this.textResources.moreInfoLabel || '';
+
+        buttonGroup.appendChild(acceptAllBtn);
+        buttonGroup.appendChild(rejectAllBtn);
+        buttonGroup.appendChild(moreInfoBtn);
+        banner.appendChild(buttonGroup);
 
         this.containerElement?.appendChild(banner);
 
-        let cookieInfo = document.getElementsByClassName(styles.bannerButton)[2];
-        cookieInfo?.addEventListener('click', () => this.showPreferences(cookieCategoriesPreferences));
-
-        let acceptAllBtn = document.getElementsByClassName(styles.bannerButton)[0];
-        acceptAllBtn?.addEventListener('click', () => this.onAcceptAllClicked(cookieCategoriesPreferences));
-
-        let rejectAllBtn = document.getElementsByClassName(styles.bannerButton)[1];
-        rejectAllBtn?.addEventListener('click', () => this.onRejectAllClicked(cookieCategoriesPreferences));
+        moreInfoBtn.addEventListener('click', () => this.showPreferences(cookieCategoriesPreferences));
+        acceptAllBtn.addEventListener('click', () => this.onAcceptAllClicked(cookieCategoriesPreferences));
+        rejectAllBtn.addEventListener('click', () => this.onRejectAllClicked(cookieCategoriesPreferences));
     }
 
     /**

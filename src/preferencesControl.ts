@@ -1,6 +1,5 @@
 import * as rawStyles from './styles.scss';
 import { HtmlTools } from './htmlTools';
-import * as DOMPurify from 'dompurify';
 
 import { ICookieCategory } from './interfaces/CookieCategories';
 import { ITextResources } from './interfaces/Options';
@@ -42,37 +41,79 @@ export class PreferencesControl {
      * @param {boolean} banner true for banner, false for preferences dialog. 
      */
     public createPreferencesDialog(): void {
-        let cookieModalInnerHtml = `
-        <div role="presentation" tabindex="-1"></div>
-        <div role="dialog" aria-modal="true" aria-label="${ HtmlTools.escapeHtml(this.textResources.preferencesDialogTitle) }" class="${ styles.modalContainer }" tabindex="-1">
-            <button aria-label="${ HtmlTools.escapeHtml(this.textResources.preferencesDialogCloseLabel) }" class="${ styles.closeModalIcon }" tabindex="0">&#x2715;</button>
-            <div role="document" class="${ styles.modalBody }">
-                <div>
-                    <h1 class="${ styles.modalTitle } ${ styles.textColorTheme }">${ HtmlTools.escapeHtml(this.textResources.preferencesDialogTitle) }</h1>
-                </div>
-                
-                <form class="${ styles.modalContent } ${ styles.hyperLinkTheme }">
-                    <p class="${ styles.cookieStatement } ${ styles.textColorTheme }">
-                        ${ this.textResources.preferencesDialogDescHtml }
-                    </p>
-
-                    <dl class="${ styles.cookieOrderedList }">
-                    </dl>
-                </form>
-                
-                <div class="${ styles.modalButtonGroup }">
-                    <button type="button" aria-label="${ HtmlTools.escapeHtml(this.textResources.saveLabel) }" class="${ styles.modalButtonSave } ${ styles.primaryButtonTheme }" disabled>${ HtmlTools.escapeHtml(this.textResources.saveLabel) }</button>
-                    <button type="button" aria-label="${ HtmlTools.escapeHtml(this.textResources.resetLabel) }" class="${ styles.modalButtonReset } ${ styles.secondaryButtonTheme }" disabled>${ HtmlTools.escapeHtml(this.textResources.resetLabel) }</button>
-                </div>
-            </div>
-        </div>
-        `;
-
+        // Build modal using DOM APIs to avoid innerHTML (Trusted Types safe)
         const cookieModal = document.createElement('div');
-        cookieModal.setAttribute('id','wcpCookiePreferenceCtrl');
+        cookieModal.setAttribute('id', 'wcpCookiePreferenceCtrl');
         cookieModal.setAttribute('class', styles.cookieModal);
         cookieModal.setAttribute('dir', this.direction);
-        cookieModal.innerHTML = DOMPurify.sanitize(cookieModalInnerHtml, { RETURN_TRUSTED_TYPE: true }) as unknown as string;
+
+        let presentationDiv = document.createElement('div');
+        presentationDiv.setAttribute('role', 'presentation');
+        presentationDiv.setAttribute('tabindex', '-1');
+        cookieModal.appendChild(presentationDiv);
+
+        let dialogDiv = document.createElement('div');
+        dialogDiv.setAttribute('role', 'dialog');
+        dialogDiv.setAttribute('aria-modal', 'true');
+        dialogDiv.setAttribute('aria-label', this.textResources.preferencesDialogTitle || '');
+        dialogDiv.setAttribute('class', styles.modalContainer);
+        dialogDiv.setAttribute('tabindex', '-1');
+
+        let closeBtn = document.createElement('button');
+        closeBtn.setAttribute('aria-label', this.textResources.preferencesDialogCloseLabel || '');
+        closeBtn.setAttribute('class', styles.closeModalIcon);
+        closeBtn.setAttribute('tabindex', '0');
+        closeBtn.textContent = '\u2715';
+        dialogDiv.appendChild(closeBtn);
+
+        let modalBody = document.createElement('div');
+        modalBody.setAttribute('role', 'document');
+        modalBody.setAttribute('class', styles.modalBody);
+
+        let titleDiv = document.createElement('div');
+        let h1 = document.createElement('h1');
+        h1.setAttribute('class', `${ styles.modalTitle } ${ styles.textColorTheme }`);
+        h1.textContent = this.textResources.preferencesDialogTitle || '';
+        titleDiv.appendChild(h1);
+        modalBody.appendChild(titleDiv);
+
+        let form = document.createElement('form');
+        form.setAttribute('class', `${ styles.modalContent } ${ styles.hyperLinkTheme }`);
+
+        let cookieStatement = document.createElement('p');
+        cookieStatement.setAttribute('class', `${ styles.cookieStatement } ${ styles.textColorTheme }`);
+        HtmlTools.setHtmlContent(cookieStatement, this.textResources.preferencesDialogDescHtml);
+        form.appendChild(cookieStatement);
+
+        let cookieOrderedList = document.createElement('dl');
+        cookieOrderedList.setAttribute('class', styles.cookieOrderedList);
+        form.appendChild(cookieOrderedList);
+
+        modalBody.appendChild(form);
+
+        let modalButtonGroup = document.createElement('div');
+        modalButtonGroup.setAttribute('class', styles.modalButtonGroup);
+
+        let saveBtn = document.createElement('button');
+        saveBtn.setAttribute('type', 'button');
+        saveBtn.setAttribute('aria-label', this.textResources.saveLabel || '');
+        saveBtn.setAttribute('class', `${ styles.modalButtonSave } ${ styles.primaryButtonTheme }`);
+        saveBtn.disabled = true;
+        saveBtn.textContent = this.textResources.saveLabel || '';
+
+        let resetBtn = document.createElement('button');
+        resetBtn.setAttribute('type', 'button');
+        resetBtn.setAttribute('aria-label', this.textResources.resetLabel || '');
+        resetBtn.setAttribute('class', `${ styles.modalButtonReset } ${ styles.secondaryButtonTheme }`);
+        resetBtn.disabled = true;
+        resetBtn.textContent = this.textResources.resetLabel || '';
+
+        modalButtonGroup.appendChild(saveBtn);
+        modalButtonGroup.appendChild(resetBtn);
+        modalBody.appendChild(modalButtonGroup);
+
+        dialogDiv.appendChild(modalBody);
+        cookieModal.appendChild(dialogDiv);
 
         this.containerElement.appendChild(cookieModal);
         
@@ -81,15 +122,21 @@ export class PreferencesControl {
         // Insert cookie category 
         for (let cookieCategory of this.cookieCategories) {
             if (cookieCategory.isUnswitchable) {
-                let item = `
-                <dt class="${ styles.cookieListItem } ${ styles.textColorTheme }" aria-label="${ HtmlTools.escapeHtml(cookieCategory.name) }">
-                    <h2 class="${ styles.cookieListItemTitle } ${ styles.textColorTheme }">${ HtmlTools.escapeHtml(cookieCategory.name) }</h2>
-                    <p class="${ styles.cookieListItemDescription } ${ styles.textColorTheme }">${ cookieCategory.descHtml }</p>
-                </dt>
-                `;
+                let dt = document.createElement('dt');
+                dt.setAttribute('class', `${ styles.cookieListItem } ${ styles.textColorTheme }`);
+                dt.setAttribute('aria-label', cookieCategory.name);
 
-                let cookieOrderedList = document.getElementsByClassName(styles.cookieOrderedList)[0];
-                cookieOrderedList.innerHTML = DOMPurify.sanitize(cookieOrderedList.innerHTML + item, { RETURN_TRUSTED_TYPE: true }) as unknown as string;
+                let h2 = document.createElement('h2');
+                h2.setAttribute('class', `${ styles.cookieListItemTitle } ${ styles.textColorTheme }`);
+                h2.textContent = cookieCategory.name;
+                dt.appendChild(h2);
+
+                let p = document.createElement('p');
+                p.setAttribute('class', `${ styles.cookieListItemDescription } ${ styles.textColorTheme }`);
+                HtmlTools.setHtmlContent(p, cookieCategory.descHtml);
+                dt.appendChild(p);
+
+                cookieOrderedList.appendChild(dt);
             }
             else {
                 if (this.cookieCategoriesPreferences[cookieCategory.id] !== undefined) {
@@ -97,38 +144,82 @@ export class PreferencesControl {
                 }
 
                 let nameAttribute: string = cookieCategory.id;
-                let acceptValue = this.cookieCategoriesPreferences[cookieCategory.id] === true ? "checked" : "";
-                let rejectValue = this.cookieCategoriesPreferences[cookieCategory.id] === false ? "checked" : "";
-
                 let acceptRadioId = `${ styles.cookieItemRadioBtn }_${ nameAttribute }_accept`;
                 let rejectRadioId = `${ styles.cookieItemRadioBtn }_${ nameAttribute }_reject`;
-
-                let acceptRadio = `<input type="radio" class="${ styles.cookieItemRadioBtn }" name="${ nameAttribute }" id="${ acceptRadioId }" value="accept" ${ acceptValue }>`;
-                let rejectRadio = `<input type="radio" class="${ styles.cookieItemRadioBtn }" name="${ nameAttribute }" id="${ rejectRadioId }" value="reject" ${ rejectValue }>`;
-
                 let cookieListItemTitleId = `${ styles.cookieListItemTitle }_${ nameAttribute }_title`;
 
-                let item = `
-                <dt class="${ styles.cookieListItem } ${ styles.textColorTheme }" aria-label="${ HtmlTools.escapeHtml(cookieCategory.name) }">
-                    <div class="${ styles.cookieListItemGroup }" role="radiogroup" aria-labelledby="${ cookieListItemTitleId }">
-                        <h2 class="${ styles.cookieListItemTitle } ${ styles.textColorTheme }" id="${ cookieListItemTitleId }">${ HtmlTools.escapeHtml(cookieCategory.name) }</h2>
-                        <p class="${ styles.cookieListItemDescription } ${ styles.textColorTheme }">${ cookieCategory.descHtml }</p>
-                        <div class="${ styles.cookieItemRadioBtnGroup }">
-                            <div class="${ styles.cookieItemRadioBtnCtrl }">
-                                ${ acceptRadio }
-                                <label class="${ styles.cookieItemRadioBtnLabel } ${ styles.textColorTheme }" for="${ acceptRadioId }">${ HtmlTools.escapeHtml(this.textResources.acceptLabel) }</label>
-                            </div>
-                            <div class="${ styles.cookieItemRadioBtnCtrl }">
-                                ${ rejectRadio }
-                                <label class="${ styles.cookieItemRadioBtnLabel } ${ styles.textColorTheme }" for="${ rejectRadioId }">${ HtmlTools.escapeHtml(this.textResources.rejectLabel) }</label>
-                            </div>
-                        </div>
-                    </div>
-                </dt>
-                `;
+                let dt = document.createElement('dt');
+                dt.setAttribute('class', `${ styles.cookieListItem } ${ styles.textColorTheme }`);
+                dt.setAttribute('aria-label', cookieCategory.name);
 
-                let cookieOrderedList = document.getElementsByClassName(styles.cookieOrderedList)[0];
-                cookieOrderedList.innerHTML = DOMPurify.sanitize(cookieOrderedList.innerHTML + item, { RETURN_TRUSTED_TYPE: true }) as unknown as string;
+                let groupDiv = document.createElement('div');
+                groupDiv.setAttribute('class', styles.cookieListItemGroup);
+                groupDiv.setAttribute('role', 'radiogroup');
+                groupDiv.setAttribute('aria-labelledby', cookieListItemTitleId);
+
+                let h2 = document.createElement('h2');
+                h2.setAttribute('class', `${ styles.cookieListItemTitle } ${ styles.textColorTheme }`);
+                h2.setAttribute('id', cookieListItemTitleId);
+                h2.textContent = cookieCategory.name;
+                groupDiv.appendChild(h2);
+
+                let descP = document.createElement('p');
+                descP.setAttribute('class', `${ styles.cookieListItemDescription } ${ styles.textColorTheme }`);
+                HtmlTools.setHtmlContent(descP, cookieCategory.descHtml);
+                groupDiv.appendChild(descP);
+
+                let radioBtnGroup = document.createElement('div');
+                radioBtnGroup.setAttribute('class', styles.cookieItemRadioBtnGroup);
+
+                // Accept radio
+                let acceptCtrl = document.createElement('div');
+                acceptCtrl.setAttribute('class', styles.cookieItemRadioBtnCtrl);
+
+                let acceptRadio = document.createElement('input');
+                acceptRadio.setAttribute('type', 'radio');
+                acceptRadio.setAttribute('class', styles.cookieItemRadioBtn);
+                acceptRadio.setAttribute('name', nameAttribute);
+                acceptRadio.setAttribute('id', acceptRadioId);
+                acceptRadio.setAttribute('value', 'accept');
+                if (this.cookieCategoriesPreferences[cookieCategory.id] === true) {
+                    acceptRadio.checked = true;
+                }
+                acceptCtrl.appendChild(acceptRadio);
+
+                let acceptLabel = document.createElement('label');
+                acceptLabel.setAttribute('class', `${ styles.cookieItemRadioBtnLabel } ${ styles.textColorTheme }`);
+                acceptLabel.setAttribute('for', acceptRadioId);
+                acceptLabel.textContent = this.textResources.acceptLabel || '';
+                acceptCtrl.appendChild(acceptLabel);
+
+                radioBtnGroup.appendChild(acceptCtrl);
+
+                // Reject radio
+                let rejectCtrl = document.createElement('div');
+                rejectCtrl.setAttribute('class', styles.cookieItemRadioBtnCtrl);
+
+                let rejectRadio = document.createElement('input');
+                rejectRadio.setAttribute('type', 'radio');
+                rejectRadio.setAttribute('class', styles.cookieItemRadioBtn);
+                rejectRadio.setAttribute('name', nameAttribute);
+                rejectRadio.setAttribute('id', rejectRadioId);
+                rejectRadio.setAttribute('value', 'reject');
+                if (this.cookieCategoriesPreferences[cookieCategory.id] === false) {
+                    rejectRadio.checked = true;
+                }
+                rejectCtrl.appendChild(rejectRadio);
+
+                let rejectLabel = document.createElement('label');
+                rejectLabel.setAttribute('class', `${ styles.cookieItemRadioBtnLabel } ${ styles.textColorTheme }`);
+                rejectLabel.setAttribute('for', rejectRadioId);
+                rejectLabel.textContent = this.textResources.rejectLabel || '';
+                rejectCtrl.appendChild(rejectLabel);
+
+                radioBtnGroup.appendChild(rejectCtrl);
+
+                groupDiv.appendChild(radioBtnGroup);
+                dt.appendChild(groupDiv);
+                cookieOrderedList.appendChild(dt);
             }
         }
 
