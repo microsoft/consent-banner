@@ -1,6 +1,5 @@
 import * as rawStyles from './styles.scss';
 import * as injectStylesIntoStyleTag from 'style-loader/dist/runtime/injectStylesIntoStyleTag';
-import * as DOMPurify from 'dompurify';
 
 import { PreferencesControl } from './preferencesControl';
 import { HtmlTools } from './htmlTools';
@@ -40,36 +39,40 @@ export class ConsentControl {
         {
             id: "c0",
             name: "1. Essential cookies",
-            descHtml: "We use this cookie, read more <a href='link'>here</a>.",
-            isUnswitchable: true        // optional, prevents toggling the category. True only for categories like Essential cookies.
+            desc: "We use this cookie, read more ",
+            descLink: { text: "here", href: "link" },
+            isUnswitchable: true
         },
         {
             id: "c1",
             name: "2. Performance & analytics",
-            descHtml: "We use this cookie, read more <a href='link'>here</a>."
+            desc: "We use this cookie, read more ",
+            descLink: { text: "here", href: "link" }
         },
         {
             id: "c2",
             name: "3. Advertising/Marketing",
-            descHtml: "Blah"
+            desc: "Blah"
         },
         {
             id: "c3",
             name: "4. Targeting/personalization",
-            descHtml: "Blah"
+            desc: "Blah"
         }
     ];
 
     // only the passed text resources should be replaced in the control.
     // If any string is not passed the control should keep the default value
     defaultTextResources: ITextResources = {
-        bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
+        bannerMessage: "We use optional cookies to provide... read ",
+        bannerLinks: [{ text: "here", href: "link" }],
         acceptAllLabel: "Accept all",
         rejectAllLabel: "Reject all",
         moreInfoLabel: "More info",
         preferencesDialogCloseLabel: "Close",
         preferencesDialogTitle: "Manage cookie preferences",
-        preferencesDialogDescHtml: "Most Microsoft sites...",
+        preferencesDialogDesc: "Most Microsoft sites use cookies.",
+        preferencesDialogDescLink: undefined,
         acceptLabel: "Accept",
         rejectLabel: "Reject",
         saveLabel: "Save changes",
@@ -139,9 +142,8 @@ export class ConsentControl {
     public setTextResources(textResources: ITextResources): void {
         for (let key of Object.keys(this.textResources)) {
             let typeKey = <keyof ITextResources> key;
-
-            if (textResources[typeKey]) {
-                this.textResources[typeKey] = textResources[typeKey];
+            if (textResources[typeKey] !== undefined) {
+                (this.textResources as any)[typeKey] = textResources[typeKey];
             }
         }
     }
@@ -175,7 +177,7 @@ export class ConsentControl {
     }
 
     /**
-     * Insert all necessary HTML code and shows the banner. 
+     * Insert all necessary HTML code and shows the banner.
      * Until this method is called there should be no HTML elements of the Consent Control anywhere in the DOM
      * 
      * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences object that indicates cookie categories preferences
@@ -184,7 +186,7 @@ export class ConsentControl {
         // Add <meta name="viewport" content="width=device-width, initial-scale=1.0">
         // for responsive web design
         if (!document.querySelector('meta[name="viewport"]')) {
-            let meta = document.createElement('meta');
+            const meta = document.createElement('meta');
             meta.name = "viewport";
             meta.content = "width=device-width, initial-scale=1.0";
             document.head.appendChild(meta);
@@ -193,46 +195,90 @@ export class ConsentControl {
         // Remove existing banner and preference dialog
         this.hideBanner();
 
-        let infoIcon = `
-        <svg xmlns="http://www.w3.org/2000/svg" x='0px' y='0px' viewBox='0 0 44 44' width='24px' height='24px' fill='none' stroke='currentColor'>
-          <circle cx='22' cy='22' r='20' stroke-width='2'></circle>
-          <line x1='22' x2='22' y1='18' y2='33' stroke-width='3'></line>
-          <line x1='22' x2='22' y1='12' y2='15' stroke-width='3'></line>
-        </svg>
-        `;
-
-        const bannerInnerHtml = `
-        <div class="${ styles.bannerInform }">
-            <span class="${ styles.infoIcon } ${ styles.textColorTheme }">${ infoIcon }</span> <!--  used for icon  -->
-            <p class="${ styles.bannerInformBody } ${ styles.hyperLinkTheme } ${ styles.textColorTheme }">
-                ${ this.textResources.bannerMessageHtml }
-            </p>
-        </div>
-
-        <div class="${ styles.buttonGroup }">
-            <button type="button" class="${ styles.bannerButton } ${ styles.secondaryButtonTheme }">${ HtmlTools.escapeHtml(this.textResources.acceptAllLabel) }</button>
-            <button type="button" class="${ styles.bannerButton } ${ styles.secondaryButtonTheme }">${ HtmlTools.escapeHtml(this.textResources.rejectAllLabel) }</button>
-            <button type="button" class="${ styles.bannerButton } ${ styles.secondaryButtonTheme }">${ HtmlTools.escapeHtml(this.textResources.moreInfoLabel) }</button>
-        </div>
-        `;
-
+        // Banner root
         const banner = document.createElement('div');
-        banner.setAttribute('id','wcpConsentBannerCtrl');
-        banner.setAttribute('class', styles.bannerBody);
+        banner.id = 'wcpConsentBannerCtrl';
+        banner.className = styles.bannerBody;
         banner.setAttribute('dir', this.direction);
         banner.setAttribute('role', 'alert');
-        banner.innerHTML = DOMPurify.sanitize(bannerInnerHtml, { RETURN_TRUSTED_TYPE: true }) as unknown as string;
+
+        // Inform section
+        const bannerInform = document.createElement('div');
+        bannerInform.className = styles.bannerInform;
+
+        // Info icon (SVG built via DOM — no innerHTML)
+        const iconSpan = document.createElement('span');
+        iconSpan.className = `${ styles.infoIcon } ${ styles.textColorTheme }`;
+        const svgNS = 'http://www.w3.org/2000/svg';
+        const svg = document.createElementNS(svgNS, 'svg');
+        svg.setAttribute('x', '0px');
+        svg.setAttribute('y', '0px');
+        svg.setAttribute('viewBox', '0 0 44 44');
+        svg.setAttribute('width', '24px');
+        svg.setAttribute('height', '24px');
+        svg.setAttribute('fill', 'none');
+        svg.setAttribute('stroke', 'currentColor');
+        const circle = document.createElementNS(svgNS, 'circle');
+        circle.setAttribute('cx', '22'); circle.setAttribute('cy', '22');
+        circle.setAttribute('r', '20'); circle.setAttribute('stroke-width', '2');
+        const line1 = document.createElementNS(svgNS, 'line');
+        line1.setAttribute('x1', '22'); line1.setAttribute('x2', '22');
+        line1.setAttribute('y1', '18'); line1.setAttribute('y2', '33');
+        line1.setAttribute('stroke-width', '3');
+        const line2 = document.createElementNS(svgNS, 'line');
+        line2.setAttribute('x1', '22'); line2.setAttribute('x2', '22');
+        line2.setAttribute('y1', '12'); line2.setAttribute('y2', '15');
+        line2.setAttribute('stroke-width', '3');
+        svg.appendChild(circle);
+        svg.appendChild(line1);
+        svg.appendChild(line2);
+        iconSpan.appendChild(svg);
+        bannerInform.appendChild(iconSpan);
+
+        // Banner message paragraph
+        const bannerP = document.createElement('p');
+        bannerP.className = `${ styles.bannerInformBody } ${ styles.hyperLinkTheme } ${ styles.textColorTheme }`;
+        if (this.textResources.bannerMessage) {
+            bannerP.appendChild(HtmlTools.createText(this.textResources.bannerMessage));
+        }
+        if (this.textResources.bannerLinks) {
+            for (const link of this.textResources.bannerLinks) {
+                bannerP.appendChild(HtmlTools.createText(' '));
+                bannerP.appendChild(HtmlTools.createLink(link.text, link.href));
+            }
+        }
+        bannerInform.appendChild(bannerP);
+        banner.appendChild(bannerInform);
+
+        // Button group
+        const buttonGroup = document.createElement('div');
+        buttonGroup.className = styles.buttonGroup;
+
+        const acceptAllBtn = document.createElement('button');
+        acceptAllBtn.type = 'button';
+        acceptAllBtn.className = `${ styles.bannerButton } ${ styles.secondaryButtonTheme }`;
+        acceptAllBtn.textContent = this.textResources.acceptAllLabel ?? '';
+
+        const rejectAllBtn = document.createElement('button');
+        rejectAllBtn.type = 'button';
+        rejectAllBtn.className = `${ styles.bannerButton } ${ styles.secondaryButtonTheme }`;
+        rejectAllBtn.textContent = this.textResources.rejectAllLabel ?? '';
+
+        const manageBtn = document.createElement('button');
+        manageBtn.type = 'button';
+        manageBtn.className = `${ styles.bannerButton } ${ styles.secondaryButtonTheme }`;
+        manageBtn.textContent = this.textResources.moreInfoLabel ?? '';
+
+        buttonGroup.appendChild(acceptAllBtn);
+        buttonGroup.appendChild(rejectAllBtn);
+        buttonGroup.appendChild(manageBtn);
+        banner.appendChild(buttonGroup);
 
         this.containerElement?.appendChild(banner);
 
-        let cookieInfo = document.getElementsByClassName(styles.bannerButton)[2];
-        cookieInfo?.addEventListener('click', () => this.showPreferences(cookieCategoriesPreferences));
-
-        let acceptAllBtn = document.getElementsByClassName(styles.bannerButton)[0];
-        acceptAllBtn?.addEventListener('click', () => this.onAcceptAllClicked(cookieCategoriesPreferences));
-
-        let rejectAllBtn = document.getElementsByClassName(styles.bannerButton)[1];
-        rejectAllBtn?.addEventListener('click', () => this.onRejectAllClicked(cookieCategoriesPreferences));
+        manageBtn.addEventListener('click', () => this.showPreferences(cookieCategoriesPreferences));
+        acceptAllBtn.addEventListener('click', () => this.onAcceptAllClicked(cookieCategoriesPreferences));
+        rejectAllBtn.addEventListener('click', () => this.onRejectAllClicked(cookieCategoriesPreferences));
     }
 
     /**
@@ -282,11 +328,11 @@ export class ConsentControl {
     private initPreferencesCtrl(cookieCategoriesPreferences: ICookieCategoriesPreferences): void {
         
         this.preferencesCtrl = new PreferencesControl(this.cookieCategories, 
-                                                      this.textResources, 
-                                                      cookieCategoriesPreferences, 
-                                                      <HTMLElement> this.containerElement, 
-                                                      this.direction, 
-                                                      this.isDirty, 
+            this.textResources, 
+            cookieCategoriesPreferences, 
+            <HTMLElement> this.containerElement, 
+            this.direction, 
+            this.isDirty, 
                                                       () => this.onPreferencesClosed());
         
         this.preferencesCtrl.createPreferencesDialog();
@@ -315,7 +361,7 @@ export class ConsentControl {
      * 
      * @param {ICookieCategoriesPreferences} cookieCategoriesPreferences object that indicates cookie categories preferences
      */
-      private onRejectAllClicked(cookieCategoriesPreferences: ICookieCategoriesPreferences): void {
+    private onRejectAllClicked(cookieCategoriesPreferences: ICookieCategoriesPreferences): void {
         for (let cookieCategory of this.cookieCategories) {
             if (!cookieCategory.isUnswitchable) {
                 cookieCategoriesPreferences[cookieCategory.id] = false;

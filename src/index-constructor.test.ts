@@ -1,6 +1,48 @@
 import { ConsentControl } from "./index";
 import { IOptions } from './interfaces/Options';
 
+const defaultCookieCategories = [
+    {
+        id: "c0",
+        name: "1. Essential cookies",
+        desc: "We use this cookie, read more ",
+        descLink: { text: "here", href: "link" },
+        isUnswitchable: true
+    },
+    {
+        id: "c1",
+        name: "2. Performance & analytics",
+        desc: "We use this cookie, read more ",
+        descLink: { text: "here", href: "link" }
+    },
+    {
+        id: "c2",
+        name: "3. Advertising/Marketing",
+        desc: "Blah"
+    },
+    {
+        id: "c3",
+        name: "4. Targeting/personalization",
+        desc: "Blah"
+    }
+];
+
+const defaultTextResources = {
+    bannerMessage: "We use optional cookies to provide... read ",
+    bannerLinks: [{ text: "here", href: "link" }],
+    acceptAllLabel: "Accept all",
+    rejectAllLabel: "Reject all",
+    moreInfoLabel: "More info",
+    preferencesDialogCloseLabel: "Close",
+    preferencesDialogTitle: "Manage cookie preferences",
+    preferencesDialogDesc: "Most Microsoft sites use cookies.",
+    preferencesDialogDescLink: undefined,
+    acceptLabel: "Accept",
+    rejectLabel: "Reject",
+    saveLabel: "Save changes",
+    resetLabel: "Reset all"
+};
+
 describe("Test constructor", () => {
     let testId: string = "app";
 
@@ -14,7 +56,6 @@ describe("Test constructor", () => {
         let child = document.getElementById(testId);
         if (child) {
             let parent = child.parentNode;
-
             if (parent) {
                 parent.removeChild(child);
             }
@@ -29,24 +70,26 @@ describe("Test constructor", () => {
             {
                 id: "cookie1",
                 name: "Test cookie1",
-                descHtml: "This is for test cookie1"
+                desc: "This is for test cookie1"
             },
             {
                 id: "cookie2",
                 name: "Test cookie2",
-                descHtml: "This is for test cookie2 with 4th property",
+                desc: "This is for test cookie2 with 4th property",
                 isUnswitchable: true
             }
         ];
 
         let textResources = {
-            bannerMessageHtml: "This is banner message.",
+            bannerMessage: "This is banner message.",
+            bannerLinks: [],
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogDesc: "This is preferences dialog text",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
@@ -69,105 +112,49 @@ describe("Test constructor", () => {
         let cc = new ConsentControl(testId, "en", callBack);
 
         expect(cc.culture).toBe("en");
-        expect(cc.cookieCategories).toEqual([
-            {
-                id: "c0",
-                name: "1. Essential cookies",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>.",
-                isUnswitchable: true
-            },
-            {
-                id: "c1",
-                name: "2. Performance & analytics",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>."
-            },
-            {
-                id: "c2",
-                name: "3. Advertising/Marketing",
-                descHtml: "Blah"
-            },
-            {
-                id: "c3",
-                name: "4. Targeting/personalization",
-                descHtml: "Blah"
-            }
-        ]);
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
-            acceptAllLabel: "Accept all",
-            rejectAllLabel: "Reject all",
-            moreInfoLabel: "More info",
-            preferencesDialogCloseLabel: "Close",
-            preferencesDialogTitle: "Manage cookie preferences",
-            preferencesDialogDescHtml: "Most Microsoft sites...",
-            acceptLabel: "Accept",
-            rejectLabel: "Reject",
-            saveLabel: "Save changes",
-            resetLabel: "Reset all"
-        });
+        expect(cc.cookieCategories).toEqual(defaultCookieCategories);
+        expect(cc.textResources).toEqual(defaultTextResources);
     });
 
     test("No cookieCategories, textResources over provided", () => {
         let textResources = {
             market: "en-us",
-            bannerMessageHtml: "This is banner message.",
+            bannerMessage: "This is banner message.",
+            bannerLinks: [],
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogDesc: "This is preferences dialog text",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "This is accept",
             middle: 6,
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
             resetLabel: "This is reset all",
             add: "additional",
-            complex: {
-                id: "c",
-                name: "1. Essential"
-            }
+            complex: { id: "c", name: "1. Essential" }
         };
-    
+
         let callBack = function() { return; };
-    
         let options: IOptions = { };
         options.textResources = textResources;
-    
+
         let cc = new ConsentControl(testId, "en", callBack, undefined, options);
-    
+
         expect(cc.culture).toBe("en");
-        expect(cc.cookieCategories).toEqual([
-            {
-                id: "c0",
-                name: "1. Essential cookies",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>.",
-                isUnswitchable: true
-            },
-            {
-                id: "c1",
-                name: "2. Performance & analytics",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>."
-            },
-            {
-                id: "c2",
-                name: "3. Advertising/Marketing",
-                descHtml: "Blah"
-            },
-            {
-                id: "c3",
-                name: "4. Targeting/personalization",
-                descHtml: "Blah"
-            }
-        ]);
+        expect(cc.cookieCategories).toEqual(defaultCookieCategories);
         expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
+            bannerMessage: "This is banner message.",
+            bannerLinks: [],
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogDesc: "This is preferences dialog text",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
@@ -177,13 +164,15 @@ describe("Test constructor", () => {
 
     test("No cookieCategories, textResources full provided", () => {
         let textResources = {
-            bannerMessageHtml: "This is banner message.",
+            bannerMessage: "This is banner message.",
+            bannerLinks: [],
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogDesc: "This is preferences dialog text",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
@@ -191,36 +180,13 @@ describe("Test constructor", () => {
         };
 
         let callBack = function() { return; };
-
         let options: IOptions = { };
         options.textResources = textResources;
 
         let cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.culture).toBe("en");
-        expect(cc.cookieCategories).toEqual([
-            {
-                id: "c0",
-                name: "1. Essential cookies",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>.",
-                isUnswitchable: true
-            },
-            {
-                id: "c1",
-                name: "2. Performance & analytics",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>."
-            },
-            {
-                id: "c2",
-                name: "3. Advertising/Marketing",
-                descHtml: "Blah"
-            },
-            {
-                id: "c3",
-                name: "4. Targeting/personalization",
-                descHtml: "Blah"
-            }
-        ]);
+        expect(cc.cookieCategories).toEqual(defaultCookieCategories);
         expect(cc.textResources).toEqual(textResources);
     });
 
@@ -229,12 +195,12 @@ describe("Test constructor", () => {
             {
                 id: "cookie1",
                 name: "Test cookie1",
-                descHtml: "This is for test cookie1"
+                desc: "This is for test cookie1"
             },
             {
                 id: "cookie2",
                 name: "Test cookie2",
-                descHtml: "This is for test cookie2 with 4th property",
+                desc: "This is for test cookie2 with 4th property",
                 isUnswitchable: true
             }
         ];
@@ -244,29 +210,19 @@ describe("Test constructor", () => {
 
         expect(cc.culture).toBe("en");
         expect(cc.cookieCategories).toEqual(cookieCategories);
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
-            acceptAllLabel: "Accept all",
-            rejectAllLabel: "Reject all",
-            moreInfoLabel: "More info",
-            preferencesDialogCloseLabel: "Close",
-            preferencesDialogTitle: "Manage cookie preferences",
-            preferencesDialogDescHtml: "Most Microsoft sites...",
-            acceptLabel: "Accept",
-            rejectLabel: "Reject",
-            saveLabel: "Save changes",
-            resetLabel: "Reset all"
-        });
+        expect(cc.textResources).toEqual(defaultTextResources);
     });
 
-    test("No cookieCategories, textResources without bannerMessageHtml", () => {
+    test("No cookieCategories, textResources without bannerMessage", () => {
         let textResources = {
+            bannerLinks: [],
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogDesc: "This is preferences dialog text",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
@@ -280,37 +236,16 @@ describe("Test constructor", () => {
         let cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.culture).toBe("en");
-        expect(cc.cookieCategories).toEqual([
-            {
-                id: "c0",
-                name: "1. Essential cookies",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>.",
-                isUnswitchable: true
-            },
-            {
-                id: "c1",
-                name: "2. Performance & analytics",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>."
-            },
-            {
-                id: "c2",
-                name: "3. Advertising/Marketing",
-                descHtml: "Blah"
-            },
-            {
-                id: "c3",
-                name: "4. Targeting/personalization",
-                descHtml: "Blah"
-            }
-        ]);
         expect(cc.textResources).toEqual({
-            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
+            bannerMessage: "We use optional cookies to provide... read ",
+            bannerLinks: [],
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogDesc: "This is preferences dialog text",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
@@ -320,11 +255,13 @@ describe("Test constructor", () => {
 
     test("No cookieCategories, textResources without acceptAllLabel", () => {
         let textResources = {
-            bannerMessageHtml: "This is banner message.",           
+            bannerMessage: "This is banner message.",
+            bannerLinks: [],
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogDesc: "This is preferences dialog text",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
@@ -338,13 +275,15 @@ describe("Test constructor", () => {
         let cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
+            bannerMessage: "This is banner message.",
+            bannerLinks: [],
             acceptAllLabel: "Accept all",
             rejectAllLabel: "Reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogDesc: "This is preferences dialog text",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
@@ -354,12 +293,14 @@ describe("Test constructor", () => {
 
     test("No cookieCategories, textResources without moreInfoLabel", () => {
         let textResources = {
-            bannerMessageHtml: "This is banner message.",
+            bannerMessage: "This is banner message.",
+            bannerLinks: [],
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogDesc: "This is preferences dialog text",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
@@ -373,13 +314,15 @@ describe("Test constructor", () => {
         let cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
+            bannerMessage: "This is banner message.",
+            bannerLinks: [],
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "More info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogDesc: "This is preferences dialog text",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
@@ -389,12 +332,14 @@ describe("Test constructor", () => {
 
     test("No cookieCategories, textResources without preferencesDialogCloseLabel", () => {
         let textResources = {
-            bannerMessageHtml: "This is banner message.",
+            bannerMessage: "This is banner message.",
+            bannerLinks: [],
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogDesc: "This is preferences dialog text",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
@@ -408,13 +353,15 @@ describe("Test constructor", () => {
         let cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
+            bannerMessage: "This is banner message.",
+            bannerLinks: [],
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "Close",
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogDesc: "This is preferences dialog text",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
@@ -424,12 +371,14 @@ describe("Test constructor", () => {
 
     test("No cookieCategories, textResources without preferencesDialogTitle", () => {
         let textResources = {
-            bannerMessageHtml: "This is banner message.",
+            bannerMessage: "This is banner message.",
+            bannerLinks: [],
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogDesc: "This is preferences dialog text",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
@@ -443,13 +392,15 @@ describe("Test constructor", () => {
         let cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
+            bannerMessage: "This is banner message.",
+            bannerLinks: [],
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "Manage cookie preferences",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogDesc: "This is preferences dialog text",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
@@ -457,14 +408,16 @@ describe("Test constructor", () => {
         });
     });
 
-    test("No cookieCategories, textResources without preferencesDialogDescHtml", () => {
+    test("No cookieCategories, textResources without preferencesDialogDesc", () => {
         let textResources = {
-            bannerMessageHtml: "This is banner message.",
+            bannerMessage: "This is banner message.",
+            bannerLinks: [],
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
@@ -478,13 +431,15 @@ describe("Test constructor", () => {
         let cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
+            bannerMessage: "This is banner message.",
+            bannerLinks: [],
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "Most Microsoft sites...",
+            preferencesDialogDesc: "Most Microsoft sites use cookies.",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
@@ -494,13 +449,15 @@ describe("Test constructor", () => {
 
     test("No cookieCategories, textResources without acceptLabel", () => {
         let textResources = {
-            bannerMessageHtml: "This is banner message.",
+            bannerMessage: "This is banner message.",
+            bannerLinks: [],
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogDesc: "This is preferences dialog text",
+            preferencesDialogDescLink: undefined,
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
             resetLabel: "This is reset all"
@@ -513,13 +470,15 @@ describe("Test constructor", () => {
         let cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
+            bannerMessage: "This is banner message.",
+            bannerLinks: [],
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogDesc: "This is preferences dialog text",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "Accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
@@ -529,13 +488,15 @@ describe("Test constructor", () => {
 
     test("No cookieCategories, textResources without rejectLabel", () => {
         let textResources = {
-            bannerMessageHtml: "This is banner message.",
+            bannerMessage: "This is banner message.",
+            bannerLinks: [],
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogDesc: "This is preferences dialog text",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "This is accept",
             saveLabel: "This is save changes",
             resetLabel: "This is reset all"
@@ -548,13 +509,15 @@ describe("Test constructor", () => {
         let cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
+            bannerMessage: "This is banner message.",
+            bannerLinks: [],
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogDesc: "This is preferences dialog text",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "This is accept",
             rejectLabel: "Reject",
             saveLabel: "This is save changes",
@@ -564,13 +527,15 @@ describe("Test constructor", () => {
 
     test("No cookieCategories, textResources without saveLabel", () => {
         let textResources = {
-            bannerMessageHtml: "This is banner message.",
+            bannerMessage: "This is banner message.",
+            bannerLinks: [],
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogDesc: "This is preferences dialog text",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             resetLabel: "This is reset all"
@@ -583,13 +548,15 @@ describe("Test constructor", () => {
         let cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
+            bannerMessage: "This is banner message.",
+            bannerLinks: [],
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogDesc: "This is preferences dialog text",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "Save changes",
@@ -599,13 +566,15 @@ describe("Test constructor", () => {
 
     test("No cookieCategories, textResources without resetLabel", () => {
         let textResources = {
-            bannerMessageHtml: "This is banner message.",
+            bannerMessage: "This is banner message.",
+            bannerLinks: [],
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogDesc: "This is preferences dialog text",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
@@ -618,13 +587,15 @@ describe("Test constructor", () => {
         let cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
+            bannerMessage: "This is banner message.",
+            bannerLinks: [],
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogDesc: "This is preferences dialog text",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
@@ -632,12 +603,14 @@ describe("Test constructor", () => {
         });
     });
 
-    test("No cookieCategories, textResources without bannerMessageHtml, acceptAllLabel", () => {
+    test("No cookieCategories, textResources without bannerMessage, acceptAllLabel", () => {
         let textResources = {
+            bannerLinks: [],
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogDesc: "This is preferences dialog text",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
@@ -651,37 +624,17 @@ describe("Test constructor", () => {
         let cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.culture).toBe("en");
-        expect(cc.cookieCategories).toEqual([
-            {
-                id: "c0",
-                name: "1. Essential cookies",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>.",
-                isUnswitchable: true
-            },
-            {
-                id: "c1",
-                name: "2. Performance & analytics",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>."
-            },
-            {
-                id: "c2",
-                name: "3. Advertising/Marketing",
-                descHtml: "Blah"
-            },
-            {
-                id: "c3",
-                name: "4. Targeting/personalization",
-                descHtml: "Blah"
-            }
-        ]);
+        expect(cc.cookieCategories).toEqual(defaultCookieCategories);
         expect(cc.textResources).toEqual({
-            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
+            bannerMessage: "We use optional cookies to provide... read ",
+            bannerLinks: [],
             acceptAllLabel: "Accept all",
             rejectAllLabel: "Reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogDesc: "This is preferences dialog text",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
@@ -689,14 +642,16 @@ describe("Test constructor", () => {
         });
     });
 
-    test("No cookieCategories, textResources without bannerMessageHtml, rejectLabel", () => {
+    test("No cookieCategories, textResources without bannerMessage, rejectLabel", () => {
         let textResources = {
+            bannerLinks: [],
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogDesc: "This is preferences dialog text",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "This is accept",
             saveLabel: "This is save changes",
             resetLabel: "This is reset all"
@@ -709,13 +664,15 @@ describe("Test constructor", () => {
         let cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.textResources).toEqual({
-            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
+            bannerMessage: "We use optional cookies to provide... read ",
+            bannerLinks: [],
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogDesc: "This is preferences dialog text",
+            preferencesDialogDescLink: undefined,
             acceptLabel: "This is accept",
             rejectLabel: "Reject",
             saveLabel: "This is save changes",

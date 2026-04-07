@@ -54,13 +54,17 @@ export interface ITheme {
 }
 
 export interface ITextResources {
-    bannerMessageHtml?: string;
+    bannerMessage?: string;
+    bannerLinks?: Array<{ text: string; href: string }>;
+
     acceptAllLabel?: string;
     rejectAllLabel?: string;
     moreInfoLabel?: string;
     preferencesDialogCloseLabel?: string;
     preferencesDialogTitle?: string;
-    preferencesDialogDescHtml?: string;
+    preferencesDialogDesc?: string;
+    preferencesDialogDescLink?: { text: string; href: string };
+    
     acceptLabel?: string;
     rejectLabel?: string;
     saveLabel?: string;
