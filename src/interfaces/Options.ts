@@ -63,8 +63,8 @@ export interface ITextResources {
     preferencesDialogCloseLabel?: string;
     preferencesDialogTitle?: string;
     preferencesDialogDesc?: string;
-    preferencesDialogDescLink?: { text: string; href: string };
-    
+    preferencesDialogDescLinks?: Array<{ text: string; href: string }>;
+
     acceptLabel?: string;
     rejectLabel?: string;
     saveLabel?: string;

@@ -13,8 +13,31 @@ export class HtmlTools {
         const a = document.createElement('a');
         a.href = href;
         a.target = target;
-        a.rel = 'noopener noreferrer'; // required whenever target="_blank"
+        a.rel = 'noopener noreferrer';
         a.textContent = text;
         return a;
+    }
+
+    public static appendTextWithLinks(
+        container: HTMLElement,
+        text: string,
+        links?: Array<{ text: string; href: string }>
+    ): void {
+        const parts = text.split(/(\{\d+\})/);
+
+        for (const part of parts) {
+            const match = part.match(/^\{(\d+)\}$/);
+            if (match) {
+                const index = parseInt(match[1], 10);
+                if (links && links[index]) {
+                    container.appendChild(
+                        HtmlTools.createLink(links[index].text, links[index].href)
+                    );
+                }
+            }
+            else if (part) {
+                container.appendChild(HtmlTools.createText(part));
+            }
+        }
     }
 }

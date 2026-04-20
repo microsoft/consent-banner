@@ -40,14 +40,14 @@ export class ConsentControl {
             id: "c0",
             name: "1. Essential cookies",
             desc: "We use this cookie, read more ",
-            descLink: { text: "here", href: "link" },
+            descLink: { text: "here", href: "unknown" },
             isUnswitchable: true
         },
         {
             id: "c1",
             name: "2. Performance & analytics",
             desc: "We use this cookie, read more ",
-            descLink: { text: "here", href: "link" }
+            descLink: { text: "here", href: "unknown" }
         },
         {
             id: "c2",
@@ -61,18 +61,16 @@ export class ConsentControl {
         }
     ];
 
-    // only the passed text resources should be replaced in the control.
-    // If any string is not passed the control should keep the default value
     defaultTextResources: ITextResources = {
-        bannerMessage: "We use optional cookies to provide... read ",
-        bannerLinks: [{ text: "here", href: "link" }],
+        bannerMessage: "We use optional cookies to provide... read {0}.",
+        bannerLinks: [{ text: "here", href: "unknown" }],
         acceptAllLabel: "Accept all",
         rejectAllLabel: "Reject all",
         moreInfoLabel: "More info",
         preferencesDialogCloseLabel: "Close",
         preferencesDialogTitle: "Manage cookie preferences",
-        preferencesDialogDesc: "Most Microsoft sites use cookies.",
-        preferencesDialogDescLink: undefined,
+        preferencesDialogDesc: "Most Microsoft sites...",
+        preferencesDialogDescLinks: [],
         acceptLabel: "Accept",
         rejectLabel: "Reject",
         saveLabel: "Save changes",
@@ -235,18 +233,14 @@ export class ConsentControl {
         iconSpan.appendChild(svg);
         bannerInform.appendChild(iconSpan);
 
-        // Banner message paragraph
+        // Banner message paragraph — {0},{1},... placeholders are replaced by bannerLinks entries
         const bannerP = document.createElement('p');
         bannerP.className = `${ styles.bannerInformBody } ${ styles.hyperLinkTheme } ${ styles.textColorTheme }`;
-        if (this.textResources.bannerMessage) {
-            bannerP.appendChild(HtmlTools.createText(this.textResources.bannerMessage));
-        }
-        if (this.textResources.bannerLinks) {
-            for (const link of this.textResources.bannerLinks) {
-                bannerP.appendChild(HtmlTools.createText(' '));
-                bannerP.appendChild(HtmlTools.createLink(link.text, link.href));
-            }
-        }
+        HtmlTools.appendTextWithLinks(
+            bannerP,
+            this.textResources.bannerMessage ?? '',
+            this.textResources.bannerLinks
+        );
         bannerInform.appendChild(bannerP);
         banner.appendChild(bannerInform);
 

@@ -85,19 +85,14 @@ export class PreferencesControl {
         const form = document.createElement('form');
         form.className = `${ styles.modalContent } ${ styles.hyperLinkTheme }`;
 
-        // Description paragraph
+        // Description paragraph — {0},{1},... placeholders are replaced by preferencesDialogDescLinks entries
         const descP = document.createElement('p');
         descP.className = `${ styles.cookieStatement } ${ styles.textColorTheme }`;
-        if (this.textResources.preferencesDialogDesc) {
-            descP.appendChild(HtmlTools.createText(this.textResources.preferencesDialogDesc));
-        }
-        if (this.textResources.preferencesDialogDescLink) {
-            descP.appendChild(HtmlTools.createText(' '));
-            descP.appendChild(HtmlTools.createLink(
-                this.textResources.preferencesDialogDescLink.text,
-                this.textResources.preferencesDialogDescLink.href
-            ));
-        }
+        HtmlTools.appendTextWithLinks(
+            descP,
+            this.textResources.preferencesDialogDesc ?? '',
+            this.textResources.preferencesDialogDescLinks
+        );
         form.appendChild(descP);
 
         // Cookie list
