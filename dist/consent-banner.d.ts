@@ -42,13 +42,15 @@ declare interface IThemes {
     "high-contrast"?: ITheme;
 }
 declare interface ITextResources {
-    bannerMessageHtml?: string;
+    bannerMessage?: string;
+    bannerLinks?: Array<{ text: string; href: string }>;
     acceptAllLabel?: string;
     rejectAllLabel?: string;
     moreInfoLabel?: string;
     preferencesDialogCloseLabel?: string;
     preferencesDialogTitle?: string;
-    preferencesDialogDescHtml?: string;
+    preferencesDialogDesc?: string;
+    preferencesDialogDescLinks?: Array<{ text: string; href: string }>;
     acceptLabel?: string;
     rejectLabel?: string;
     saveLabel?: string;
@@ -63,7 +65,8 @@ declare interface IOptions {
 declare interface ICookieCategory {
     id: string;
     name: string;
-    descHtml: string;
+    desc: string;
+    descLink?: { text: string; href: string };
     isUnswitchable?: boolean;
 }
 declare interface ICookieCategoriesPreferences {
