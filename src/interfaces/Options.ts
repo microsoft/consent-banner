@@ -1,3 +1,5 @@
+import { ILink } from './Link';
+
 export interface IOptions {
     textResources?: ITextResources;
     themes?: IThemes;
@@ -55,7 +57,7 @@ export interface ITheme {
 
 export interface ITextResources {
     bannerMessage?: string;
-    bannerLinks?: Array<{ text: string; href: string }>;
+    bannerLinks?: ILink[];
 
     acceptAllLabel?: string;
     rejectAllLabel?: string;
@@ -63,7 +65,7 @@ export interface ITextResources {
     preferencesDialogCloseLabel?: string;
     preferencesDialogTitle?: string;
     preferencesDialogDesc?: string;
-    preferencesDialogDescLinks?: Array<{ text: string; href: string }>;
+    preferencesDialogDescLinks?: ILink[];
 
     acceptLabel?: string;
     rejectLabel?: string;

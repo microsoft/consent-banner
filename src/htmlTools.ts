@@ -1,3 +1,4 @@
+import { ILink } from './interfaces/Link';
 export class HtmlTools {
     /**
      * Safely creates a text node.
@@ -21,7 +22,7 @@ export class HtmlTools {
     public static appendTextWithLinks(
         container: HTMLElement,
         text: string,
-        links?: Array<{ text: string; href: string }>
+        links?: ILink[]
     ): void {
         const parts = text.split(/(\{\d+\})/);
 

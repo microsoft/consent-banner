@@ -8,6 +8,7 @@ import { ThemesController } from './themes/themesController';
 import { RTL_LANGUAGE } from './language-list.const';
 import { DEFAULT_THEMES } from './themes/theme-styles';
 
+import { ILink } from './interfaces/Link';
 import { ICookieCategory } from './interfaces/CookieCategories';
 import { ITextResources, IOptions, IThemes, ITheme } from './interfaces/Options';
 import { ICookieCategoriesPreferences } from './interfaces/CookieCategoriesPreferences';
@@ -69,8 +70,8 @@ export class ConsentControl {
         moreInfoLabel: "More info",
         preferencesDialogCloseLabel: "Close",
         preferencesDialogTitle: "Manage cookie preferences",
-        preferencesDialogDesc: "Most Microsoft sites...",
-        preferencesDialogDescLinks: [],
+        preferencesDialogDesc: "Most Microsoft sites use cookies. For more info see {0}.",
+        preferencesDialogDescLinks: [{ text: "here", href: "unknown" }],
         acceptLabel: "Accept",
         rejectLabel: "Reject",
         saveLabel: "Save changes",

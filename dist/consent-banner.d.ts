@@ -1,3 +1,8 @@
+declare interface ILink {
+    text: string;
+    href: string;
+}
+
 declare interface ITheme {
     "close-button-color": string;
     "secondary-button-disabled-opacity": string;
@@ -43,14 +48,14 @@ declare interface IThemes {
 }
 declare interface ITextResources {
     bannerMessage?: string;
-    bannerLinks?: Array<{ text: string; href: string }>;
+    bannerLinks?: ILink[];
     acceptAllLabel?: string;
     rejectAllLabel?: string;
     moreInfoLabel?: string;
     preferencesDialogCloseLabel?: string;
     preferencesDialogTitle?: string;
     preferencesDialogDesc?: string;
-    preferencesDialogDescLinks?: Array<{ text: string; href: string }>;
+    preferencesDialogDescLinks?: ILink[];
     acceptLabel?: string;
     rejectLabel?: string;
     saveLabel?: string;
@@ -66,7 +71,7 @@ declare interface ICookieCategory {
     id: string;
     name: string;
     desc: string;
-    descLink?: { text: string; href: string };
+    descLink?: ILink;
     isUnswitchable?: boolean;
 }
 declare interface ICookieCategoriesPreferences {

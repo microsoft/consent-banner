@@ -1,19 +1,21 @@
 import { ConsentControl } from "./index";
-import { IOptions } from './interfaces/Options';
+import { IOptions, ITextResources } from './interfaces/Options';
+import { ILink } from './interfaces/Link';
+import { ICookieCategory } from './interfaces/CookieCategories';
 
-const defaultCookieCategories = [
+const defaultCookieCategories: ICookieCategory[] = [
     {
         id: "c0",
         name: "1. Essential cookies",
         desc: "We use this cookie, read more ",
-        descLink: { text: "here", href: "unknown" },
+        descLink: { text: "here", href: "unknown" } as ILink,
         isUnswitchable: true
     },
     {
         id: "c1",
         name: "2. Performance & analytics",
         desc: "We use this cookie, read more ",
-        descLink: { text: "here", href: "unknown" }
+        descLink: { text: "here", href: "unknown" } as ILink
     },
     {
         id: "c2",
@@ -27,16 +29,16 @@ const defaultCookieCategories = [
     }
 ];
 
-const defaultTextResources = {
+const defaultTextResources: ITextResources = {
     bannerMessage: "We use optional cookies to provide... read {0}.",
-    bannerLinks: [{ text: "here", href: "unknown" }],
+    bannerLinks: [{ text: "here", href: "unknown" } as ILink],
     acceptAllLabel: "Accept all",
     rejectAllLabel: "Reject all",
     moreInfoLabel: "More info",
     preferencesDialogCloseLabel: "Close",
     preferencesDialogTitle: "Manage cookie preferences",
-    preferencesDialogDesc: "Most Microsoft sites...",
-    preferencesDialogDescLinks: [],
+    preferencesDialogDesc: "Most Microsoft sites use cookies. For more info see {0}.",
+    preferencesDialogDescLinks: [{ text: "here", href: "unknown" } as ILink],
     acceptLabel: "Accept",
     rejectLabel: "Reject",
     saveLabel: "Save changes",
@@ -438,7 +440,7 @@ describe("Test constructor", () => {
             moreInfoLabel: "This is more info",
             preferencesDialogCloseLabel: "This is Close",
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDesc: "Most Microsoft sites...",
+            preferencesDialogDesc: "Most Microsoft sites use cookies. For more info see {0}.",
             preferencesDialogDescLinks: [],
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
