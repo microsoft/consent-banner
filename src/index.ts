@@ -76,12 +76,12 @@ export class ConsentControl {
         acceptAllLabel: "Accept all",
         rejectAllLabel: "Reject all",
         moreInfoLabel: "More info",
+        preferencesDialogCloseLabel: "Close",
         preferencesDialogTitle: "Manage cookie preferences",
         preferencesDialog: {
             message: "Most Microsoft sites use cookies. For more info see {0}.",
             links: [{ text: "here", href: "unknown" }]
         },
-        preferencesDialogCloseLabel: "Close",
         acceptLabel: "Accept",
         rejectLabel: "Reject",
         saveLabel: "Save changes",

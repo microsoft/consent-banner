@@ -60,9 +60,9 @@ declare interface ITextResources {
     acceptAllLabel?: string;
     rejectAllLabel?: string;
     moreInfoLabel?: string;
+    preferencesDialogCloseLabel?: string;
     preferencesDialogTitle?: string;
     preferencesDialog?: IPreferencesDialogContent;
-    preferencesDialogCloseLabel?: string;
     acceptLabel?: string;
     rejectLabel?: string;
     saveLabel?: string;
