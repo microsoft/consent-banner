@@ -3,6 +3,15 @@ declare interface ILink {
     href: string;
 }
 
+declare interface IRichText {
+    message: string;
+    links?: ILink[];
+}
+
+declare interface IBannerContent extends IRichText { }
+
+declare interface IPreferencesDialogContent extends IRichText { }
+
 declare interface ITheme {
     "close-button-color": string;
     "secondary-button-disabled-opacity": string;
@@ -47,15 +56,13 @@ declare interface IThemes {
     "high-contrast"?: ITheme;
 }
 declare interface ITextResources {
-    bannerMessage?: string;
-    bannerLinks?: ILink[];
+    banner?: IBannerContent;
     acceptAllLabel?: string;
     rejectAllLabel?: string;
     moreInfoLabel?: string;
-    preferencesDialogCloseLabel?: string;
     preferencesDialogTitle?: string;
-    preferencesDialogDesc?: string;
-    preferencesDialogDescLinks?: ILink[];
+    preferencesDialog?: IPreferencesDialogContent;
+    preferencesDialogCloseLabel?: string;
     acceptLabel?: string;
     rejectLabel?: string;
     saveLabel?: string;
@@ -70,8 +77,7 @@ declare interface IOptions {
 declare interface ICookieCategory {
     id: string;
     name: string;
-    desc: string;
-    descLink?: ILink;
+    description: IRichText;
     isUnswitchable?: boolean;
 }
 declare interface ICookieCategoriesPreferences {

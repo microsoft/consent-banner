@@ -85,14 +85,10 @@ export class PreferencesControl {
         const form = document.createElement('form');
         form.className = `${ styles.modalContent } ${ styles.hyperLinkTheme }`;
 
-        // Description paragraph — {0},{1},... placeholders are replaced by preferencesDialogDescLinks entries
+        // Description paragraph — {0},{1},... placeholders are replaced by preferencesDialog.links entries
         const descP = document.createElement('p');
         descP.className = `${ styles.cookieStatement } ${ styles.textColorTheme }`;
-        HtmlTools.appendTextWithLinks(
-            descP,
-            this.textResources.preferencesDialogDesc ?? '',
-            this.textResources.preferencesDialogDescLinks
-        );
+        HtmlTools.appendTextWithLinks(descP, this.textResources.preferencesDialog);
         form.appendChild(descP);
 
         // Cookie list
@@ -142,10 +138,7 @@ export class PreferencesControl {
 
                 const catP = document.createElement('p');
                 catP.className = `${ styles.cookieListItemDescription } ${ styles.textColorTheme }`;
-                catP.appendChild(HtmlTools.createText(cookieCategory.desc));
-                if (cookieCategory.descLink) {
-                    catP.appendChild(HtmlTools.createLink(cookieCategory.descLink.text, cookieCategory.descLink.href));
-                }
+                HtmlTools.appendTextWithLinks(catP, cookieCategory.description);
                 dt.appendChild(catP);
             }
             else {
@@ -174,10 +167,7 @@ export class PreferencesControl {
 
                 const catP = document.createElement('p');
                 catP.className = `${ styles.cookieListItemDescription } ${ styles.textColorTheme }`;
-                catP.appendChild(HtmlTools.createText(cookieCategory.desc));
-                if (cookieCategory.descLink) {
-                    catP.appendChild(HtmlTools.createLink(cookieCategory.descLink.text, cookieCategory.descLink.href));
-                }
+                HtmlTools.appendTextWithLinks(catP, cookieCategory.description);
                 group.appendChild(catP);
 
                 const radioBtnGroup = document.createElement('div');

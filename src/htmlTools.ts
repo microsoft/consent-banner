@@ -1,4 +1,5 @@
-import { ILink } from './interfaces/Link';
+import { IRichText } from './interfaces/RichText';
+
 export class HtmlTools {
     /**
      * Safely creates a text node.
@@ -19,12 +20,14 @@ export class HtmlTools {
         return a;
     }
 
-    public static appendTextWithLinks(
-        container: HTMLElement,
-        text: string,
-        links?: ILink[]
-    ): void {
-        const parts = text.split(/(\{\d+\})/);
+
+    public static appendTextWithLinks(container: HTMLElement, content: IRichText | undefined): void {
+        if (!content) {
+            return;
+        }
+
+        const { message, links } = content;
+        const parts = message.split(/(\{\d+\})/);
 
         for (const part of parts) {
             const match = part.match(/^\{(\d+)\}$/);

@@ -1,4 +1,4 @@
-import { ILink } from './Link';
+import { IBannerContent, IPreferencesDialogContent } from './RichText';
 
 export interface IOptions {
     textResources?: ITextResources;
@@ -56,17 +56,13 @@ export interface ITheme {
 }
 
 export interface ITextResources {
-    bannerMessage?: string;
-    bannerLinks?: ILink[];
-
+    banner?: IBannerContent;
     acceptAllLabel?: string;
     rejectAllLabel?: string;
     moreInfoLabel?: string;
-    preferencesDialogCloseLabel?: string;
+    preferencesDialog?: IPreferencesDialogContent;
     preferencesDialogTitle?: string;
-    preferencesDialogDesc?: string;
-    preferencesDialogDescLinks?: ILink[];
-
+    preferencesDialogCloseLabel?: string;
     acceptLabel?: string;
     rejectLabel?: string;
     saveLabel?: string;

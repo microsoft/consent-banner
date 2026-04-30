@@ -12,6 +12,7 @@ import { ILink } from './interfaces/Link';
 import { ICookieCategory } from './interfaces/CookieCategories';
 import { ITextResources, IOptions, IThemes, ITheme } from './interfaces/Options';
 import { ICookieCategoriesPreferences } from './interfaces/CookieCategoriesPreferences';
+import { IBannerContent } from './interfaces/RichText';
 
 const styles = rawStyles.locals;
 
@@ -40,38 +41,47 @@ export class ConsentControl {
         {
             id: "c0",
             name: "1. Essential cookies",
-            desc: "We use this cookie, read more ",
-            descLink: { text: "here", href: "unknown" },
+            description: {
+                message: "We use this cookie, read more {0}",
+                links: [{ text: "here", href: "unknown" }]
+            },
             isUnswitchable: true
         },
         {
             id: "c1",
             name: "2. Performance & analytics",
-            desc: "We use this cookie, read more ",
-            descLink: { text: "here", href: "unknown" }
+            description: {
+                message: "We use this cookie, read more {0}",
+                links: [{ text: "here", href: "unknown" }]
+            }
         },
         {
             id: "c2",
             name: "3. Advertising/Marketing",
-            desc: "Blah"
+            description: { message: "Blah" }
         },
         {
             id: "c3",
             name: "4. Targeting/personalization",
-            desc: "Blah"
+            description: { message: "Blah" }
         }
     ];
 
     defaultTextResources: ITextResources = {
-        bannerMessage: "We use optional cookies to provide... read {0}.",
-        bannerLinks: [{ text: "here", href: "unknown" }],
+        banner: {
+            message: "We use optional cookies to provide... read {0}.",
+            links: [{ text: "here", href: "unknown" }]
+        },
+
         acceptAllLabel: "Accept all",
         rejectAllLabel: "Reject all",
         moreInfoLabel: "More info",
-        preferencesDialogCloseLabel: "Close",
         preferencesDialogTitle: "Manage cookie preferences",
-        preferencesDialogDesc: "Most Microsoft sites use cookies. For more info see {0}.",
-        preferencesDialogDescLinks: [{ text: "here", href: "unknown" }],
+        preferencesDialog: {
+            message: "Most Microsoft sites use cookies. For more info see {0}.",
+            links: [{ text: "here", href: "unknown" }]
+        },
+        preferencesDialogCloseLabel: "Close",
         acceptLabel: "Accept",
         rejectLabel: "Reject",
         saveLabel: "Save changes",
@@ -234,14 +244,10 @@ export class ConsentControl {
         iconSpan.appendChild(svg);
         bannerInform.appendChild(iconSpan);
 
-        // Banner message paragraph — {0},{1},... placeholders are replaced by bannerLinks entries
+        // Banner message paragraph — {0},{1},... placeholders are replaced by banner.links entries
         const bannerP = document.createElement('p');
         bannerP.className = `${ styles.bannerInformBody } ${ styles.hyperLinkTheme } ${ styles.textColorTheme }`;
-        HtmlTools.appendTextWithLinks(
-            bannerP,
-            this.textResources.bannerMessage ?? '',
-            this.textResources.bannerLinks
-        );
+        HtmlTools.appendTextWithLinks(bannerP, this.textResources.banner);
         bannerInform.appendChild(bannerP);
         banner.appendChild(bannerInform);
 

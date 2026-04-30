@@ -1,9 +1,8 @@
-import { ILink } from './Link';
+import { IRichText } from './RichText';
 
 export interface ICookieCategory {
     id: string;
     name: string;
-    desc: string;
-    descLink?: ILink;
+    description: IRichText;
     isUnswitchable?: boolean;
 }
