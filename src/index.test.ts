@@ -809,3 +809,38 @@ describe("Test setRadioBtnState()", () => {
         testRadioBtnState(cc, cc.preferencesCtrl!.cookieCategoriesPreferences);
     });
 });
+
+describe("Test banner renders", () => {
+    let testId: string = "app";
+
+    beforeEach(() => {
+        let newDiv = document.createElement("div");
+        newDiv.setAttribute("id", testId);
+        document.body.appendChild(newDiv);
+    });
+
+    afterEach(() => {
+        let child = document.getElementById(testId);
+        if (child) {
+            let parent = child.parentNode;
+
+            if (parent) {
+                parent.removeChild(child);
+            }
+            else {
+                throw new Error("Parent not found error");
+            }
+        }
+    });
+
+    test("Banner renders inline link from default banner.links", () => {
+        const callBack = () => { return; };
+        const cc = new ConsentControl(testId, "en", callBack);
+        cc.showBanner({ "c1": true, "c2": false, "c3": undefined });
+
+        const bannerLinks = document.querySelectorAll(`.${styles.bannerInformBody} a`);
+        expect(bannerLinks.length).toBe(1);
+        expect(bannerLinks[0].getAttribute('href')).toBe('unknown');
+        expect(bannerLinks[0].textContent).toBe('here');
+    });
+});

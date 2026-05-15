@@ -1,3 +1,5 @@
+import { IBannerContent, IPreferencesDialogContent } from './RichText';
+
 export interface IOptions {
     textResources?: ITextResources;
     themes?: IThemes;
@@ -54,13 +56,13 @@ export interface ITheme {
 }
 
 export interface ITextResources {
-    bannerMessageHtml?: string;
+    banner?: IBannerContent;
     acceptAllLabel?: string;
     rejectAllLabel?: string;
     moreInfoLabel?: string;
-    preferencesDialogCloseLabel?: string;
+    preferencesDialog?: IPreferencesDialogContent;
     preferencesDialogTitle?: string;
-    preferencesDialogDescHtml?: string;
+    preferencesDialogCloseLabel?: string;
     acceptLabel?: string;
     rejectLabel?: string;
     saveLabel?: string;

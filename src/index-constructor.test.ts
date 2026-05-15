@@ -1,5 +1,76 @@
-import { ConsentControl } from "./index";
-import { IOptions } from './interfaces/Options';
+import { ConsentControl } from './index';
+import { IOptions, ITextResources } from './interfaces/Options';
+import { ICookieCategory } from './interfaces/CookieCategories';
+
+const cookieCategories: ICookieCategory[] = [
+    {
+        id: "c0",
+        name: "1. Essential cookies",
+        description: {
+            message: "We use this cookie, read more {0}",
+            links: [{ text: "here", href: "unknown" }]
+        },
+        isUnswitchable: true
+    },
+    {
+        id: "c1",
+        name: "2. Performance & analytics",
+        description: {
+            message: "We use this cookie, read more {0}",
+            links: [{ text: "here", href: "unknown" }]
+        }
+    },
+    {
+        id: "c2",
+        name: "3. Advertising/Marketing",
+        description: { message: "Blah" }
+    },
+    {
+        id: "c3",
+        name: "4. Targeting/personalization",
+        description: { message: "Blah" }
+    }
+];
+
+const defaultTextResources: ITextResources = {
+    banner: {
+        message: "We use optional cookies to provide... read {0}.",
+        links: [{ text: "here", href: "unknown" }]
+    },
+    acceptAllLabel: "Accept all",
+    rejectAllLabel: "Reject all",
+    moreInfoLabel: "More info",
+    preferencesDialog: {
+        message: "Most Microsoft sites use cookies. For more info see {0}.",
+        links: [{ text: "here", href: "unknown" }]
+    },
+    preferencesDialogTitle: "Manage cookie preferences",
+    preferencesDialogCloseLabel: "Close",
+    acceptLabel: "Accept",
+    rejectLabel: "Reject",
+    saveLabel: "Save changes",
+    resetLabel: "Reset all"
+};
+
+const testResources: ITextResources = {
+    banner: {
+        message: "Test banner message {0}",
+        links: [{ text: "link", href: "https://example.com" }]
+    },
+    acceptAllLabel: "OK",
+    rejectAllLabel: "No",
+    moreInfoLabel: "Info",
+    preferencesDialog: {
+        message: "Test dialog desc {0}",
+        links: [{ text: "more", href: "https://example.com/more" }]
+    },
+    preferencesDialogTitle: "Title",
+    preferencesDialogCloseLabel: "X",
+    acceptLabel: "Yes",
+    rejectLabel: "No",
+    saveLabel: "Save",
+    resetLabel: "Reset"
+};
 
 describe("Test constructor", () => {
     let testId: string = "app";
@@ -14,7 +85,6 @@ describe("Test constructor", () => {
         let child = document.getElementById(testId);
         if (child) {
             let parent = child.parentNode;
-
             if (parent) {
                 parent.removeChild(child);
             }
@@ -24,40 +94,38 @@ describe("Test constructor", () => {
         }
     });
 
-    test("CookieCategories and textResources full provided", () => {
-        let cookieCategories = [
+    test("CookieCategories and textResources fully provided", () => {
+        const cookieCategories: ICookieCategory[] = [
             {
                 id: "cookie1",
                 name: "Test cookie1",
-                descHtml: "This is for test cookie1"
+                description: { message: "This is for test cookie1" }
             },
             {
                 id: "cookie2",
                 name: "Test cookie2",
-                descHtml: "This is for test cookie2 with 4th property",
+                description: { message: "This is for test cookie2 with 4th property" },
                 isUnswitchable: true
             }
         ];
 
-        let textResources = {
-            bannerMessageHtml: "This is banner message.",
+        const textResources: ITextResources = {
+            banner: { message: "This is banner message.", links: [] },
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
+            preferencesDialog: { message: "This is preferences dialog text", links: [] },
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogCloseLabel: "This is Close",
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
             resetLabel: "This is reset all"
         };
 
-        let options: IOptions = {};
-        options.textResources = textResources;
-
-        let callBack = function() { return; };
-        let cc = new ConsentControl(testId, "en", callBack, cookieCategories, options);
+        const options: IOptions = { textResources };
+        const callBack = () => { return; };
+        const cc = new ConsentControl(testId, "en", callBack, cookieCategories, options);
 
         expect(cc.culture).toBe("en");
         expect(cc.cookieCategories).toEqual(cookieCategories);
@@ -65,623 +133,113 @@ describe("Test constructor", () => {
     });
 
     test("No cookieCategories, no textResources", () => {
-        let callBack = function() { return; };
-        let cc = new ConsentControl(testId, "en", callBack);
+        const callBack = () => { return; };
+        const cc = new ConsentControl(testId, "en", callBack);
 
         expect(cc.culture).toBe("en");
-        expect(cc.cookieCategories).toEqual([
-            {
-                id: "c0",
-                name: "1. Essential cookies",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>.",
-                isUnswitchable: true
-            },
-            {
-                id: "c1",
-                name: "2. Performance & analytics",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>."
-            },
-            {
-                id: "c2",
-                name: "3. Advertising/Marketing",
-                descHtml: "Blah"
-            },
-            {
-                id: "c3",
-                name: "4. Targeting/personalization",
-                descHtml: "Blah"
-            }
-        ]);
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
-            acceptAllLabel: "Accept all",
-            rejectAllLabel: "Reject all",
-            moreInfoLabel: "More info",
-            preferencesDialogCloseLabel: "Close",
-            preferencesDialogTitle: "Manage cookie preferences",
-            preferencesDialogDescHtml: "Most Microsoft sites...",
-            acceptLabel: "Accept",
-            rejectLabel: "Reject",
-            saveLabel: "Save changes",
-            resetLabel: "Reset all"
-        });
+        expect(cc.cookieCategories).toEqual(cookieCategories);
+        expect(cc.textResources).toEqual(defaultTextResources);
     });
 
-    test("No cookieCategories, textResources over provided", () => {
-        let textResources = {
+    test("No cookieCategories, textResources over-provided (extra keys are ignored)", () => {
+        const textResources = {
             market: "en-us",
-            bannerMessageHtml: "This is banner message.",
+            banner: { message: "This is banner message.", links: [] },
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
+            preferencesDialog: { message: "This is preferences dialog text", links: [] },
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogCloseLabel: "This is Close",
             acceptLabel: "This is accept",
             middle: 6,
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
             resetLabel: "This is reset all",
             add: "additional",
-            complex: {
-                id: "c",
-                name: "1. Essential"
-            }
-        };
-    
-        let callBack = function() { return; };
-    
-        let options: IOptions = { };
-        options.textResources = textResources;
-    
-        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
-    
-        expect(cc.culture).toBe("en");
-        expect(cc.cookieCategories).toEqual([
-            {
-                id: "c0",
-                name: "1. Essential cookies",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>.",
-                isUnswitchable: true
-            },
-            {
-                id: "c1",
-                name: "2. Performance & analytics",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>."
-            },
-            {
-                id: "c2",
-                name: "3. Advertising/Marketing",
-                descHtml: "Blah"
-            },
-            {
-                id: "c3",
-                name: "4. Targeting/personalization",
-                descHtml: "Blah"
-            }
-        ]);
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        });
-    });
+            complex: { id: "c", name: "1. Essential" }
+        } as unknown as ITextResources;
 
-    test("No cookieCategories, textResources full provided", () => {
-        let textResources = {
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        };
-
-        let callBack = function() { return; };
-
-        let options: IOptions = { };
-        options.textResources = textResources;
-
-        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
-
-        expect(cc.culture).toBe("en");
-        expect(cc.cookieCategories).toEqual([
-            {
-                id: "c0",
-                name: "1. Essential cookies",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>.",
-                isUnswitchable: true
-            },
-            {
-                id: "c1",
-                name: "2. Performance & analytics",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>."
-            },
-            {
-                id: "c2",
-                name: "3. Advertising/Marketing",
-                descHtml: "Blah"
-            },
-            {
-                id: "c3",
-                name: "4. Targeting/personalization",
-                descHtml: "Blah"
-            }
-        ]);
-        expect(cc.textResources).toEqual(textResources);
-    });
-
-    test("CookieCategories provided, no textResources", () => {
-        let cookieCategories = [
-            {
-                id: "cookie1",
-                name: "Test cookie1",
-                descHtml: "This is for test cookie1"
-            },
-            {
-                id: "cookie2",
-                name: "Test cookie2",
-                descHtml: "This is for test cookie2 with 4th property",
-                isUnswitchable: true
-            }
-        ];
-
-        let callBack = function() { return; };
-        let cc = new ConsentControl(testId, "en", callBack, cookieCategories);
+        const callBack = () => { return; };
+        const options: IOptions = { textResources };
+        const cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.culture).toBe("en");
         expect(cc.cookieCategories).toEqual(cookieCategories);
         expect(cc.textResources).toEqual({
-            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
-            acceptAllLabel: "Accept all",
-            rejectAllLabel: "Reject all",
-            moreInfoLabel: "More info",
-            preferencesDialogCloseLabel: "Close",
-            preferencesDialogTitle: "Manage cookie preferences",
-            preferencesDialogDescHtml: "Most Microsoft sites...",
-            acceptLabel: "Accept",
-            rejectLabel: "Reject",
-            saveLabel: "Save changes",
-            resetLabel: "Reset all"
-        });
-    });
-
-    test("No cookieCategories, textResources without bannerMessageHtml", () => {
-        let textResources = {
+            banner: { message: "This is banner message.", links: [] },
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
+            preferencesDialog: { message: "This is preferences dialog text", links: [] },
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogCloseLabel: "This is Close",
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
             resetLabel: "This is reset all"
-        };
+        });
+    });
 
-        let callBack = function() { return; };
-        let options: IOptions = { };
-        options.textResources = textResources;
-
-        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
+    test("No cookieCategories, textResources fully provided", () => {
+        const callBack = () => { return; };
+        const options: IOptions = { textResources: testResources };
+        const cc = new ConsentControl(testId, "en", callBack, undefined, options);
 
         expect(cc.culture).toBe("en");
-        expect(cc.cookieCategories).toEqual([
+        expect(cc.cookieCategories).toEqual(cookieCategories);
+        expect(cc.textResources).toEqual(testResources);
+    });
+
+    test("CookieCategories provided, no textResources", () => {
+        const cookieCategories: ICookieCategory[] = [
             {
-                id: "c0",
-                name: "1. Essential cookies",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>.",
+                id: "cookie1",
+                name: "Test cookie1",
+                description: { message: "This is for test cookie1" }
+            },
+            {
+                id: "cookie2",
+                name: "Test cookie2",
+                description: { message: "This is for test cookie2 with 4th property" },
                 isUnswitchable: true
-            },
-            {
-                id: "c1",
-                name: "2. Performance & analytics",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>."
-            },
-            {
-                id: "c2",
-                name: "3. Advertising/Marketing",
-                descHtml: "Blah"
-            },
-            {
-                id: "c3",
-                name: "4. Targeting/personalization",
-                descHtml: "Blah"
             }
-        ]);
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
-            acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        });
-    });
+        ];
 
-    test("No cookieCategories, textResources without acceptAllLabel", () => {
-        let textResources = {
-            bannerMessageHtml: "This is banner message.",           
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        };
-
-        let callBack = function() { return; };
-        let options: IOptions = { };
-        options.textResources = textResources;
-
-        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
-
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "Accept all",
-            rejectAllLabel: "Reject all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        });
-    });
-
-    test("No cookieCategories, textResources without moreInfoLabel", () => {
-        let textResources = {
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        };
-
-        let callBack = function() { return; };
-        let options: IOptions = { };
-        options.textResources = textResources;
-
-        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
-
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
-            moreInfoLabel: "More info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        });
-    });
-
-    test("No cookieCategories, textResources without preferencesDialogCloseLabel", () => {
-        let textResources = {
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        };
-
-        let callBack = function() { return; };
-        let options: IOptions = { };
-        options.textResources = textResources;
-
-        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
-
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        });
-    });
-
-    test("No cookieCategories, textResources without preferencesDialogTitle", () => {
-        let textResources = {
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        };
-
-        let callBack = function() { return; };
-        let options: IOptions = { };
-        options.textResources = textResources;
-
-        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
-
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "Manage cookie preferences",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        });
-    });
-
-    test("No cookieCategories, textResources without preferencesDialogDescHtml", () => {
-        let textResources = {
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        };
-
-        let callBack = function() { return; };
-        let options: IOptions = { };
-        options.textResources = textResources;
-
-        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
-
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "Most Microsoft sites...",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        });
-    });
-
-    test("No cookieCategories, textResources without acceptLabel", () => {
-        let textResources = {
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        };
-
-        let callBack = function() { return; };
-        let options: IOptions = { };
-        options.textResources = textResources;
-
-        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
-
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "Accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        });
-    });
-
-    test("No cookieCategories, textResources without rejectLabel", () => {
-        let textResources = {
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        };
-
-        let callBack = function() { return; };
-        let options: IOptions = { };
-        options.textResources = textResources;
-
-        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
-
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "Reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        });
-    });
-
-    test("No cookieCategories, textResources without saveLabel", () => {
-        let textResources = {
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            resetLabel: "This is reset all"
-        };
-
-        let callBack = function() { return; };
-        let options: IOptions = { };
-        options.textResources = textResources;
-
-        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
-
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "Save changes",
-            resetLabel: "This is reset all"
-        });
-    });
-
-    test("No cookieCategories, textResources without resetLabel", () => {
-        let textResources = {
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-        };
-
-        let callBack = function() { return; };
-        let options: IOptions = { };
-        options.textResources = textResources;
-
-        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
-
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "This is banner message.",
-            acceptAllLabel: "This is accept all",
-            rejectAllLabel: "This is reject all",
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "Reset all"
-        });
-    });
-
-    test("No cookieCategories, textResources without bannerMessageHtml, acceptAllLabel", () => {
-        let textResources = {
-            moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
-            preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
-            acceptLabel: "This is accept",
-            rejectLabel: "This is reject",
-            saveLabel: "This is save changes",
-            resetLabel: "This is reset all"
-        };
-
-        let callBack = function() { return; };
-        let options: IOptions = { };
-        options.textResources = textResources;
-
-        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
+        const callBack = () => { return; };
+        const cc = new ConsentControl(testId, "en", callBack, cookieCategories);
 
         expect(cc.culture).toBe("en");
-        expect(cc.cookieCategories).toEqual([
-            {
-                id: "c0",
-                name: "1. Essential cookies",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>.",
-                isUnswitchable: true
-            },
-            {
-                id: "c1",
-                name: "2. Performance & analytics",
-                descHtml: "We use this cookie, read more <a href='link'>here</a>."
-            },
-            {
-                id: "c2",
-                name: "3. Advertising/Marketing",
-                descHtml: "Blah"
-            },
-            {
-                id: "c3",
-                name: "4. Targeting/personalization",
-                descHtml: "Blah"
-            }
-        ]);
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
-            acceptAllLabel: "Accept all",
-            rejectAllLabel: "Reject all",
+        expect(cc.cookieCategories).toEqual(cookieCategories);
+        expect(cc.textResources).toEqual(defaultTextResources);
+    });
+
+    test("textResources without 'banner' → falls back to default banner", () => {
+        const textResources: ITextResources = {
+            acceptAllLabel: "This is accept all",
+            rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
+            preferencesDialog: { message: "This is preferences dialog text", links: [] },
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogCloseLabel: "This is Close",
+            acceptLabel: "This is accept",
+            rejectLabel: "This is reject",
+            saveLabel: "This is save changes",
+            resetLabel: "This is reset all"
+        };
+
+        const callBack = () => { return; };
+        const options: IOptions = { textResources };
+        const cc = new ConsentControl(testId, "en", callBack, undefined, options);
+
+        expect(cc.textResources).toEqual({
+            banner: defaultTextResources.banner,
+            acceptAllLabel: "This is accept all",
+            rejectAllLabel: "This is reject all",
+            moreInfoLabel: "This is more info",
+            preferencesDialog: { message: "This is preferences dialog text", links: [] },
+            preferencesDialogTitle: "This is preferences dialog title",
+            preferencesDialogCloseLabel: "This is Close",
             acceptLabel: "This is accept",
             rejectLabel: "This is reject",
             saveLabel: "This is save changes",
@@ -689,37 +247,218 @@ describe("Test constructor", () => {
         });
     });
 
-    test("No cookieCategories, textResources without bannerMessageHtml, rejectLabel", () => {
-        let textResources = {
+    test("textResources without acceptAllLabel → falls back to default", () => {
+        const textResources: ITextResources = {
+            banner: { message: "This is banner message.", links: [] },
+            rejectAllLabel: "This is reject all",
+            moreInfoLabel: "This is more info",
+            preferencesDialog: { message: "This is preferences dialog text", links: [] },
+            preferencesDialogTitle: "This is preferences dialog title",
+            preferencesDialogCloseLabel: "This is Close",
+            acceptLabel: "This is accept",
+            rejectLabel: "This is reject",
+            saveLabel: "This is save changes",
+            resetLabel: "This is reset all"
+        };
+
+        const callBack = () => { return; };
+        const options: IOptions = { textResources };
+        const cc = new ConsentControl(testId, "en", callBack, undefined, options);
+
+        expect(cc.textResources.acceptAllLabel).toBe("Accept all");
+        expect(cc.textResources.rejectAllLabel).toBe("This is reject all");
+    });
+
+    test("textResources without moreInfoLabel → falls back to default", () => {
+        const textResources: ITextResources = {
+            banner: { message: "This is banner message.", links: [] },
+            acceptAllLabel: "This is accept all",
+            rejectAllLabel: "This is reject all",
+            preferencesDialog: { message: "This is preferences dialog text", links: [] },
+            preferencesDialogTitle: "This is preferences dialog title",
+            preferencesDialogCloseLabel: "This is Close",
+            acceptLabel: "This is accept",
+            rejectLabel: "This is reject",
+            saveLabel: "This is save changes",
+            resetLabel: "This is reset all"
+        };
+
+        const callBack = () => { return; };
+        const cc = new ConsentControl(testId, "en", callBack, undefined, { textResources });
+        expect(cc.textResources.moreInfoLabel).toBe("More info");
+    });
+
+    test("textResources without preferencesDialogCloseLabel → falls back to default", () => {
+        const textResources: ITextResources = {
+            banner: { message: "This is banner message.", links: [] },
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
+            preferencesDialog: { message: "This is preferences dialog text", links: [] },
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            acceptLabel: "This is accept",
+            rejectLabel: "This is reject",
+            saveLabel: "This is save changes",
+            resetLabel: "This is reset all"
+        };
+
+        const callBack = () => { return; };
+        const cc = new ConsentControl(testId, "en", callBack, undefined, { textResources });
+        expect(cc.textResources.preferencesDialogCloseLabel).toBe("Close");
+    });
+
+    test("textResources without preferencesDialogTitle → falls back to default", () => {
+        const textResources: ITextResources = {
+            banner: { message: "This is banner message.", links: [] },
+            acceptAllLabel: "This is accept all",
+            rejectAllLabel: "This is reject all",
+            moreInfoLabel: "This is more info",
+            preferencesDialog: { message: "This is preferences dialog text", links: [] },
+            preferencesDialogCloseLabel: "This is Close",
+            acceptLabel: "This is accept",
+            rejectLabel: "This is reject",
+            saveLabel: "This is save changes",
+            resetLabel: "This is reset all"
+        };
+
+        const callBack = () => { return; };
+        const cc = new ConsentControl(testId, "en", callBack, undefined, { textResources });
+        expect(cc.textResources.preferencesDialogTitle).toBe("Manage cookie preferences");
+    });
+
+    test("textResources without 'preferencesDialog' → falls back to default preferencesDialog", () => {
+        const textResources: ITextResources = {
+            banner: { message: "This is banner message.", links: [] },
+            acceptAllLabel: "This is accept all",
+            rejectAllLabel: "This is reject all",
+            moreInfoLabel: "This is more info",
+            preferencesDialogTitle: "This is preferences dialog title",
+            preferencesDialogCloseLabel: "This is Close",
+            acceptLabel: "This is accept",
+            rejectLabel: "This is reject",
+            saveLabel: "This is save changes",
+            resetLabel: "This is reset all"
+        };
+
+        const callBack = () => { return; };
+        const cc = new ConsentControl(testId, "en", callBack, undefined, { textResources });
+        expect(cc.textResources.preferencesDialog).toEqual(defaultTextResources.preferencesDialog);
+    });
+
+    test("textResources without acceptLabel → falls back to default", () => {
+        const textResources: ITextResources = {
+            banner: { message: "This is banner message.", links: [] },
+            acceptAllLabel: "This is accept all",
+            rejectAllLabel: "This is reject all",
+            moreInfoLabel: "This is more info",
+            preferencesDialog: { message: "This is preferences dialog text", links: [] },
+            preferencesDialogTitle: "This is preferences dialog title",
+            preferencesDialogCloseLabel: "This is Close",
+            rejectLabel: "This is reject",
+            saveLabel: "This is save changes",
+            resetLabel: "This is reset all"
+        };
+
+        const callBack = () => { return; };
+        const cc = new ConsentControl(testId, "en", callBack, undefined, { textResources });
+        expect(cc.textResources.acceptLabel).toBe("Accept");
+    });
+
+    test("textResources without rejectLabel → falls back to default", () => {
+        const textResources: ITextResources = {
+            banner: { message: "This is banner message.", links: [] },
+            acceptAllLabel: "This is accept all",
+            rejectAllLabel: "This is reject all",
+            moreInfoLabel: "This is more info",
+            preferencesDialog: { message: "This is preferences dialog text", links: [] },
+            preferencesDialogTitle: "This is preferences dialog title",
+            preferencesDialogCloseLabel: "This is Close",
             acceptLabel: "This is accept",
             saveLabel: "This is save changes",
             resetLabel: "This is reset all"
         };
 
-        let callBack = function() { return; };
-        let options: IOptions = { };
-        options.textResources = textResources;
+        const callBack = () => { return; };
+        const cc = new ConsentControl(testId, "en", callBack, undefined, { textResources });
+        expect(cc.textResources.rejectLabel).toBe("Reject");
+    });
 
-        let cc = new ConsentControl(testId, "en", callBack, undefined, options);
-
-        expect(cc.textResources).toEqual({
-            bannerMessageHtml: "We use optional cookies to provide... read <a href='link'>here</a>.",
+    test("textResources without saveLabel → falls back to default", () => {
+        const textResources: ITextResources = {
+            banner: { message: "This is banner message.", links: [] },
             acceptAllLabel: "This is accept all",
             rejectAllLabel: "This is reject all",
             moreInfoLabel: "This is more info",
-            preferencesDialogCloseLabel: "This is Close",
+            preferencesDialog: { message: "This is preferences dialog text", links: [] },
             preferencesDialogTitle: "This is preferences dialog title",
-            preferencesDialogDescHtml: "This is preferences dialog text",
+            preferencesDialogCloseLabel: "This is Close",
             acceptLabel: "This is accept",
-            rejectLabel: "Reject",
+            rejectLabel: "This is reject",
+            resetLabel: "This is reset all"
+        };
+
+        const callBack = () => { return; };
+        const cc = new ConsentControl(testId, "en", callBack, undefined, { textResources });
+        expect(cc.textResources.saveLabel).toBe("Save changes");
+    });
+
+    test("textResources without resetLabel → falls back to default", () => {
+        const textResources: ITextResources = {
+            banner: { message: "This is banner message.", links: [] },
+            acceptAllLabel: "This is accept all",
+            rejectAllLabel: "This is reject all",
+            moreInfoLabel: "This is more info",
+            preferencesDialog: { message: "This is preferences dialog text", links: [] },
+            preferencesDialogTitle: "This is preferences dialog title",
+            preferencesDialogCloseLabel: "This is Close",
+            acceptLabel: "This is accept",
+            rejectLabel: "This is reject",
+            saveLabel: "This is save changes"
+        };
+
+        const callBack = () => { return; };
+        const cc = new ConsentControl(testId, "en", callBack, undefined, { textResources });
+        expect(cc.textResources.resetLabel).toBe("Reset all");
+    });
+
+    test("textResources without 'banner' and 'acceptAllLabel' → both fall back to default", () => {
+        const textResources: ITextResources = {
+            moreInfoLabel: "This is more info",
+            preferencesDialog: { message: "This is preferences dialog text", links: [] },
+            preferencesDialogTitle: "This is preferences dialog title",
+            preferencesDialogCloseLabel: "This is Close",
+            rejectAllLabel: "This is reject all",
+            acceptLabel: "This is accept",
+            rejectLabel: "This is reject",
             saveLabel: "This is save changes",
             resetLabel: "This is reset all"
-        });
+        };
+
+        const callBack = () => { return; };
+        const cc = new ConsentControl(testId, "en", callBack, undefined, { textResources });
+
+        expect(cc.cookieCategories).toEqual(cookieCategories);
+        expect(cc.textResources.banner).toEqual(defaultTextResources.banner);
+        expect(cc.textResources.acceptAllLabel).toBe("Accept all");
+    });
+
+    test("textResources without 'banner' and 'rejectLabel' → both fall back to default", () => {
+        const textResources: ITextResources = {
+            acceptAllLabel: "This is accept all",
+            rejectAllLabel: "This is reject all",
+            moreInfoLabel: "This is more info",
+            preferencesDialog: { message: "This is preferences dialog text", links: [] },
+            preferencesDialogTitle: "This is preferences dialog title",
+            preferencesDialogCloseLabel: "This is Close",
+            acceptLabel: "This is accept",
+            saveLabel: "This is save changes",
+            resetLabel: "This is reset all"
+        };
+
+        const callBack = () => { return; };
+        const cc = new ConsentControl(testId, "en", callBack, undefined, { textResources });
+
+        expect(cc.textResources.banner).toEqual(defaultTextResources.banner);
+        expect(cc.textResources.rejectLabel).toBe("Reject");
     });
 });
