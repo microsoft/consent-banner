@@ -48,7 +48,7 @@
     "jest-junit-reporter": "^1.1.0",
     "jest-pnp-resolver": "^1.2.1",
     "postcss-loader": "^3.0.0",
-    "postcss-preset-env": "^6.7.0",
+    "postcss-preset-env": "^11.5.1",
     "sass": "1.32.13",
     "sass-loader": "^8.0.2",
     "ts-jest": "^25.3.1",
